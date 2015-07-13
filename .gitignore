@@ -1,0 +1,16 @@
+*.class
+*.log
+dependency-reduced-pom.xml
+
+# Package Files #
+*.jar
+*.war
+*.ear
+target/
+
+#IDE files#
+.idea/
+*.iml
+/.settings
+/.project
+/.classpath
