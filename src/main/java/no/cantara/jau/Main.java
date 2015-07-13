@@ -55,10 +55,12 @@ public class Main {
         //Download
         for (DownloadItem downloadItem : serviceConfig.getDownloadItems()) {
             log.debug("Downloading {}", downloadItem);
+            DownloadUtil.downloadFile(downloadItem.getUrl(), "/tmp", downloadItem.getFilename());
         }
 
         //Stop existing service if running
 
         //Start new service
     }
+
 }
