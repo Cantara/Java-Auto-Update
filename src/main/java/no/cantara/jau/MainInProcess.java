@@ -6,26 +6,29 @@ import no.cantara.jau.serviceconfig.dto.ServiceConfigSerializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.lang.reflect.Constructor;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.nio.file.Path;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
 /**
+ * Not working, just loose thoughts on how to run in-process.
+ *
  * @author <a href="mailto:erik-dev@fjas.no">Erik Drolshammer</a> 2015-07-13.
  */
-public class Main {
-    private static final Logger log = LoggerFactory.getLogger(Main.class);
+public class MainInProcess {
+    private static final Logger log = LoggerFactory.getLogger(MainInProcess.class);
 
     private final ExecutorService worker = Executors.newSingleThreadExecutor();
 
 
     public static void main(String[] args) {
         String serviceConfigUrl = "http://localhost:7000/jau/serviceconfig/query?clientid=clientid1";
-        String workingDirectory = "./";
+        final MainInProcess main = new MainInProcess();
+        main.start(serviceConfigUrl);
 
-        final Main main = new Main();
-        main.start(serviceConfigUrl, workingDirectory);
     }
 
     /**
@@ -37,9 +40,8 @@ public class Main {
      * Start new service
      *
      * @param serviceConfigUrl  url to service config for this service
-     * @param workingDirectory
      */
-    public void start(String serviceConfigUrl, String workingDirectory) {
+    public void start(String serviceConfigUrl) {
         String response = null;
         try {
             response = ConfigServiceClient.fetchServiceConfig(serviceConfigUrl);
@@ -60,18 +62,35 @@ public class Main {
         Path path = null;
         for (DownloadItem downloadItem : serviceConfig.getDownloadItems()) {
             log.debug("Downloading {}", downloadItem);
-            path = DownloadUtil.downloadFile(downloadItem.getUrl(), workingDirectory, downloadItem.getFilename());
+            path = DownloadUtil.downloadFile(downloadItem.getUrl(), "./", downloadItem.getFilename());
         }
 
         //Stop existing service if running
 
-
         //Start new service
-        //String jarPath = path.toString();
-        //new JarProcess("-DIAM_MODE=DEV", jarPath).run();
-        //String commandAsString = "java -DIAM_MODE=DEV -jar" + path.getFileName().toString();
-        String commandAsString = serviceConfig.getStartServiceScript();
-        String[] command = commandAsString.split("\\s+");
-        Future<?> future = worker.submit(new ApplicationProcess(workingDirectory, command));
+
+        //"file://./my.jar"
+        try {
+            URL url = path.toUri().toURL();
+            ClassLoader loader = URLClassLoader.newInstance(new URL[]{url}, getClass().getClassLoader());
+            Class<?> clazz = Class.forName("net.whydah.admin.MainWithJetty", true, loader);
+            Class<? extends Runnable> runClass = clazz.asSubclass(Runnable.class);
+            // Avoid Class.newInstance, for it is evil.
+            Constructor<? extends Runnable> constructor = runClass.getConstructor(int.class);
+            Runnable runnable = constructor.newInstance(5678);
+            //runnable.run();
+
+            /*
+            URLClassLoader classLoader = new URLClassLoader(new URL[]{url}, this.getClass().getClassLoader());
+            Class classToLoad = Class.forName("net.whydah.admin.MainWithJetty", true, classLoader);
+            Runnable instance = (Runnable) classToLoad.newInstance();
+            */
+            worker.submit(runnable);
+
+            //Method method = classToLoad.getDeclaredMethod("myMethod");
+            //Object result = method.invoke(instance);
+        } catch (Exception e) {
+            log.error("", e);
+        }
     }
 }
