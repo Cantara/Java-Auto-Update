@@ -1,5 +1,6 @@
 package no.cantara.jau;
 
+import no.cantara.jau.serviceconfig.dto.DownloadItem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,6 +12,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Path;
+import java.util.Base64;
 
 /**
  * @author <a href="mailto:erik-dev@fjas.no">Erik Drolshammer</a> 2015-07-13.
@@ -18,13 +20,17 @@ import java.nio.file.Path;
 public class DownloadUtil {
     private static final Logger log = LoggerFactory.getLogger(DownloadUtil.class);
 
+    public static Path downloadFile(DownloadItem downloadItem, String targetDirectory) {
+        return downloadFile(downloadItem.url, downloadItem.filename(), downloadItem.username, downloadItem.password, targetDirectory);
+    }
+
     /**
      * http://www.codejava.net/java-se/networking/use-httpurlconnection-to-download-file-from-an-http-url
      * Downloads a file from a URL
      * @param sourceUrl HTTP URL of the file to be downloaded
      * @param targetDirectory path of the directory to save the file
      */
-    public static Path downloadFile(String sourceUrl, String targetDirectory, String filenameOverride) {
+    public static Path downloadFile(String sourceUrl, String filenameOverride, String username, String password, String targetDirectory) {
         final int BUFFER_SIZE = 4096;
         URL url;
         try {
@@ -36,6 +42,10 @@ public class DownloadUtil {
         HttpURLConnection httpConn;
         try {
             httpConn = (HttpURLConnection) url.openConnection();
+            if (username != null && password != null) {
+                String authorizationValue = "Basic " + Base64.getEncoder().encodeToString((username + ":" + password).getBytes());
+                httpConn.setRequestProperty("Authorization", authorizationValue);
+            }
             int responseCode = httpConn.getResponseCode();
 
             // always check HTTP response code first

@@ -62,7 +62,7 @@ public class MainInProcess {
         Path path = null;
         for (DownloadItem downloadItem : serviceConfig.getDownloadItems()) {
             log.debug("Downloading {}", downloadItem);
-            path = DownloadUtil.downloadFile(downloadItem.url, "./", downloadItem.filename());
+            path = DownloadUtil.downloadFile(downloadItem, "./");
         }
 
         //Stop existing service if running
@@ -79,13 +79,15 @@ public class MainInProcess {
             Object result = method.invoke(null);
             */
 
-            ClassLoader loader = URLClassLoader.newInstance(new URL[]{url}, getClass().getClassLoader());
-            Class<?> clazz = Class.forName("net.whydah.admin.MainWithJetty", true, loader);
+            ClassLoader loader = URLClassLoader.newInstance(new URL[]{url}, ClassLoader.getSystemClassLoader());
+            //possible to get Main class from manifest from jarfile?
+            Class<?> mainClass = Class.forName("net.whydah.admin.MainWithJetty", true, loader);
+
 
             // Avoid Class.newInstance, for it is evil.
             //Constructor<?> constructor = clazz.getConstructor(int.class);
             //Object instance = constructor.newInstance(5678);
-            Method method = clazz.getDeclaredMethod("main", String[].class);
+            Method method = mainClass.getDeclaredMethod("main", String[].class);
             // If the underlying method is static, then the specified obj argument is ignored. It may be null.
             Object result = method.invoke(null, new Object[] {new String[]{}});
 

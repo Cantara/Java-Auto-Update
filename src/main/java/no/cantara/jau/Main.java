@@ -60,7 +60,7 @@ public class Main {
         Path path = null;
         for (DownloadItem downloadItem : serviceConfig.getDownloadItems()) {
             log.debug("Downloading {}", downloadItem);
-            path = DownloadUtil.downloadFile(downloadItem.url, workingDirectory, downloadItem.filename());
+            path = DownloadUtil.downloadFile(downloadItem, workingDirectory);
         }
 
         //Stop existing service if running
