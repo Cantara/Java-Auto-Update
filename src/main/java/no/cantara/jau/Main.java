@@ -72,6 +72,7 @@ public class Main {
      * @param workingDirectory
      */
     public void start(String serviceConfigUrl, String workingDirectory) {
+        // https://github.com/Cantara/ConfigService/issues/3
         String response = null;
         try {
             response = ConfigServiceClient.fetchServiceConfig(serviceConfigUrl);
@@ -87,6 +88,7 @@ public class Main {
 
 
         //check changedTimestamp
+        // https://github.com/Cantara/Java-Auto-Update/issues/5
 
         //Download
         Path path = null;
@@ -96,12 +98,10 @@ public class Main {
         }
 
         //Stop existing service if running
+        // https://github.com/Cantara/Java-Auto-Update/issues/4
 
 
         //Start new service
-        //String jarPath = path.toString();
-        //new JarProcess("-DIAM_MODE=DEV", jarPath).run();
-        //String commandAsString = "java -DIAM_MODE=DEV -jar" + path.getFileName().toString();
         String commandAsString = serviceConfig.getStartServiceScript();
         String[] command = commandAsString.split("\\s+");
         Future<?> future = worker.submit(new ApplicationProcess(workingDirectory, command));
