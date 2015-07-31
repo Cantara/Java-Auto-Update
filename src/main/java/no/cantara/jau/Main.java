@@ -1,5 +1,7 @@
 package no.cantara.jau;
 
+import no.cantara.jau.serviceconfig.client.ConfigServiceClient;
+import no.cantara.jau.serviceconfig.client.DownloadUtil;
 import no.cantara.jau.serviceconfig.dto.DownloadItem;
 import no.cantara.jau.serviceconfig.dto.ServiceConfig;
 import no.cantara.jau.serviceconfig.dto.ServiceConfigSerializer;

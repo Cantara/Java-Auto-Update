@@ -1,5 +1,7 @@
 package no.cantara.jau;
 
+import no.cantara.jau.serviceconfig.client.ConfigServiceClient;
+import no.cantara.jau.serviceconfig.client.DownloadUtil;
 import no.cantara.jau.serviceconfig.dto.DownloadItem;
 import no.cantara.jau.serviceconfig.dto.ServiceConfig;
 import no.cantara.jau.serviceconfig.dto.ServiceConfigSerializer;
@@ -14,7 +16,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /**
- * Not working, just loose thoughts on how to run in-process.
+ * NOT WORKING! Just loose thoughts on how to run in-process.
  *
  * @author <a href="mailto:erik-dev@fjas.no">Erik Drolshammer</a> 2015-07-13.
  */
