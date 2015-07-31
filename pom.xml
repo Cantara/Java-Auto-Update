@@ -123,7 +123,7 @@
                                         <!-- Java installation -->
                                         <property>
                                             <name>wrapper.java.command</name>
-                                            <value>../java/bin/java</value>
+                                            <value>java/bin/java</value>
                                         </property>
 
                                         <property>

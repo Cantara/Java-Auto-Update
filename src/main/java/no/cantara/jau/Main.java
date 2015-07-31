@@ -8,7 +8,9 @@ import no.cantara.jau.serviceconfig.dto.ServiceConfigSerializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.nio.file.Path;
+import java.util.Properties;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -19,15 +21,43 @@ import java.util.concurrent.Future;
 public class Main {
     private static final Logger log = LoggerFactory.getLogger(Main.class);
 
+    private static final String CONFIG_SERVICE_URL_KEY = "configServiceUrl";
+    private static final String CONFIG_FILENAME = "config_override/config.properties";
+
     private final ExecutorService worker = Executors.newSingleThreadExecutor();
 
 
+    //String serviceConfigUrl = "http://localhost:7000/jau/serviceconfig/query?clientid=clientid1";
     public static void main(String[] args) {
-        String serviceConfigUrl = "http://localhost:7000/jau/serviceconfig/query?clientid=clientid1";
-        String workingDirectory = "./";
+        String serviceConfigUrl = getServiceConfigUrlOrExit();
 
+        String workingDirectory = "./";
         final Main main = new Main();
         main.start(serviceConfigUrl, workingDirectory);
+    }
+
+
+    private static String getServiceConfigUrlOrExit() {
+        String serviceConfigUrl = null;
+        final Properties properties = new Properties();
+        try {
+            properties.load(Main.class.getClassLoader().getResourceAsStream(CONFIG_FILENAME));
+            serviceConfigUrl = properties.getProperty(CONFIG_SERVICE_URL_KEY);
+        } catch (NullPointerException|IOException e) {
+            log.debug("Could not load {} from classpath due to {}: {}.", CONFIG_FILENAME, e.getClass().getSimpleName(), e.getMessage());
+        }
+
+        if (serviceConfigUrl == null) {
+            //-DconfigServiceUrl=http://localhost:7000/jau/serviceconfig/query?clientid=clientid1
+            serviceConfigUrl = System.getProperty(CONFIG_SERVICE_URL_KEY);
+        }
+
+        if (serviceConfigUrl == null) {
+            log.error("Application cannot start! {} not set in {} or as property (-DconfigServiceUrl=http://localhost:7000/jau/serviceconfig/query?clientid=clientid1).",
+                    CONFIG_SERVICE_URL_KEY, CONFIG_FILENAME);
+            System.exit(1);
+        }
+        return serviceConfigUrl;
     }
 
     /**
@@ -48,7 +78,7 @@ public class Main {
             log.trace("fetchServiceConfig: serviceConfig={}", response);
         } catch (Exception e) {
             log.error("fetchServiceConfig failed with serviceConfigUrl={} Exiting.", serviceConfigUrl, e);
-            System.exit(1);
+            System.exit(2);
         }
 
         //Parse
