@@ -87,7 +87,8 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>appassembler-maven-plugin</artifactId>
-                <version>1.8.1</version>
+                <version>1.10</version>
+                <!--<version>1.8.1</version>-->
                 <configuration>
                     <repositoryLayout>flat</repositoryLayout>
                     <includeConfigurationDirectoryInClasspath>false</includeConfigurationDirectoryInClasspath>
@@ -117,7 +118,7 @@
                                         </property>
                                         <property>
                                             <name>wrapper.logfile</name>
-                                            <value>logs/wrapper.log</value>
+                                            <value>wrapper.log</value>
                                         </property>
 
                                         <!-- Java installation -->
@@ -145,6 +146,7 @@
                                 <initialMemorySize>16M</initialMemorySize>
                                 <maxMemorySize>128M</maxMemorySize>
                                 <extraArguments>
+                                    <extraArgument>-server</extraArgument>
                                     <!--<extraArgument>-Dlogback.configurationFile=file:config_override/logback.xml</extraArgument>-->
                                 </extraArguments>
                             </jvmSettings>

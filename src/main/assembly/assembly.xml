@@ -16,11 +16,19 @@
 
         <fileSet>
             <directory>src/main/assembly/config_override</directory>
-            <outputDirectory>/config_override</outputDirectory>
+            <outputDirectory>config_override</outputDirectory>
         </fileSet>
 
         <fileSet>
             <directory>src/main/assembly/jdk</directory>
+            <outputDirectory/>
+        </fileSet>
+
+        <fileSet>
+            <directory>src/main/assembly</directory>
+            <includes>
+                <include>install.bat</include>
+            </includes>
             <outputDirectory/>
         </fileSet>
     </fileSets>

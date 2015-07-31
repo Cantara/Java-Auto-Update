@@ -22,7 +22,7 @@ public class Main {
     private static final Logger log = LoggerFactory.getLogger(Main.class);
 
     private static final String CONFIG_SERVICE_URL_KEY = "configServiceUrl";
-    private static final String CONFIG_FILENAME = "config_override/config.properties";
+    private static final String CONFIG_FILENAME = "config.properties";
 
     private final ExecutorService worker = Executors.newSingleThreadExecutor();
 
@@ -36,7 +36,10 @@ public class Main {
         main.start(serviceConfigUrl, workingDirectory);
     }
 
-
+    
+    /*
+    lib/wrapper.jar:config_override:lib/java-auto-update-1.0-SNAPSHOT.jar:lib/configservice-sdk-1.0-SNAPSHOT.jar:lib/jackson-databind-2.5.3.jar:lib/jackson-annotations-2.5.0.jar:lib/jackson-core-2.5.3.jar:lib/slf4j-api-1.7.12.jar:lib/logback-classic-1.1.3.jar:lib/logback-core-1.1.3.jar
+     */
     private static String getServiceConfigUrlOrExit() {
         String serviceConfigUrl = null;
         final Properties properties = new Properties();
@@ -44,7 +47,8 @@ public class Main {
             properties.load(Main.class.getClassLoader().getResourceAsStream(CONFIG_FILENAME));
             serviceConfigUrl = properties.getProperty(CONFIG_SERVICE_URL_KEY);
         } catch (NullPointerException|IOException e) {
-            log.debug("Could not load {} from classpath due to {}: {}.", CONFIG_FILENAME, e.getClass().getSimpleName(), e.getMessage());
+            log.debug("Could not load {} from classpath due to {}: {}. \n  Classpath: {}",
+                    CONFIG_FILENAME, e.getClass().getSimpleName(), e.getMessage(), System.getProperty("java.class.path"));
         }
 
         if (serviceConfigUrl == null) {
