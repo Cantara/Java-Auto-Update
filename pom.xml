@@ -19,7 +19,7 @@
     <parent>
         <groupId>no.cantara.emi</groupId>
         <artifactId>parent</artifactId>
-        <version>3</version>
+        <version>5</version>
     </parent>
 
     <scm>
@@ -109,69 +109,6 @@
 
     <build>
         <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>2.1</version>
-                <!-- Override 2.0 set in parent -->
-                <configuration>
-                    <filters>
-                        <filter>
-                            <artifact>*:*</artifact>
-                            <excludes>
-                                <exclude>META-INF/*.SF</exclude>
-                                <exclude>META-INF/*.DSA</exclude>
-                                <exclude>META-INF/*.RSA</exclude>
-                            </excludes>
-                        </filter>
-                    </filters>
-                    <!-- Additional configuration. -->
-                </configuration>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                        <configuration>
-                            <filters>
-                                <!-- Excluding signed manifest files from dependencies. -->
-                                <filter>
-                                    <artifact>*:*</artifact>
-                                    <excludes>
-                                        <exclude>META-INF/*.SF</exclude>
-                                        <exclude>META-INF/*.DSA</exclude>
-                                        <exclude>META-INF/*.RSA</exclude>
-                                    </excludes>
-                                </filter>
-                            </filters>
-                            <!--
-                            <artifactSet>
-                                <excludes>
-                                    <exclude>junit:junit</exclude>
-                                </excludes>
-                            </artifactSet>
-                            -->
-                            <transformers>
-                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <manifestEntries>
-                                        <Main-Class>no.cantara.jau.Main</Main-Class>
-                                    </manifestEntries>
-                                </transformer>
-                                <!--
-                                <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
-                                <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-                                    <resource>META-INF/spring.handlers</resource>
-                                </transformer>
-                                <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-                                    <resource>META-INF/spring.schemas</resource>
-                                </transformer>
-                                -->
-                            </transformers>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
             <!--Create Windows, and Unix/Linux installation scripst -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
@@ -183,8 +120,8 @@
                     <target>${project.build.directory}</target>
                     <daemons>
                         <daemon>
-                            <id>${project.name}</id>
-                            <mainClass>net.whydah.identity.Main</mainClass>
+                            <id>${project.artifactId}</id>
+                            <mainClass>no.cantara.jau.Main</mainClass>
                             <platforms>
                                 <platform>jsw</platform>
                             </platforms>
@@ -207,6 +144,12 @@
                                         <property>
                                             <name>wrapper.logfile</name>
                                             <value>logs/wrapper.log</value>
+                                        </property>
+
+                                        <!-- Java installation -->
+                                        <property>
+                                            <name>wrapper.java.command</name>
+                                            <value>../java/bin/java</value>
                                         </property>
 
                                         <property>
@@ -244,7 +187,6 @@
                     </execution>
                 </executions>
             </plugin>
-            <!--
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <configuration>
@@ -263,7 +205,50 @@
                     </execution>
                 </executions>
             </plugin>
-            -->
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <configuration>
+                    <filters>
+                        <filter>
+                            <artifact>*:*</artifact>
+                            <excludes>
+                                <exclude>META-INF/*.SF</exclude>
+                                <exclude>META-INF/*.DSA</exclude>
+                                <exclude>META-INF/*.RSA</exclude>
+                            </excludes>
+                        </filter>
+                    </filters>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <filters>
+                                <filter>
+                                    <artifact>*:*</artifact>
+                                    <excludes>
+                                        <exclude>META-INF/*.SF</exclude>
+                                        <exclude>META-INF/*.DSA</exclude>
+                                        <exclude>META-INF/*.RSA</exclude>
+                                    </excludes>
+                                </filter>
+                            </filters>
+                            <transformers>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <manifestEntries>
+                                        <Main-Class>no.cantara.jau.Main</Main-Class>
+                                    </manifestEntries>
+                                </transformer>
+                            </transformers>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 </project>
