@@ -1,15 +1,14 @@
 package no.cantara.jau;
 
 import no.cantara.jau.serviceconfig.client.ConfigServiceClient;
+import no.cantara.jau.serviceconfig.client.ConfigurationStoreUtil;
 import no.cantara.jau.serviceconfig.client.DownloadUtil;
-import no.cantara.jau.serviceconfig.dto.DownloadItem;
 import no.cantara.jau.serviceconfig.dto.ServiceConfig;
 import no.cantara.jau.serviceconfig.dto.ServiceConfigSerializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.nio.file.Path;
 import java.util.Properties;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -27,7 +26,7 @@ public class Main {
     private final ExecutorService worker = Executors.newSingleThreadExecutor();
 
 
-    //String serviceConfigUrl = "http://localhost:7000/jau/serviceconfig/query?clientid=clientid1";
+    //String serviceConfigUrl = "http://localhost:8086/jau/serviceconfig/query?clientid=clientid1";
     public static void main(String[] args) {
         String serviceConfigUrl = getServiceConfigUrlOrExit();
 
@@ -52,7 +51,7 @@ public class Main {
         }
 
         if (serviceConfigUrl == null) {
-            //-DconfigServiceUrl=http://localhost:7000/jau/serviceconfig/query?clientid=clientid1
+            //-DconfigServiceUrl=http://localhost:8086/jau/serviceconfig/query?clientid=clientid1
             serviceConfigUrl = System.getProperty(CONFIG_SERVICE_URL_KEY);
         }
 
@@ -94,12 +93,9 @@ public class Main {
         //check changedTimestamp
         // https://github.com/Cantara/Java-Auto-Update/issues/5
 
-        //Download
-        Path path = null;
-        for (DownloadItem downloadItem : serviceConfig.getDownloadItems()) {
-            log.debug("Downloading {}", downloadItem);
-            path = DownloadUtil.downloadFile(downloadItem, workingDirectory);
-        }
+        DownloadUtil.downloadAllFiles(serviceConfig.getDownloadItems(), workingDirectory);
+
+        ConfigurationStoreUtil.toFiles(serviceConfig.getConfigurationStores(), workingDirectory);
 
         //Stop existing service if running
         // https://github.com/Cantara/Java-Auto-Update/issues/4
