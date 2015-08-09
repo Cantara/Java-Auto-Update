@@ -20,47 +20,51 @@ import java.util.concurrent.Future;
 public class Main {
     private static final Logger log = LoggerFactory.getLogger(Main.class);
 
-    private static final String CONFIG_SERVICE_URL_KEY = "configServiceUrl";
     private static final String CONFIG_FILENAME = "config.properties";
+    private static final String CONFIG_SERVICE_URL_KEY = "configservice.url";
+    private static final String CONFIG_SERVICE_USERNAME_KEY = "configservice.username";
+    private static final String CONFIG_SERVICE_PASSWORD_KEY = "configservice.password";
+
 
     private final ExecutorService worker = Executors.newSingleThreadExecutor();
 
 
     //String serviceConfigUrl = "http://localhost:8086/jau/serviceconfig/query?clientid=clientid1";
     public static void main(String[] args) {
-        String serviceConfigUrl = getServiceConfigUrlOrExit();
+        String serviceConfigUrl = getProperty(CONFIG_FILENAME, CONFIG_SERVICE_URL_KEY);
+        if (serviceConfigUrl == null) {
+            log.error("Application cannot start! {} not set in {} or as property (-D{}=).",
+                    CONFIG_SERVICE_URL_KEY, CONFIG_FILENAME, CONFIG_SERVICE_URL_KEY);
+            System.exit(1);
+        }
+        String username = getProperty(CONFIG_FILENAME, CONFIG_SERVICE_USERNAME_KEY);
+        String password = getProperty(CONFIG_FILENAME, CONFIG_SERVICE_PASSWORD_KEY);
 
         String workingDirectory = "./";
         final Main main = new Main();
-        main.start(serviceConfigUrl, workingDirectory);
+        main.start(serviceConfigUrl, username, password, workingDirectory);
     }
 
     
     /*
     lib/wrapper.jar:config_override:lib/java-auto-update-1.0-SNAPSHOT.jar:lib/configservice-sdk-1.0-SNAPSHOT.jar:lib/jackson-databind-2.5.3.jar:lib/jackson-annotations-2.5.0.jar:lib/jackson-core-2.5.3.jar:lib/slf4j-api-1.7.12.jar:lib/logback-classic-1.1.3.jar:lib/logback-core-1.1.3.jar
      */
-    private static String getServiceConfigUrlOrExit() {
-        String serviceConfigUrl = null;
+    private static String getProperty(String configFilename, String propertyKey) {
+        String property = null;
         final Properties properties = new Properties();
         try {
-            properties.load(Main.class.getClassLoader().getResourceAsStream(CONFIG_FILENAME));
-            serviceConfigUrl = properties.getProperty(CONFIG_SERVICE_URL_KEY);
+            properties.load(Main.class.getClassLoader().getResourceAsStream(configFilename));
+            property = properties.getProperty(propertyKey);
         } catch (NullPointerException|IOException e) {
             log.debug("Could not load {} from classpath due to {}: {}. \n  Classpath: {}",
-                    CONFIG_FILENAME, e.getClass().getSimpleName(), e.getMessage(), System.getProperty("java.class.path"));
+                    configFilename, e.getClass().getSimpleName(), e.getMessage(), System.getProperty("java.class.path"));
         }
 
-        if (serviceConfigUrl == null) {
-            //-DconfigServiceUrl=http://localhost:8086/jau/serviceconfig/query?clientid=clientid1
-            serviceConfigUrl = System.getProperty(CONFIG_SERVICE_URL_KEY);
+        if (property == null) {
+            //-DconfigServiceUrl=
+            property = System.getProperty(propertyKey);
         }
-
-        if (serviceConfigUrl == null) {
-            log.error("Application cannot start! {} not set in {} or as property (-DconfigServiceUrl=http://localhost:7000/jau/serviceconfig/query?clientid=clientid1).",
-                    CONFIG_SERVICE_URL_KEY, CONFIG_FILENAME);
-            System.exit(1);
-        }
-        return serviceConfigUrl;
+        return property;
     }
 
     /**
@@ -70,15 +74,12 @@ public class Main {
      * Download
      * Stop existing service if running
      * Start new service
-     *
-     * @param serviceConfigUrl  url to service config for this service
-     * @param workingDirectory
      */
-    public void start(String serviceConfigUrl, String workingDirectory) {
+    public void start(String serviceConfigUrl, String username, String password, String workingDirectory) {
         // https://github.com/Cantara/ConfigService/issues/3
         String response = null;
         try {
-            response = ConfigServiceClient.fetchServiceConfig(serviceConfigUrl);
+            response = ConfigServiceClient.fetchServiceConfig(serviceConfigUrl, username, password);
             log.trace("fetchServiceConfig: serviceConfig={}", response);
         } catch (Exception e) {
             log.error("fetchServiceConfig failed with serviceConfigUrl={} Exiting.", serviceConfigUrl, e);
@@ -87,7 +88,7 @@ public class Main {
 
         //Parse
         ServiceConfig serviceConfig = ServiceConfigSerializer.fromJson(response);
-        log.debug("{}", serviceConfig);
+        log.debug("Download serviceConfig: {}", serviceConfig);
 
 
         //check changedTimestamp
