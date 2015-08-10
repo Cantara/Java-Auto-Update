@@ -46,7 +46,7 @@ public class MainInProcess {
     public void start(String serviceConfigUrl) {
         String response = null;
         try {
-            response = ConfigServiceClient.fetchServiceConfig(serviceConfigUrl);
+            response = ConfigServiceClient.fetchServiceConfig(serviceConfigUrl, null, null);
             log.trace("fetchServiceConfig: serviceConfig={}", response);
         } catch (Exception e) {
             log.error("fetchServiceConfig failed with serviceConfigUrl={} Exiting.", serviceConfigUrl, e);
