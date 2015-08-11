@@ -1,5 +1,5 @@
 # Java-Auto-Update
-Java Auto-Update - wrapper to automaticall upgrade a Java application. 
+Java Auto-Update - wrapper to automatically upgrade a Java application. 
 
 
 ## Install on Windows 
