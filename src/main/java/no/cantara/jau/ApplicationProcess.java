@@ -1,52 +1,67 @@
 package no.cantara.jau;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.File;
 import java.io.IOException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
- * @author <a href="mailto:erik-dev@fjas.no">Erik Drolshammer</a> 2015-07-13.
+ * Wrapper of process and related data,
+ * primarily used to circumvent Java 8's "final" restriction on closures.
  */
-public class ApplicationProcess implements Runnable {
+public class ApplicationProcess {
     private static final Logger log = LoggerFactory.getLogger(ApplicationProcess.class);
     private File workingDirectory;
     private String[] command;
+    private Process runningProcess;
+    private String lastChangedTimestamp;
 
-    public ApplicationProcess(String workingDirectory, String[] command) {
-        this.workingDirectory = new File(workingDirectory);
+    public File getWorkingDirectory() {
+        return workingDirectory;
+    }
+
+    public void setWorkingDirectory(File workingDirectory) {
+        this.workingDirectory = workingDirectory;
+    }
+
+    public String[] getCommand() {
+        return command;
+    }
+
+    public void setCommand(String[] command) {
         this.command = command;
     }
 
-    /*
-    public ApplicationProcess(String workingDirectory, String javaOptions, String jarFile) {
-        this.workingDirectory = new File(workingDirectory);
-        this.javaOptions = javaOptions;
-        this.jarFile = jarFile;
+    public String getLastChangedTimestamp() {
+        return lastChangedTimestamp;
     }
-    */
 
-    public void run() {
-        //ProcessBuilder pb = new ProcessBuilder("java", javaOptions, "-jar", jarFile).inheritIO().directory(workingDirectory);
+    public void setLastChangedTimestamp(String lastChangedTimestamp) {
+        this.lastChangedTimestamp = lastChangedTimestamp;
+    }
+
+    public void reStartProcess() {
+        if (runningProcess != null) {
+            if (runningProcess.isAlive()) {
+                log.debug("Destroying running process");
+                runningProcess.destroy();
+                try {
+                    runningProcess.waitFor();
+                    log.debug("Successfully destroyed running process");
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                log.debug("Process already exited with status {}.", runningProcess.exitValue());
+            }
+        }
         ProcessBuilder pb = new ProcessBuilder(command).inheritIO().directory(workingDirectory);
         try {
-            Process process = pb.start();
-            /*
-            BufferedReader in = new BufferedReader(new InputStreamReader(process.getInputStream()));
-            String s = "";
-            while((s = in.readLine()) != null){
-                log.info(s);
-            }
-            */
-            try {
-                int exitCode = process.waitFor();
-                log.debug("Process exited with exitCode={}", exitCode);
-            } catch (InterruptedException e) {
-                throw new RuntimeException("", e);
-            }
+            runningProcess = pb.start();
         } catch (IOException e) {
             throw new RuntimeException("", e);
         }
     }
+
 }
