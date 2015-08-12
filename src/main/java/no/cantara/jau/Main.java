@@ -97,6 +97,7 @@ public class Main {
 
         //Start new service
         final ApplicationProcess processHolder = new ApplicationProcess(); // Because of Java 8's "final" limitation on closures, any outside variables that need to be changed inside the closure must be wrapped in a final object.
+        processHolder.setWorkingDirectory(new File(workingDirectory));
 
         log.debug("Starting scheduler with an update interval of {} seconds.", updateInterval);
         final ScheduledFuture<?> restarterHandle = scheduler.scheduleAtFixedRate(
@@ -112,18 +113,21 @@ public class Main {
                     }
                     try { // ExecutorService swallows any exceptions silently, so need to handle them explicitly. See http://www.nurkiewicz.com/2014/11/executorservice-10-tips-and-tricks.html (point 6.).
                         String changedTimestamp = serviceConfig.getChangedTimestamp();
-                        if (changedTimestamp.equals(processHolder.getLastChangedTimestamp())) {
-                            log.debug("Timestamp has not changed - no action needed.");
-                            return;
+                        if (!changedTimestamp.equals(processHolder.getLastChangedTimestamp())) {
+                            log.debug("We got changes - stopping process and downloading new files.");
+                            processHolder.stopProcess();
+                            processHolder.setLastChangedTimestamp(changedTimestamp);
+                            DownloadUtil.downloadAllFiles(serviceConfig.getDownloadItems(), workingDirectory);
+                            ConfigurationStoreUtil.toFiles(serviceConfig.getConfigurationStores(), workingDirectory);
+                            String[] command = serviceConfig.getStartServiceScript().split("\\s+");
+                            processHolder.setCommand(command);
+                        } else {
+                            log.debug("No updated config - checking if the process has stopped.");
                         }
-                        log.debug("We got changes - downloading new files and restarting process.");
-                        processHolder.setLastChangedTimestamp(changedTimestamp);
-                        DownloadUtil.downloadAllFiles(serviceConfig.getDownloadItems(), workingDirectory);
-                        ConfigurationStoreUtil.toFiles(serviceConfig.getConfigurationStores(), workingDirectory);
-                        String[] command = serviceConfig.getStartServiceScript().split("\\s+");
-                        processHolder.setCommand(command);
-                        processHolder.setWorkingDirectory(new File(workingDirectory));
-                        processHolder.reStartProcess();
+                        if (!processHolder.processIsrunning()) { // Restart, whatever the cause of the shutdown.
+                            log.debug("Process has stopped - restarting.");
+                            processHolder.startProcess();
+                        }
                     } catch (Exception e) {
                         log.debug("Error thrown from scheduled lambda.", e);
                     }

@@ -41,26 +41,31 @@ public class ApplicationProcess {
         this.lastChangedTimestamp = lastChangedTimestamp;
     }
 
-    public void reStartProcess() {
-        if (runningProcess != null) {
-            if (runningProcess.isAlive()) {
-                log.debug("Destroying running process");
-                runningProcess.destroy();
-                try {
-                    runningProcess.waitFor();
-                    log.debug("Successfully destroyed running process");
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            } else {
-                log.debug("Process already exited with status {}.", runningProcess.exitValue());
-            }
-        }
+    public boolean processIsrunning() {
+        return runningProcess != null && runningProcess.isAlive();
+    }
+
+    public void startProcess() {
         ProcessBuilder pb = new ProcessBuilder(command).inheritIO().directory(workingDirectory);
         try {
             runningProcess = pb.start();
         } catch (IOException e) {
-            throw new RuntimeException("", e);
+            throw new RuntimeException("IOException while trying to start process with command '" + String.join(" ", command) + "' from directory '" + workingDirectory + "'.", e);
+        }
+    }
+
+    public void stopProcess() {
+        log.debug("Destroying running process");
+        if (!processIsrunning()) {
+            log.debug("Tried to stop process, but no process was running.");
+            return;
+        }
+        runningProcess.destroy();
+        try {
+            runningProcess.waitFor();
+            log.debug("Successfully destroyed running process");
+        } catch (InterruptedException e) {
+            log.debug("Interrupted while waiting for process to shut down.", e);
         }
     }
 
