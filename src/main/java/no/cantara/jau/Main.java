@@ -6,7 +6,6 @@ import no.cantara.jau.serviceconfig.client.ConfigServiceClient;
 import no.cantara.jau.serviceconfig.client.ConfigurationStoreUtil;
 import no.cantara.jau.serviceconfig.client.DownloadUtil;
 import no.cantara.jau.serviceconfig.dto.ServiceConfig;
-import no.cantara.jau.serviceconfig.dto.ServiceConfigSerializer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,48 +30,55 @@ public class Main {
 
     private static final String CONFIG_SERVICE_PASSWORD_KEY = "configservice.password";
 
-    public static final int DEFAULT_REFRESH_PERIOD = 3; // minutes
+    private static final String UPDATE_INTERVAL_KEY = "updateinterval";
 
-    private final ExecutorService worker = Executors.newSingleThreadExecutor();
+    public static final int DEFAULT_UPDATE_INTERVAL = 3 * 60; // seconds
 
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
     //String serviceConfigUrl = "http://localhost:8086/jau/serviceconfig/query?clientid=clientid1";
     public static void main(String[] args) {
-        String serviceConfigUrl = getProperty(CONFIG_FILENAME, CONFIG_SERVICE_URL_KEY);
+        final Properties properties = new Properties();
+        try {
+            properties.load(Main.class.getClassLoader().getResourceAsStream(CONFIG_FILENAME));
+        } catch (NullPointerException | IOException e) {
+            log.debug("Could not load {} from classpath due to {}: {}. \n  Classpath: {}",
+                      CONFIG_FILENAME, e.getClass().getSimpleName(), e.getMessage(),
+                      System.getProperty("java.class.path"));
+        }
+        String serviceConfigUrl = getStringProperty(properties, CONFIG_SERVICE_URL_KEY, null);
         if (serviceConfigUrl == null) {
             log.error("Application cannot start! {} not set in {} or as property (-D{}=).",
                       CONFIG_SERVICE_URL_KEY, CONFIG_FILENAME, CONFIG_SERVICE_URL_KEY);
             System.exit(1);
         }
-        String username = getProperty(CONFIG_FILENAME, CONFIG_SERVICE_USERNAME_KEY);
-        String password = getProperty(CONFIG_FILENAME, CONFIG_SERVICE_PASSWORD_KEY);
+        String username = getStringProperty(properties, CONFIG_SERVICE_USERNAME_KEY, null);
+        String password = getStringProperty(properties, CONFIG_SERVICE_PASSWORD_KEY, null);
+        int updateInterval = getIntProperty(properties, UPDATE_INTERVAL_KEY, DEFAULT_UPDATE_INTERVAL);
 
         String workingDirectory = "./";
         final Main main = new Main();
-        main.start(serviceConfigUrl, username, password, workingDirectory);
+        main.start(serviceConfigUrl, username, password, workingDirectory, updateInterval);
     }
 
     /*
     lib/wrapper.jar:config_override:lib/java-auto-update-1.0-SNAPSHOT.jar:lib/configservice-sdk-1.0-SNAPSHOT.jar:lib/jackson-databind-2.5.3.jar:lib/jackson-annotations-2.5.0.jar:lib/jackson-core-2.5.3.jar:lib/slf4j-api-1.7.12.jar:lib/logback-classic-1.1.3.jar:lib/logback-core-1.1.3.jar
      */
-    private static String getProperty(String configFilename, String propertyKey) {
-        String property = null;
-        final Properties properties = new Properties();
-        try {
-            properties.load(Main.class.getClassLoader().getResourceAsStream(configFilename));
-            property = properties.getProperty(propertyKey);
-        } catch (NullPointerException | IOException e) {
-            log.debug("Could not load {} from classpath due to {}: {}. \n  Classpath: {}",
-                      configFilename, e.getClass().getSimpleName(), e.getMessage(),
-                      System.getProperty("java.class.path"));
-        }
-
+    private static String getStringProperty(final Properties properties, String propertyKey, String defaultValue) {
+        String property = properties.getProperty(propertyKey, defaultValue);
         if (property == null) {
-            //-DconfigServiceUrl=
+            //-Dconfigservice.url=
             property = System.getProperty(propertyKey);
         }
         return property;
+    }
+
+    private static Integer getIntProperty(final Properties properties, String propertyKey, Integer defaultValue) {
+        String property = getStringProperty(properties, propertyKey, null);
+        if (property == null) {
+            return defaultValue;
+        }
+        return Integer.valueOf(property);
     }
 
     /**
@@ -83,7 +89,8 @@ public class Main {
      * Stop existing service if running
      * Start new service
      */
-    public void start(String serviceConfigUrl, String username, String password, String workingDirectory) {
+    public void start(String serviceConfigUrl, String username, String password, String workingDirectory,
+                      int updateInterval) {
 
         //Stop existing service if running
         // https://github.com/Cantara/Java-Auto-Update/issues/4
@@ -91,43 +98,39 @@ public class Main {
         //Start new service
         final ApplicationProcess processHolder = new ApplicationProcess(); // Because of Java 8's "final" limitation on closures, any outside variables that need to be changed inside the closure must be wrapped in a final object.
 
+        log.debug("Starting scheduler with an update interval of {} seconds.", updateInterval);
         final ScheduledFuture<?> restarterHandle = scheduler.scheduleAtFixedRate(
                 () -> {
-                    ServiceConfig serviceConfig = getServiceConfig(serviceConfigUrl, username, password);
-                    String changedTimestamp = serviceConfig.getChangedTimestamp();
-                    if (changedTimestamp.equals(processHolder.getLastChangedTimestamp())) {
-                        log.debug("Timestamp has not changed - no action needed.");
-                        return;
+
+                    ServiceConfig serviceConfig = null;
+                    try {
+                        serviceConfig = ConfigServiceClient
+                                .fetchAndParseServiceConfig(serviceConfigUrl, username, password);
+                    } catch (IOException e) {
+                        log.error("fetchServiceConfig failed with serviceConfigUrl={} Exiting.", serviceConfigUrl, e);
+                        System.exit(2);
                     }
-                    log.debug("We got changes - downloading new files and restarting process.");
-                    processHolder.setLastChangedTimestamp(changedTimestamp);
-                    DownloadUtil.downloadAllFiles(serviceConfig.getDownloadItems(), workingDirectory);
-                    ConfigurationStoreUtil.toFiles(serviceConfig.getConfigurationStores(), workingDirectory);
-                    String[] command = serviceConfig.getStartServiceScript().split("\\s+");
-                    processHolder.setCommand(command);
-                    processHolder.setWorkingDirectory(new File(workingDirectory));
-                    processHolder.reStartProcess();
+                    try { // ExecutorService swallows any exceptions silently, so need to handle them explicitly. See http://www.nurkiewicz.com/2014/11/executorservice-10-tips-and-tricks.html (point 6.).
+                        String changedTimestamp = serviceConfig.getChangedTimestamp();
+                        if (changedTimestamp.equals(processHolder.getLastChangedTimestamp())) {
+                            log.debug("Timestamp has not changed - no action needed.");
+                            return;
+                        }
+                        log.debug("We got changes - downloading new files and restarting process.");
+                        processHolder.setLastChangedTimestamp(changedTimestamp);
+                        DownloadUtil.downloadAllFiles(serviceConfig.getDownloadItems(), workingDirectory);
+                        ConfigurationStoreUtil.toFiles(serviceConfig.getConfigurationStores(), workingDirectory);
+                        String[] command = serviceConfig.getStartServiceScript().split("\\s+");
+                        processHolder.setCommand(command);
+                        processHolder.setWorkingDirectory(new File(workingDirectory));
+                        processHolder.reStartProcess();
+                    } catch (Exception e) {
+                        log.debug("Error thrown from scheduled lambda.", e);
+                    }
                 },
-                0, DEFAULT_REFRESH_PERIOD, MINUTES
+                1, updateInterval, SECONDS
         );
 
-    }
-
-    private ServiceConfig getServiceConfig(String serviceConfigUrl, String username, String password) {
-        String response = null;
-        try {
-            response = ConfigServiceClient.fetchServiceConfig(serviceConfigUrl, username, password);
-            log.debug("Fetched ServiceConfig (length: {}).", response.length());
-        } catch (Exception e) {
-            log.error("fetchServiceConfig failed with serviceConfigUrl={} Exiting.", serviceConfigUrl, e);
-            System.exit(2);
-        }
-
-        //Parse
-        ServiceConfig serviceConfig = ServiceConfigSerializer.fromJson(response);
-        log.debug("Parsed serviceConfig (timestamp: {})", serviceConfig.getChangedTimestamp());
-
-        return serviceConfig;
     }
 
 }
