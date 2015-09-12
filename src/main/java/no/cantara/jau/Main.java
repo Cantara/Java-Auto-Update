@@ -35,11 +35,15 @@ public class Main {
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
     private final ConfigServiceClient configServiceClient;
     private final String artifactId;
+    private final ApplicationProcess processHolder;
 
 
-    public Main(String serviceConfigUrl, String username, String password, String artifactId) {
+    public Main(String serviceConfigUrl, String username, String password, String artifactId, String workingDirectory) {
         configServiceClient = new ConfigServiceClient(serviceConfigUrl, username, password);
         this.artifactId = artifactId;
+        // Because of Java 8's "final" limitation on closures, any outside variables that need to be changed inside the closure must be wrapped in a final object.
+        processHolder = new ApplicationProcess();
+        processHolder.setWorkingDirectory(new File(workingDirectory));
     }
 
     //-Dconfigservice.url=http://localhost:8086/jau/clientconfig -Dconfigservice.username=user -Dconfigservice.password=pass -Dconfigservice.artifactid=someArtifactId
@@ -64,8 +68,8 @@ public class Main {
         int updateInterval = getIntProperty(properties, UPDATE_INTERVAL_KEY, DEFAULT_UPDATE_INTERVAL);
 
         String workingDirectory = "./";
-        final Main main = new Main(serviceConfigUrl, username, password, artifactId);
-        main.start(workingDirectory, updateInterval);
+        final Main main = new Main(serviceConfigUrl, username, password, artifactId, workingDirectory);
+        main.start(updateInterval);
     }
 
     /**
@@ -76,60 +80,55 @@ public class Main {
      *   Stop existing service if running
      *   Start new service
      */
-    public void start(String workingDirectory, int updateInterval) {
+    public void start(int updateInterval) {
         //Stop existing service if running
         //https://github.com/Cantara/Java-Auto-Update/issues/4
 
 
-        //registerClient
-        final ClientConfig clientConfig;
-        try {
-
-            ClientRegistrationRequest registrationRequest = new ClientRegistrationRequest(artifactId);
-            registrationRequest.envInfo.putAll(System.getenv());
-            clientConfig = configServiceClient.registerClient(registrationRequest);
-            //TODO persist clientId and checksum
-            //For some scenarios it makes sense to retry
-            // ConnectException: Connection refused - retry
-        } catch (IOException e) {
-            log.error("TODO handle this better", e);
-            return;
-        }
+        registerClient();
 
 
         //Start new service
-        final ApplicationProcess processHolder = new ApplicationProcess(); // Because of Java 8's "final" limitation on closures, any outside variables that need to be changed inside the closure must be wrapped in a final object.
-        processHolder.setWorkingDirectory(new File(workingDirectory));
-
         log.debug("Starting scheduler with an update interval of {} seconds.", updateInterval);
+        //The initial extra call to checkForUpdate can be removed, but not a priority now...
         final ScheduledFuture<?> restarterHandle = scheduler.scheduleAtFixedRate(
                 () -> {
                     ClientConfig newClientConfig = null;
                     try {
-                        newClientConfig = configServiceClient.checkForUpdate(clientConfig.clientId, "checksumHere", System.getenv());
+                        Properties applicationState = configServiceClient.getApplicationState();
+                        String clientId = getStringProperty(applicationState, ConfigServiceClient.CLIENT_ID, null);
+                        String lastChanged = getStringProperty(applicationState, ConfigServiceClient.LAST_CHANGED, null);
+                        newClientConfig = configServiceClient.checkForUpdate(clientId, lastChanged, System.getenv());
+                    } catch (IllegalStateException regE) {
+                        log.warn(regE.getMessage());
+                        configServiceClient.cleanApplicationState();
+                        registerClient();
                     } catch (IOException e) {
                         log.error("checkForUpdate failed, do nothing. Retrying in {} seconds.", updateInterval, e);
                         return;
                     }
 
-
-                    try { // ExecutorService swallows any exceptions silently, so need to handle them explicitly. See http://www.nurkiewicz.com/2014/11/executorservice-10-tips-and-tricks.html (point 6.).
-                        //String changedTimestamp = serviceConfig.getChangedTimestamp();
-                        //if (!changedTimestamp.equals(processHolder.getLastChangedTimestamp())) {
-                        if (newClientConfig != null) {
+                    // ExecutorService swallows any exceptions silently, so need to handle them explicitly.
+                    // See http://www.nurkiewicz.com/2014/11/executorservice-10-tips-and-tricks.html (point 6.).
+                    try {
+                        if (newClientConfig == null) {
+                            log.debug("No updated config - checking if the process has stopped.");
+                        } else {
                             log.debug("We got changes - stopping process and downloading new files.");
                             processHolder.stopProcess();
-                            //processHolder.setLastChangedTimestamp(changedTimestamp);  //TODO
+
                             ServiceConfig serviceConfig = newClientConfig.serviceConfig;
+                            String workingDirectory = processHolder.getWorkingDirectory().getAbsolutePath();
                             DownloadUtil.downloadAllFiles(serviceConfig.getDownloadItems(), workingDirectory);
                             ConfigurationStoreUtil.toFiles(serviceConfig.getConfigurationStores(), workingDirectory);
                             String[] command = serviceConfig.getStartServiceScript().split("\\s+");
                             processHolder.setCommand(command);
-                        } else {
-                            log.debug("No updated config - checking if the process has stopped.");
+                            processHolder.setLastChangedTimestamp(serviceConfig.getLastChanged());
+
+                            configServiceClient.saveApplicationState(newClientConfig);
                         }
                         if (!processHolder.processIsrunning()) { // Restart, whatever the cause of the shutdown.
-                            log.debug("Process is not running - restarting.");
+                            log.debug("Process is not running - restarting...");
                             processHolder.startProcess();
                         }
                     } catch (Exception e) {
@@ -138,6 +137,33 @@ public class Main {
                 },
                 1, updateInterval, SECONDS
         );
+    }
+
+    private void registerClient() {
+        Properties applicationStateOnStartup = configServiceClient.getApplicationState();
+        if (applicationStateOnStartup == null) {
+            ClientConfig clientConfig;
+            try {
+                ClientRegistrationRequest registrationRequest = new ClientRegistrationRequest(artifactId);
+                registrationRequest.envInfo.putAll(System.getenv());
+                clientConfig = configServiceClient.registerClient(registrationRequest);
+                configServiceClient.saveApplicationState(clientConfig);
+                //TODO make more robust, e.g. retries
+                // ConnectException: Connection refused - retry
+
+                processHolder.setCommand(clientConfig.serviceConfig.getStartServiceScript().split("\\s+"));
+                processHolder.setLastChangedTimestamp(clientConfig.serviceConfig.getLastChanged());
+            } catch (IOException e) {
+                log.error("TODO handle this better", e);
+            }
+        } else {
+            String clientIdOnStartup = getStringProperty(applicationStateOnStartup, ConfigServiceClient.CLIENT_ID, null);
+            String lastChangedOnStartup = getStringProperty(applicationStateOnStartup, ConfigServiceClient.LAST_CHANGED, null);
+            String commandOnStartup = getStringProperty(applicationStateOnStartup, ConfigServiceClient.COMMAND, null);
+            processHolder.setCommand(commandOnStartup.split("\\s+"));
+            processHolder.setLastChangedTimestamp(lastChangedOnStartup);
+            log.debug("Client already registered. clientId={}, lastChanged={}, command={}", clientIdOnStartup, lastChangedOnStartup, commandOnStartup);
+        }
     }
 
     private static String getStringProperty(final Properties properties, String propertyKey, String defaultValue) {
