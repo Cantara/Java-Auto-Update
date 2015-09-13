@@ -32,7 +32,7 @@ public class ApplicationProcessTest {
         processHolder.setWorkingDirectory(new File("./"));
         String[] command = new String[2];
         command[0] = "sleep";
-        command[1] = "10";
+        command[1] = "4";
         int updateInterval=100;
         processHolder.setCommand(command);
         processHolder.startProcess();
