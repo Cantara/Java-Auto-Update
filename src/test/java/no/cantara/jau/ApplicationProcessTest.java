@@ -32,7 +32,7 @@ public class ApplicationProcessTest {
         processHolder.setWorkingDirectory(new File("./"));
         String[] command = new String[2];
         command[0] = "sleep";
-        command[1] = "20";
+        command[1] = "10";
         int updateInterval=100;
         processHolder.setCommand(command);
         processHolder.startProcess();
@@ -75,7 +75,11 @@ public class ApplicationProcessTest {
         processHolder.stopProcess();
         assertFalse(processHolder.processIsrunning(), "Fifth check");
         Thread.sleep(4000);
-        assertTrue(processHolder.processIsrunning(), "First check");
+        assertTrue(processHolder.processIsrunning(), "Sixt check");
+        processHolder.stopProcess();
+        assertFalse(processHolder.processIsrunning(), "Seventh check");
+        Thread.sleep(4000);
+        assertTrue(processHolder.processIsrunning(), "Eigth check");
 
 
     }
