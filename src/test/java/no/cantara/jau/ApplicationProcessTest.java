@@ -58,7 +58,9 @@ public class ApplicationProcessTest {
 
     @AfterClass
     public void stop() {
-        processHolder.startProcess();
+        if (processHolder!=null){
+            processHolder.startProcess();
+        }
     }
 
 
