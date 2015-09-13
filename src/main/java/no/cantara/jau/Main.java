@@ -109,57 +109,59 @@ public class Main {
         log.debug("Starting scheduler with an update interval of {} seconds.", updateInterval);
         while (true) {
 
-            restarterHandle = scheduler.scheduleAtFixedRate(
-                    () -> {
-                        ClientConfig newClientConfig = null;
-                        try {
-                            Properties applicationState = configServiceClient.getApplicationState();
-                            String clientId = getStringProperty(applicationState, ConfigServiceClient.CLIENT_ID, null);
-                            String lastChanged = getStringProperty(applicationState, ConfigServiceClient.LAST_CHANGED, null);
-                            newClientConfig = configServiceClient.checkForUpdate(clientId, lastChanged, System.getenv());
-                        } catch (IllegalStateException regE) {
-                            log.warn(regE.getMessage());
-                            configServiceClient.cleanApplicationState();
-                            newClientConfig = registerClient();
-                        } catch (IOException e) {
-                            log.error("checkForUpdate failed, do nothing. Retrying in {} seconds.", updateInterval, e);
-                            return;
-                        }
-
-                        // ExecutorService swallows any exceptions silently, so need to handle them explicitly.
-                        // See http://www.nurkiewicz.com/2014/11/executorservice-10-tips-and-tricks.html (point 6.).
-                        try {
-                            if (newClientConfig == null) {
-                                log.debug("No updated config. - checking if the process has stopped.");
-                            } else {
-                                log.debug("We got changes - stopping process and downloading new files.");
-                                restarterHandle.cancel(true);
-                                processHolder.stopProcess();
-
-                                String workingDirectory = processHolder.getWorkingDirectory().getAbsolutePath();
-                                ServiceConfig serviceConfig = newClientConfig.serviceConfig;
-                                DownloadUtil.downloadAllFiles(serviceConfig.getDownloadItems(), workingDirectory);
-                                ConfigurationStoreUtil.toFiles(serviceConfig.getConfigurationStores(), workingDirectory);
-                                String[] command = serviceConfig.getStartServiceScript().split("\\s+");
-                                processHolder.setCommand(command);
-                                processHolder.setClientId(newClientConfig.clientId);
-                                processHolder.setLastChangedTimestamp(serviceConfig.getLastChanged());
-
-                                configServiceClient.saveApplicationState(newClientConfig);
+            if (restarterHandle==null || restarterHandle.isCancelled()) {
+                restarterHandle = scheduler.scheduleAtFixedRate(
+                        () -> {
+                            ClientConfig newClientConfig = null;
+                            try {
+                                Properties applicationState = configServiceClient.getApplicationState();
+                                String clientId = getStringProperty(applicationState, ConfigServiceClient.CLIENT_ID, null);
+                                String lastChanged = getStringProperty(applicationState, ConfigServiceClient.LAST_CHANGED, null);
+                                newClientConfig = configServiceClient.checkForUpdate(clientId, lastChanged, System.getenv());
+                            } catch (IllegalStateException regE) {
+                                log.warn(regE.getMessage());
+                                configServiceClient.cleanApplicationState();
+                                newClientConfig = registerClient();
+                            } catch (IOException e) {
+                                log.error("checkForUpdate failed, do nothing. Retrying in {} seconds.", updateInterval, e);
+                                return;
                             }
 
-                            // Restart, whatever the reason the process is not running.
-                            if (!processHolder.processIsrunning() && !restarterHandle.isCancelled()) {
-                                log.debug("Process is not running - restarting... clientId={}, lastChanged={}, command={}",
-                                        processHolder.getClientId(), processHolder.getLastChangedTimestamp(), processHolder.getCommand());
-                                processHolder.startProcess();
+                            // ExecutorService swallows any exceptions silently, so need to handle them explicitly.
+                            // See http://www.nurkiewicz.com/2014/11/executorservice-10-tips-and-tricks.html (point 6.).
+                            try {
+                                if (newClientConfig == null) {
+                                    log.debug("No updated config. - checking if the process has stopped.");
+                                } else {
+                                    log.debug("We got changes - stopping process and downloading new files.");
+                                    restarterHandle.cancel(true);
+                                    processHolder.stopProcess();
+
+                                    String workingDirectory = processHolder.getWorkingDirectory().getAbsolutePath();
+                                    ServiceConfig serviceConfig = newClientConfig.serviceConfig;
+                                    DownloadUtil.downloadAllFiles(serviceConfig.getDownloadItems(), workingDirectory);
+                                    ConfigurationStoreUtil.toFiles(serviceConfig.getConfigurationStores(), workingDirectory);
+                                    String[] command = serviceConfig.getStartServiceScript().split("\\s+");
+                                    processHolder.setCommand(command);
+                                    processHolder.setClientId(newClientConfig.clientId);
+                                    processHolder.setLastChangedTimestamp(serviceConfig.getLastChanged());
+
+                                    configServiceClient.saveApplicationState(newClientConfig);
+                                }
+
+                                // Restart, whatever the reason the process is not running.
+                                if (!processHolder.processIsrunning() && !restarterHandle.isCancelled()) {
+                                    log.debug("Process is not running - restarting... clientId={}, lastChanged={}, command={}",
+                                            processHolder.getClientId(), processHolder.getLastChangedTimestamp(), processHolder.getCommand());
+                                    processHolder.startProcess();
+                                }
+                            } catch (Exception e) {
+                                log.debug("Error thrown from scheduled lambda.", e);
                             }
-                        } catch (Exception e) {
-                            log.debug("Error thrown from scheduled lambda.", e);
-                        }
-                    },
-                    1, updateInterval, SECONDS
-            );
+                        },
+                        1, updateInterval, SECONDS
+                );
+            }
         }
     }
 
