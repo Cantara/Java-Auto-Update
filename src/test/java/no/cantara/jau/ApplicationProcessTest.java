@@ -33,7 +33,7 @@ public class ApplicationProcessTest {
         String[] command = new String[2];
         command[0] = "sleep";
         command[1] = "4";
-        int updateInterval=100;
+        int updateInterval=20;
         processHolder.setCommand(command);
         processHolder.startProcess();
 
