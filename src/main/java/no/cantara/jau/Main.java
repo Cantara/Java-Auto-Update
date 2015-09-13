@@ -106,10 +106,10 @@ public class Main {
 
 
         //checkForUpdate and start process
-        log.debug("Starting scheduler with an update interval of {} seconds.", updateInterval);
         while (true) {
 
             if (restarterHandle==null || restarterHandle.isCancelled()) {
+                log.debug("Starting scheduler with an update interval of {} seconds.", updateInterval);
                 restarterHandle = scheduler.scheduleAtFixedRate(
                         () -> {
                             ClientConfig newClientConfig = null;
