@@ -1,7 +1,6 @@
 package no.cantara.jau;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jdk.nashorn.internal.ir.annotations.Ignore;
 import no.cantara.jau.serviceconfig.client.ConfigServiceClient;
 import no.cantara.jau.serviceconfig.client.ConfigurationStoreUtil;
 import no.cantara.jau.serviceconfig.client.DownloadUtil;
@@ -53,8 +52,7 @@ public class JAUProcessTest {
     }
 
 
-    @Ignore
-    @Test
+    @Test(enabled=false)
     public void testProcessDownloadStartupAndRunning() throws Exception {
 
 
