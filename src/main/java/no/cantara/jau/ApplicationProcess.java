@@ -1,10 +1,10 @@
 package no.cantara.jau;
 
-import java.io.File;
-import java.io.IOException;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.File;
+import java.io.IOException;
 
 /**
  * Wrapper of process and related data,
@@ -15,31 +15,9 @@ public class ApplicationProcess {
     private File workingDirectory;
     private String[] command;
     private Process runningProcess;
+
+    private String clientId;
     private String lastChangedTimestamp;
-
-    public File getWorkingDirectory() {
-        return workingDirectory;
-    }
-
-    public void setWorkingDirectory(File workingDirectory) {
-        this.workingDirectory = workingDirectory;
-    }
-
-    public String[] getCommand() {
-        return command;
-    }
-
-    public void setCommand(String[] command) {
-        this.command = command;
-    }
-
-    public String getLastChangedTimestamp() {
-        return lastChangedTimestamp;
-    }
-
-    public void setLastChangedTimestamp(String lastChangedTimestamp) {
-        this.lastChangedTimestamp = lastChangedTimestamp;
-    }
 
     public boolean processIsrunning() {
         return runningProcess != null && runningProcess.isAlive();
@@ -67,6 +45,32 @@ public class ApplicationProcess {
         } catch (InterruptedException e) {
             log.debug("Interrupted while waiting for process to shut down.", e);
         }
+    }
+
+    public void setWorkingDirectory(File workingDirectory) {
+        this.workingDirectory = workingDirectory;
+    }
+    public void setCommand(String[] command) {
+        this.command = command;
+    }
+    public void setClientId(String clientId) {
+        this.clientId = clientId;
+    }
+    public void setLastChangedTimestamp(String lastChangedTimestamp) {
+        this.lastChangedTimestamp = lastChangedTimestamp;
+    }
+
+    public File getWorkingDirectory() {
+        return workingDirectory;
+    }
+    public String[] getCommand() {
+        return command;
+    }
+    public String getClientId() {
+        return clientId;
+    }
+    public String getLastChangedTimestamp() {
+        return lastChangedTimestamp;
     }
 
 }

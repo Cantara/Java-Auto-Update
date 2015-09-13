@@ -52,8 +52,8 @@ public class Main {
         try {
             properties.load(Main.class.getClassLoader().getResourceAsStream(CONFIG_FILENAME));
         } catch (NullPointerException | IOException e) {
-            log.debug("Could not load {} from classpath due to {}: {}. \n  Classpath: {}",
-                    CONFIG_FILENAME, e.getClass().getSimpleName(), e.getMessage(), System.getProperty("java.class.path"));
+            log.debug("{} not found on classpath.  Fallback to VM options (-D).", CONFIG_FILENAME);
+            //log.debug("{} not found on classpath.  Fallback to -D values. \n  Classpath: {}", CONFIG_FILENAME, System.getProperty("java.class.path"));
         }
         String serviceConfigUrl = getStringProperty(properties, CONFIG_SERVICE_URL_KEY, null);
         if (serviceConfigUrl == null) {
@@ -84,13 +84,28 @@ public class Main {
         //Stop existing service if running
         //https://github.com/Cantara/Java-Auto-Update/issues/4
 
+        //registerClient or fetch applicationState from file
+        if (configServiceClient.getApplicationState() == null) {
+            ClientConfig clientConfig = registerClient();
 
-        registerClient();
+            String workingDirectory = processHolder.getWorkingDirectory().getAbsolutePath();
+            ServiceConfig serviceConfig = clientConfig.serviceConfig;
+            DownloadUtil.downloadAllFiles(serviceConfig.getDownloadItems(), workingDirectory);
+            ConfigurationStoreUtil.toFiles(serviceConfig.getConfigurationStores(), workingDirectory);
+        } else {
+            log.debug("Client already registered. Skip registerClient and use properties from file.");
+        }
+        Properties initialApplicationState = configServiceClient.getApplicationState();
+        String initialClientId = getStringProperty(initialApplicationState, ConfigServiceClient.CLIENT_ID, null);
+        String initialLastChanged = getStringProperty(initialApplicationState, ConfigServiceClient.LAST_CHANGED, null);
+        String initialCommand = getStringProperty(initialApplicationState, ConfigServiceClient.COMMAND, null);
+        processHolder.setCommand(initialCommand.split("\\s+"));
+        processHolder.setClientId(initialClientId);
+        processHolder.setLastChangedTimestamp(initialLastChanged);
 
 
-        //Start new service
+        //checkForUpdate and start process
         log.debug("Starting scheduler with an update interval of {} seconds.", updateInterval);
-        //The initial extra call to checkForUpdate can be removed, but not a priority now...
         final ScheduledFuture<?> restarterHandle = scheduler.scheduleAtFixedRate(
                 () -> {
                     ClientConfig newClientConfig = null;
@@ -102,7 +117,7 @@ public class Main {
                     } catch (IllegalStateException regE) {
                         log.warn(regE.getMessage());
                         configServiceClient.cleanApplicationState();
-                        registerClient();
+                        newClientConfig = registerClient();
                     } catch (IOException e) {
                         log.error("checkForUpdate failed, do nothing. Retrying in {} seconds.", updateInterval, e);
                         return;
@@ -112,23 +127,27 @@ public class Main {
                     // See http://www.nurkiewicz.com/2014/11/executorservice-10-tips-and-tricks.html (point 6.).
                     try {
                         if (newClientConfig == null) {
-                            log.debug("No updated config - checking if the process has stopped.");
+                            log.debug("No updated config. - checking if the process has stopped.");
                         } else {
                             log.debug("We got changes - stopping process and downloading new files.");
                             processHolder.stopProcess();
 
-                            ServiceConfig serviceConfig = newClientConfig.serviceConfig;
                             String workingDirectory = processHolder.getWorkingDirectory().getAbsolutePath();
+                            ServiceConfig serviceConfig = newClientConfig.serviceConfig;
                             DownloadUtil.downloadAllFiles(serviceConfig.getDownloadItems(), workingDirectory);
                             ConfigurationStoreUtil.toFiles(serviceConfig.getConfigurationStores(), workingDirectory);
                             String[] command = serviceConfig.getStartServiceScript().split("\\s+");
                             processHolder.setCommand(command);
+                            processHolder.setClientId(newClientConfig.clientId);
                             processHolder.setLastChangedTimestamp(serviceConfig.getLastChanged());
 
                             configServiceClient.saveApplicationState(newClientConfig);
                         }
-                        if (!processHolder.processIsrunning()) { // Restart, whatever the cause of the shutdown.
-                            log.debug("Process is not running - restarting...");
+
+                        // Restart, whatever the reason the process is not running.
+                        if (!processHolder.processIsrunning()) {
+                            log.debug("Process is not running - restarting... clientId={}, lastChanged={}, command={}",
+                                    processHolder.getClientId(), processHolder.getLastChangedTimestamp(), processHolder.getCommand());
                             processHolder.startProcess();
                         }
                     } catch (Exception e) {
@@ -139,32 +158,22 @@ public class Main {
         );
     }
 
-    private void registerClient() {
-        Properties applicationStateOnStartup = configServiceClient.getApplicationState();
-        if (applicationStateOnStartup == null) {
-            ClientConfig clientConfig;
-            try {
-                ClientRegistrationRequest registrationRequest = new ClientRegistrationRequest(artifactId);
-                registrationRequest.envInfo.putAll(System.getenv());
-                clientConfig = configServiceClient.registerClient(registrationRequest);
-                configServiceClient.saveApplicationState(clientConfig);
-                //TODO make more robust, e.g. retries
-                // ConnectException: Connection refused - retry
-
-                processHolder.setCommand(clientConfig.serviceConfig.getStartServiceScript().split("\\s+"));
-                processHolder.setLastChangedTimestamp(clientConfig.serviceConfig.getLastChanged());
-            } catch (IOException e) {
-                log.error("TODO handle this better", e);
-            }
-        } else {
-            String clientIdOnStartup = getStringProperty(applicationStateOnStartup, ConfigServiceClient.CLIENT_ID, null);
-            String lastChangedOnStartup = getStringProperty(applicationStateOnStartup, ConfigServiceClient.LAST_CHANGED, null);
-            String commandOnStartup = getStringProperty(applicationStateOnStartup, ConfigServiceClient.COMMAND, null);
-            processHolder.setCommand(commandOnStartup.split("\\s+"));
-            processHolder.setLastChangedTimestamp(lastChangedOnStartup);
-            log.debug("Client already registered. clientId={}, lastChanged={}, command={}", clientIdOnStartup, lastChangedOnStartup, commandOnStartup);
+    private ClientConfig registerClient() {
+        ClientConfig clientConfig;
+        try {
+            ClientRegistrationRequest registrationRequest = new ClientRegistrationRequest(artifactId);
+            registrationRequest.envInfo.putAll(System.getenv());
+            clientConfig = configServiceClient.registerClient(registrationRequest);
+            configServiceClient.saveApplicationState(clientConfig);
+            return clientConfig;
+            //TODO make more robust, e.g. retries
+            // ConnectException: Connection refused - retry
+        } catch (IOException e) {
+            log.error("TODO handle this better", e);
+            throw new RuntimeException(e);
         }
     }
+
 
     private static String getStringProperty(final Properties properties, String propertyKey, String defaultValue) {
         String property = properties.getProperty(propertyKey, defaultValue);
