@@ -17,6 +17,7 @@ import static org.testng.Assert.assertFalse;
 
 import java.io.File;
 import java.util.Properties;
+import java.util.Scanner;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -55,38 +56,7 @@ public class JAUProcessTest {
     public void testProcessDownloadStartupAndRunning() throws Exception {
 
 
-        String jsonResponse = "{  \n" +
-                "   \"name\":\"Service1-1.23\",\n" +
-//                "   \"changedTimestamp\":\"2015-08-11T10:13:12.141Z\",\n" +
-                "   \"downloadItems\":[  \n" +
-                "      {  \n" +
-                "         \"url\":\"http://mvnrepo.capraconsulting.no/service/local/artifact/maven/redirect?r=nmdsnapshots&g=no.asa.as&a=as-agent&v=0.7-SNAPSHOT&p=jar\",\n" +
-                "         \"username\":\"as\",\n" +
-                "         \"password\":\"hjhk\",\n" +
-                "         \"metadata\":{  \n" +
-                "            \"groupId\":\"no.xx.armacy\",\n" +
-                "            \"artifactId\":\"pharmacy-agent\",\n" +
-                "            \"version\":\"0.7-SNAPSHOT\",\n" +
-                "            \"packaging\":\"jar\",\n" +
-                "            \"lastUpdated\":null,\n" +
-                "            \"buildNumber\":null\n" +
-                "         }\n" +
-                "      }\n" +
-                "   ],\n" +
-                "   \"configurationStores\":[  \n" +
-                "      {  \n" +
-                "         \"fileName\":\"config_override.properties\",\n" +
-                "         \"properties\":{  \n" +
-                "            \"stocklevel.aws.accessKey\":\"\",\n" +
-                "            \"stocklevel.aws.secretKey\":\"jRTh7lv+\",\n" +
-                "            \"stocklevel.aws.destination.name\":\"as\",\n" +
-                "            \"stocklevel.aws.region\":\"us-east-1\",\n" +
-                "            \"jms.rest.host\":\"localhost\"\n" +
-                "         }\n" +
-                "      }\n" +
-                "   ],\n" +
-                "   \"startServiceScript\":\"java -DDEMO_MODE=true -jar pharmacy-agent-0.7-SNAPSHOT.jar\"\n" +
-                "}";
+        String jsonResponse = new Scanner( new File("config1.serviceconfig") ).useDelimiter("\\A").next();
 
         // let us type a configuration the quick way..
         ServiceConfig serviceConfig = mapper.readValue(jsonResponse, ServiceConfig.class);
