@@ -45,7 +45,9 @@ public class JAUProcessTest {
 
     @AfterClass
     public void stop() {
-        processHolder.startProcess();
+        if (processHolder != null) {
+            processHolder.stopProcess();
+        }
         restarterHandle.cancel(true);
 
     }
