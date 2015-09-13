@@ -87,12 +87,12 @@ public class JAUProcessTest {
                     try {
                         // Restart, whatever the reason the process is not running.
                         if (!processHolder.processIsrunning()) {
-                            log.debug("Process is not running - restarting... clientId={}, lastChanged={}, command={}",
+                            log.info("Process is not running - restarting... clientId={}, lastChanged={}, command={}",
                                     processHolder.getClientId(), processHolder.getLastChangedTimestamp(), processHolder.getCommand());
                             processHolder.startProcess();
                         }
                     } catch (Exception e) {
-                        log.debug("Error thrown from scheduled lambda.", e);
+                        log.warn("Error thrown from scheduled lambda.", e);
                     }
                 },
                 1, updateInterval, MILLISECONDS

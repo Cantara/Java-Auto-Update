@@ -33,7 +33,7 @@ public class ApplicationProcessTest {
         String[] command = new String[2];
         command[0] = "sleep";
         command[1] = "4";
-        int updateInterval=20;
+        int updateInterval=22;
         processHolder.setCommand(command);
         processHolder.startProcess();
 
@@ -43,12 +43,12 @@ public class ApplicationProcessTest {
                     try {
                         // Restart, whatever the reason the process is not running.
                         if (!processHolder.processIsrunning()) {
-                            log.debug("Process is not running - restarting... clientId={}, lastChanged={}, command={}",
+                            log.info("Process is not running - restarting... clientId={}, lastChanged={}, command={}",
                                     processHolder.getClientId(), processHolder.getLastChangedTimestamp(), processHolder.getCommand());
                             processHolder.startProcess();
                         }
                     } catch (Exception e) {
-                        log.debug("Error thrown from scheduled lambda.", e);
+                        log.warn("Error thrown from scheduled lambda.", e);
                     }
                 },
                 1, updateInterval, MILLISECONDS
@@ -66,7 +66,7 @@ public class ApplicationProcessTest {
 
     @Test
     public void testProcessRunning() throws Exception {
-        Thread.sleep(4000);
+        Thread.sleep(3000);
         assertTrue(processHolder.processIsrunning(), "First check");
         Thread.sleep(1000);
         assertTrue(processHolder.processIsrunning(), "Second check");
