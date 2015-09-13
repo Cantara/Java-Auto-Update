@@ -1,5 +1,6 @@
 *.class
 *.log
+*.serviceconfig
 dependency-reduced-pom.xml
 
 # Package Files #
