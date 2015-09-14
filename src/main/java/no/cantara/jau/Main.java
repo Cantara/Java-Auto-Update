@@ -108,7 +108,7 @@ public class Main {
         //checkForUpdate and start process
         while (true) {
 
-            if (restarterHandle==null || restarterHandle.isCancelled()) {
+            if (restarterHandle==null || restarterHandle.isCancelled() || restarterHandle.isDone()) {
                 log.debug("Starting scheduler with an update interval of {} seconds.", updateInterval);
                 restarterHandle = scheduler.scheduleAtFixedRate(
                         () -> {
