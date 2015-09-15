@@ -1,5 +1,8 @@
 package no.cantara.jau;
 
+import com.netflix.hystrix.HystrixCommand;
+import com.netflix.hystrix.HystrixCommandGroupKey;
+import com.netflix.hystrix.exception.HystrixRuntimeException;
 import no.cantara.jau.serviceconfig.client.ConfigServiceClient;
 import no.cantara.jau.serviceconfig.client.ConfigurationStoreUtil;
 import no.cantara.jau.serviceconfig.client.DownloadUtil;
@@ -8,9 +11,15 @@ import no.cantara.jau.serviceconfig.dto.ClientRegistrationRequest;
 import no.cantara.jau.serviceconfig.dto.ServiceConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.backoff.BackOffExecution;
+import org.springframework.util.backoff.ExponentialBackOff;
 
+import javax.ws.rs.BadRequestException;
+import javax.ws.rs.InternalServerErrorException;
+import javax.ws.rs.NotFoundException;
 import java.io.File;
 import java.io.IOException;
+import java.net.ConnectException;
 import java.util.Properties;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -38,8 +47,12 @@ public class Main {
     private final String artifactId;
     private final ApplicationProcess processHolder;
 
+    private static final String GROUP_KEY = "GROUP_KEY";
+    private final String serviceConfigUrl;
+
 
     public Main(String serviceConfigUrl, String username, String password, String artifactId, String workingDirectory) {
+        this.serviceConfigUrl = serviceConfigUrl;
         configServiceClient = new ConfigServiceClient(serviceConfigUrl, username, password);
         this.artifactId = artifactId;
         // Because of Java 8's "final" limitation on closures, any outside variables that need to be changed inside the closure must be wrapped in a final object.
@@ -166,18 +179,44 @@ public class Main {
     }
 
     private ClientConfig registerClient() {
-        ClientConfig clientConfig;
+        ExponentialBackOff exponentialBackOff = new ExponentialBackOff();
+        BackOffExecution backOffExecution = exponentialBackOff.start();
+
+        while (true) {
+            try {
+                return new CommandRegisterClient().execute();
+            } catch (HystrixRuntimeException e) {
+                Throwable cause = e.getCause();
+                log.debug("Exception cause getMessage={}", cause.getMessage());
+
+                if (cause instanceof ConnectException) {
+                    log.debug("Connection refused to ConfigService url={}", serviceConfigUrl);
+                    wait(backOffExecution);
+                } else if (cause instanceof InternalServerErrorException) {
+                    log.debug("Internal server error in ConfigService url={}", serviceConfigUrl);
+                    wait(backOffExecution);
+                } else if(cause instanceof NotFoundException) {
+                    log.debug("404 not found to ConfigService url={}", serviceConfigUrl);
+                    wait(backOffExecution);
+                } else if (cause instanceof BadRequestException) {
+                    log.error("400 Bad Request. Probably need to fix something on the client. Exiting…");
+                    System.exit(1);
+                } else {
+                    System.exit(1);
+                }
+            }
+        }
+
+    }
+
+    private void wait(BackOffExecution backOffExecution) {
+        long waitInterval = backOffExecution.nextBackOff();
         try {
-            ClientRegistrationRequest registrationRequest = new ClientRegistrationRequest(artifactId);
-            registrationRequest.envInfo.putAll(System.getenv());
-            clientConfig = configServiceClient.registerClient(registrationRequest);
-            configServiceClient.saveApplicationState(clientConfig);
-            return clientConfig;
-            //TODO make more robust, e.g. retries
-            // ConnectException: Connection refused - retry
-        } catch (IOException e) {
-            log.error("TODO handle this better", e);
-            throw new RuntimeException(e);
+            log.debug("retrying in {} milliseconds ", waitInterval);
+            Thread.sleep(waitInterval);
+        } catch (InterruptedException e1) {
+            log.error("Failed to run Thread.sleep({})", waitInterval);
+            log.error(e1.getMessage());
         }
     }
 
@@ -185,7 +224,6 @@ public class Main {
     private static String getStringProperty(final Properties properties, String propertyKey, String defaultValue) {
         String property = properties.getProperty(propertyKey, defaultValue);
         if (property == null) {
-            //-Dconfigservice.url=
             property = System.getProperty(propertyKey);
         }
         return property;
@@ -196,5 +234,21 @@ public class Main {
             return defaultValue;
         }
         return Integer.valueOf(property);
+    }
+
+    private class CommandRegisterClient extends HystrixCommand<ClientConfig> {
+
+        protected CommandRegisterClient() {
+            super(HystrixCommandGroupKey.Factory.asKey(GROUP_KEY));
+        }
+
+        @Override
+        protected ClientConfig run() throws Exception {
+            ClientRegistrationRequest registrationRequest = new ClientRegistrationRequest(artifactId);
+            registrationRequest.envInfo.putAll(System.getenv());
+            ClientConfig clientConfig = configServiceClient.registerClient(registrationRequest);
+            configServiceClient.saveApplicationState(clientConfig);
+            return clientConfig;
+        }
     }
 }

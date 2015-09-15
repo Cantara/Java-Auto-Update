@@ -75,6 +75,18 @@
             <version>6.9.4</version>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>com.netflix.hystrix</groupId>
+            <artifactId>hystrix-core</artifactId>
+            <version>1.4.0-RC5</version>
+        </dependency>
+        <dependency>
+            <groupId>no.nmd.pharmacy</groupId>
+            <artifactId>pharmacy-inventory</artifactId>
+            <version>0.3-SNAPSHOT</version>
+        </dependency>
+
     </dependencies>
 
     <build>
