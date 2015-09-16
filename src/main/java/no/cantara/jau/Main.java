@@ -247,6 +247,9 @@ public class Main {
             ClientRegistrationRequest registrationRequest = new ClientRegistrationRequest(artifactId);
             registrationRequest.envInfo.putAll(System.getenv());
             ClientConfig clientConfig = configServiceClient.registerClient(registrationRequest);
+            if (clientConfig == null) {
+                throw new NotFoundException("got null clientConfig, indicating a 404 was the problem"); // I'm not so sure about this.
+            }
             configServiceClient.saveApplicationState(clientConfig);
             return clientConfig;
         }
