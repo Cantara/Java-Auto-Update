@@ -111,7 +111,7 @@
                                 <generatorConfiguration>
                                     <generator>jsw</generator>
                                     <includes>
-                                        <!--<include>windows-x86-32</include>-->
+                                        <include>windows-x86-32</include>
                                         <include>windows-x86-64</include>
                                     </includes>
                                     <configuration>
