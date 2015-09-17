@@ -69,6 +69,7 @@ public class Main {
             log.debug("{} not found on classpath.  Fallback to VM options (-D).", CONFIG_FILENAME);
             //log.debug("{} not found on classpath.  Fallback to -D values. \n  Classpath: {}", CONFIG_FILENAME, System.getProperty("java.class.path"));
         }
+        ProxyFixer.fixProxy(properties);
         String serviceConfigUrl = getStringProperty(properties, CONFIG_SERVICE_URL_KEY, null);
         if (serviceConfigUrl == null) {
             log.error("Application cannot start! {} not set in {} or as property (-D{}=).",
