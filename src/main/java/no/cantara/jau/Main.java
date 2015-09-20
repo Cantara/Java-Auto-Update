@@ -21,6 +21,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.ConnectException;
 import java.util.Properties;
+import java.util.SortedMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -161,7 +162,8 @@ public class Main {
                         Properties applicationState = configServiceClient.getApplicationState();
                         String clientId = getStringProperty(applicationState, ConfigServiceClient.CLIENT_ID, null);
                         String lastChanged = getStringProperty(applicationState, ConfigServiceClient.LAST_CHANGED, null);
-                        newClientConfig = configServiceClient.checkForUpdate(clientId, lastChanged, System.getenv());
+                        SortedMap<String, String> clientEnvironment = ClientEnvironmentUtil.getClientEnvironment();
+                        newClientConfig = configServiceClient.checkForUpdate(clientId, lastChanged, clientEnvironment);
                     } catch (IllegalStateException e) {
                         // illegal state - reregister client
                         log.warn(e.getMessage());
@@ -282,7 +284,7 @@ public class Main {
         @Override
         protected ClientConfig run() throws Exception {
             ClientRegistrationRequest registrationRequest = new ClientRegistrationRequest(artifactId);
-            registrationRequest.envInfo.putAll(System.getenv());
+            registrationRequest.envInfo.putAll(ClientEnvironmentUtil.getClientEnvironment());
             ClientConfig clientConfig = configServiceClient.registerClient(registrationRequest);
             if (clientConfig == null) {
                 throw new NotFoundException("got null clientConfig, indicating a 404 was the problem"); // I'm not so sure about this.
