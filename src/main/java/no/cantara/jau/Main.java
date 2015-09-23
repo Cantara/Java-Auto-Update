@@ -25,6 +25,7 @@ import java.util.SortedMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeoutException;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
 
@@ -212,7 +213,8 @@ public class Main {
                 return new CommandRegisterClient().execute();
             } catch (HystrixRuntimeException e) {
                 Throwable cause = e.getCause();
-                log.debug("Exception regestering client getMessage={}", cause.getMessage());
+                log.debug("Exception registering client, exception getMessage={}", e.getMessage());
+                log.debug("Exception registering client, cause getMessage={}", cause.getMessage());
 
                 if (cause instanceof ConnectException) {
                     log.debug("Connection refused to ConfigService url={}", serviceConfigUrl);
@@ -223,6 +225,8 @@ public class Main {
                 } else if (cause instanceof BadRequestException) {
                     log.error("400 Bad Request. Probably need to fix something on the client. Exiting…");
                     System.exit(1);
+                } else if (cause instanceof TimeoutException) {
+                    log.debug("CommandRegisterClient timed out.");
                 } else {
                     log.error("Couldn't handle exception: {}", e);
                     System.exit(1);
