@@ -212,7 +212,7 @@ public class Main {
                 return new CommandRegisterClient().execute();
             } catch (HystrixRuntimeException e) {
                 Throwable cause = e.getCause();
-                log.debug("Exception cause getMessage={}", cause.getMessage());
+                log.debug("Exception regestering client getMessage={}", cause.getMessage());
 
                 if (cause instanceof ConnectException) {
                     log.debug("Connection refused to ConfigService url={}", serviceConfigUrl);
@@ -224,6 +224,7 @@ public class Main {
                     log.error("400 Bad Request. Probably need to fix something on the client. Exiting…");
                     System.exit(1);
                 } else {
+                    log.error("Couldn't handle exception: {}", e);
                     System.exit(1);
                 }
 
@@ -253,9 +254,9 @@ public class Main {
         try {
             log.debug("retrying in {} milliseconds ", waitInterval);
             Thread.sleep(waitInterval);
-        } catch (InterruptedException e1) {
+        } catch (InterruptedException e) {
             log.error("Failed to run Thread.sleep({})", waitInterval);
-            log.error(e1.getMessage());
+            log.error(e.getMessage());
         }
     }
 
