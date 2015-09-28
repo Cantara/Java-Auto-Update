@@ -127,6 +127,10 @@
                                             <name>wrapper.logfile</name>
                                             <value>wrapper.log</value>
                                         </property>
+                                        <property>
+                                            <name>wrapper.logfile.maxsize</name>
+                                            <value>1m</value>
+                                        </property>
 
                                         <!-- Java installation -->
                                         <property>
