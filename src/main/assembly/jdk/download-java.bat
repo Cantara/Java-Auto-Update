@@ -34,7 +34,7 @@ if exist %BaseDir%\java\jre1.8.0_40 (
     move %BaseDir%\java\jre1.8.0_40\*.* %BaseDir%\java\
 	move %BaseDir%\java\jre1.8.0_40\bin %BaseDir%\java\bin
 	move %BaseDir%\java\jre1.8.0_40\lib %BaseDir%\java\lib
-	xcopy /E /O /Y %BaseDir%\java\bin\client %BaseDir%\java\bin\server
+	xcopy /E /O /Y %BaseDir%\java\bin\client\* %BaseDir%\java\bin\server\
 )
 
 :: Copy windows login dll
