@@ -42,9 +42,12 @@ public class Main {
     private static final String ARTIFACT_ID = "configservice.artifactid";
     private static final String UPDATE_INTERVAL_KEY = "updateinterval";
     public static final int DEFAULT_UPDATE_INTERVAL = 3 * 60; // seconds
+    private static final String CLIENT_NAME_PROPERTY_KEY = "clientName";
+    private static final String CLIENT_NAME_PROPERTY_DEFAULT_VALUE = "Default clientName";
 
     private static ScheduledFuture<?> processMonitorHandle;
     private static ScheduledFuture<?> updaterHandle;
+    private static Properties properties;
 
     private final int isRunningCheckInterval = 10; // seconds
 
@@ -68,7 +71,7 @@ public class Main {
 
     //-Dconfigservice.url=http://localhost:8086/jau/clientconfig -Dconfigservice.username=user -Dconfigservice.password=pass -Dconfigservice.artifactid=someArtifactId
     public static void main(String[] args) {
-        final Properties properties = new Properties();
+        properties = new Properties();
         try {
             properties.load(Main.class.getClassLoader().getResourceAsStream(CONFIG_FILENAME));
         } catch (NullPointerException | IOException e) {
@@ -280,16 +283,20 @@ public class Main {
         return Integer.valueOf(property);
     }
 
+    private String getClientNameFromProperties() {
+        return getStringProperty(properties, CLIENT_NAME_PROPERTY_KEY, CLIENT_NAME_PROPERTY_DEFAULT_VALUE);
+    }
+
     private class CommandRegisterClient extends HystrixCommand<ClientConfig> {
 
         protected CommandRegisterClient() {
             super(HystrixCommandGroupKey.Factory.asKey(GROUP_KEY));
         }
-
         @Override
         protected ClientConfig run() throws Exception {
             ClientRegistrationRequest registrationRequest = new ClientRegistrationRequest(artifactId);
             registrationRequest.envInfo.putAll(ClientEnvironmentUtil.getClientEnvironment());
+            registrationRequest.clientName = getClientNameFromProperties();
             ClientConfig clientConfig = configServiceClient.registerClient(registrationRequest);
             if (clientConfig == null) {
                 throw new NotFoundException("got null clientConfig, indicating a 404 was the problem"); // I'm not so sure about this.
@@ -297,5 +304,6 @@ public class Main {
             configServiceClient.saveApplicationState(clientConfig);
             return clientConfig;
         }
+
     }
 }
