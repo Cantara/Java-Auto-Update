@@ -232,7 +232,6 @@ public class Main {
                     log.debug("CommandRegisterClient timed out.");
                 } else {
                     log.error("Couldn't handle exception: {}", e);
-                    System.exit(1);
                 }
 
                 wait(backOffExecution);
