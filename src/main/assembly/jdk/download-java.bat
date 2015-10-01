@@ -1,8 +1,8 @@
 @ECHO OFF
 
 :: Switch comments on next two lines when using proxy
-::SET USE_HTTP_PROXY=1
-SET "USE_HTTP_PROXY="
+SET USE_HTTP_PROXY=1
+::SET "USE_HTTP_PROXY="
 
 ver | findstr /i "5\.2\." > nul
 IF %ERRORLEVEL% == 0 (
