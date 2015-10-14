@@ -2,6 +2,7 @@ package no.cantara.jau;
 
 import com.netflix.hystrix.HystrixCommand;
 import com.netflix.hystrix.HystrixCommandGroupKey;
+import com.netflix.hystrix.HystrixCommandProperties;
 import com.netflix.hystrix.exception.HystrixRuntimeException;
 import no.cantara.jau.serviceconfig.client.ConfigServiceClient;
 import no.cantara.jau.serviceconfig.client.ConfigurationStoreUtil;
@@ -44,6 +45,7 @@ public class Main {
     public static final int DEFAULT_UPDATE_INTERVAL = 3 * 60; // seconds
     private static final String CLIENT_NAME_PROPERTY_KEY = "clientName";
     private static final String CLIENT_NAME_PROPERTY_DEFAULT_VALUE = "Default clientName";
+    private static final int COMMAND_TIMEOUT = 5000;
 
     private static ScheduledFuture<?> processMonitorHandle;
     private static ScheduledFuture<?> updaterHandle;
@@ -289,7 +291,9 @@ public class Main {
     private class CommandRegisterClient extends HystrixCommand<ClientConfig> {
 
         protected CommandRegisterClient() {
-            super(HystrixCommandGroupKey.Factory.asKey(GROUP_KEY));
+            super(Setter.withGroupKey(HystrixCommandGroupKey.Factory.asKey(GROUP_KEY))
+                    .andCommandPropertiesDefaults(HystrixCommandProperties.Setter()
+                            .withExecutionIsolationThreadTimeoutInMilliseconds(COMMAND_TIMEOUT)));
         }
         @Override
         protected ClientConfig run() throws Exception {
