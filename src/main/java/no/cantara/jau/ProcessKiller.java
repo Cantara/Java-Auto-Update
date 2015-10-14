@@ -10,6 +10,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+/**
+ * Makes sure any running managed service is killed if JAU should restart
+ */
 public class ProcessKiller {
     private static final Logger log = LoggerFactory.getLogger(ProcessKiller.class);
     private static final String RUNNING_PROCESS_FILENAME = "runningProcess.txt";
