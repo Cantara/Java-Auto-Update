@@ -226,7 +226,9 @@ public class Main {
                 } else if(cause instanceof NotFoundException) {
                     log.debug("404 not found to ConfigService url={}", serviceConfigUrl);
                 } else if (cause instanceof BadRequestException) {
-                    log.error("400 Bad Request. Probably need to fix something on the client. Exiting…");
+                    log.error("400 Bad Request. Probably need to fix something on the client. Exiting after a" +
+                            " wait, so as to not DDoS the server.");
+                    waitForMillis(exponentialBackOff.getMaxInterval()*2);
                     System.exit(1);
                 } else if (cause instanceof TimeoutException) {
                     log.debug("CommandRegisterClient timed out.");
@@ -234,7 +236,7 @@ public class Main {
                     log.error("Couldn't handle exception: {}", e);
                 }
 
-                wait(backOffExecution);
+                waitForMillis(backOffExecution.nextBackOff());
             }
         }
     }
@@ -255,8 +257,7 @@ public class Main {
         processHolder.setLastChangedTimestamp(initialLastChanged);
     }
 
-    private void wait(BackOffExecution backOffExecution) {
-        long waitInterval = backOffExecution.nextBackOff();
+    private void waitForMillis(long waitInterval) {
         try {
             log.debug("retrying in {} milliseconds ", waitInterval);
             Thread.sleep(waitInterval);
