@@ -1,5 +1,6 @@
 package no.cantara.jau;
 
+import no.cantara.jau.util.ClientEnvironmentUtil;
 import org.testng.annotations.Test;
 
 import java.util.Map;

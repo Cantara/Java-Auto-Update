@@ -1,4 +1,4 @@
-package no.cantara.jau;
+package no.cantara.jau.util;
 
 import java.util.Properties;
 
