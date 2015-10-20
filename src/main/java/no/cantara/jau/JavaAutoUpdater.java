@@ -35,10 +35,12 @@ public class JavaAutoUpdater {
     private final ApplicationProcess processHolder;
 
     private final String serviceConfigUrl;
+    private final String artifactId;
 
-    public JavaAutoUpdater(String serviceConfigUrl, String username, String password, String workingDirectory) {
+    public JavaAutoUpdater(String serviceConfigUrl, String username, String password, String artifactId, String workingDirectory) {
         this.serviceConfigUrl = serviceConfigUrl;
         this.configServiceClient = new ConfigServiceClient(serviceConfigUrl, username, password);
+        this.artifactId = artifactId;
         // Because of Java 8's "final" limitation on closures, any outside variables that need to be changed inside the
         // closure must be wrapped in a final object.
         processHolder = new ApplicationProcess();
@@ -158,8 +160,7 @@ public class JavaAutoUpdater {
 
     private ClientConfig registerClient() {
         Properties applicationState = configServiceClient.getApplicationState();
-        String artifactId = PropertiesHelper.getArtifactId(applicationState);
-        String clientName = PropertiesHelper.getClientNameFromProperties(applicationState);
+        String clientName = applicationState == null ? null : PropertiesHelper.getClientNameFromProperties(applicationState);
         RegisterClientHelper registerClientHelper = new RegisterClientHelper(configServiceClient, artifactId,
                 clientName, serviceConfigUrl);
         return registerClientHelper.registerClient();

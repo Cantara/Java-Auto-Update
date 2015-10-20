@@ -20,14 +20,12 @@ public class Main {
     private static final String CONFIG_SERVICE_PASSWORD_KEY = "configservice.password";
     private static final String UPDATE_INTERVAL_KEY = "updateinterval";
 
-    private static Properties properties;
-
     private static final Logger log = LoggerFactory.getLogger(Main.class);
 
     // -Dconfigservice.url=http://localhost:8086/jau/clientconfig -Dconfigservice.username=user
     // -Dconfigservice.password=pass -Dconfigservice.artifactid=someArtifactId
     public static void main(String[] args) {
-        properties = new Properties();
+        Properties properties = new Properties();
         try {
             properties.load(Main.class.getClassLoader().getResourceAsStream(CONFIG_FILENAME));
         } catch (NullPointerException | IOException e) {
@@ -44,12 +42,13 @@ public class Main {
         }
         String username = PropertiesHelper.getStringProperty(properties, CONFIG_SERVICE_USERNAME_KEY, null);
         String password = PropertiesHelper.getStringProperty(properties, CONFIG_SERVICE_PASSWORD_KEY, null);
+        String artifactId = PropertiesHelper.getArtifactId(properties);
 
         int updateInterval = PropertiesHelper.getIntProperty(properties, UPDATE_INTERVAL_KEY, DEFAULT_UPDATE_INTERVAL);
 
         String workingDirectory = "./";
 
-        final JavaAutoUpdater javaAutoUpdater = new JavaAutoUpdater(serviceConfigUrl, username, password, workingDirectory);
+        final JavaAutoUpdater javaAutoUpdater = new JavaAutoUpdater(serviceConfigUrl, username, password, artifactId, workingDirectory);
         javaAutoUpdater.start(updateInterval);
     }
 
