@@ -11,6 +11,9 @@ import no.cantara.jau.util.PropertiesHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.ws.rs.BadRequestException;
+import javax.ws.rs.InternalServerErrorException;
+import javax.ws.rs.core.NoContentException;
 import java.io.File;
 import java.io.IOException;
 import java.util.Properties;
@@ -124,13 +127,17 @@ public class JavaAutoUpdater {
                         log.warn(e.getMessage());
                         configServiceClient.cleanApplicationState();
                         newClientConfig = registerClient();
+                    } catch (NoContentException e) {
+                        log.debug("No updated config.");
+                        return;
+                    } catch (BadRequestException e) {
+                        log.error("Got BadRequestException: ", e);
+                        return;
+                    } catch (InternalServerErrorException e) {
+                        log.warn("Got InternalServerErrorException: ", e);
+                        return;
                     } catch (IOException e) {
                         log.error("checkForUpdate failed, do nothing. Retrying in {} seconds.", interval, e);
-                        return;
-                    }
-
-                    if (newClientConfig == null) {
-                        log.debug("No updated config.");
                         return;
                     }
 
