@@ -14,6 +14,13 @@
                 <role>Developer</role>
             </roles>
         </developer>
+        <developer>
+            <name>Jørund B. Fagerjord</name>
+            <email>j.b.fagerjord@gmail.com</email>
+            <roles>
+                <role>Developer</role>
+            </roles>
+        </developer>
     </developers>
 
     <parent>
