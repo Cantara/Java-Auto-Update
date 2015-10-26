@@ -40,7 +40,7 @@ public class ProcessKiller {
             Integer.parseInt(pid);
             return true;
         } catch (NumberFormatException e) {
-            log.warn("PID is not valid integer. Got: '{}'", pid, e);
+            log.warn("PID is not valid integer. Got: '{}' {}", pid, e);
             return false;
         }
     }
