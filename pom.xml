@@ -188,6 +188,22 @@
                                             <name>wrapper.ntservice.displayname</name>
                                             <value>${service.name}</value>
                                         </property>
+                                        <property>
+                                            <name>wrapper.ntservice.starttype</name>
+                                            <value>AUTO_START</value>
+                                        </property>
+                                        <property>
+                                            <name>wrapper.ntservice.recovery.1.failure</name>
+                                            <value>RESTART</value>
+                                        </property>
+                                        <property>
+                                            <name>wrapper.ntservice.recovery.2.failure</name>
+                                            <value>RESTART</value>
+                                        </property>
+                                        <property>
+                                            <name>wrapper.ntservice.recovery.3.failure</name>
+                                            <value>RESTART</value>
+                                        </property>
                                     </configuration>
                                 </generatorConfiguration>
                             </generatorConfigurations>
