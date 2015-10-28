@@ -2,6 +2,7 @@ package no.cantara.jau.coms;
 
 import com.netflix.hystrix.exception.HystrixRuntimeException;
 import no.cantara.jau.serviceconfig.client.ConfigServiceClient;
+import no.cantara.jau.serviceconfig.dto.ClientRegistrationRequest;
 import org.testng.annotations.Test;
 
 import javax.ws.rs.BadRequestException;
@@ -10,6 +11,7 @@ import javax.ws.rs.NotFoundException;
 import javax.ws.rs.core.NoContentException;
 import java.io.IOException;
 
+import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyMap;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
@@ -25,11 +27,12 @@ public class CommandRegisterClientTest {
     @Test
     public void test404ShouldThrowHystrixRuntimeException() throws IOException {
         ConfigServiceClient configServiceClient = mock(ConfigServiceClient.class);
-        when(configServiceClient.checkForUpdate(anyString(), anyString(), anyMap())).thenThrow(
-                new NotFoundException("test not found message"));
+
+        when(configServiceClient.registerClient(any(ClientRegistrationRequest.class))).thenThrow(NotFoundException.class);
 
         try {
             new CommandRegisterClient("", configServiceClient, "").execute();
+            fail("Should've gotten an exception");
         } catch (HystrixRuntimeException e) {
             Throwable cause = e.getCause();
             assertTrue(cause instanceof NotFoundException);
@@ -41,11 +44,12 @@ public class CommandRegisterClientTest {
     @Test
     public void testInternalServerErrorShouldThrowHystrixRuntimeException() throws IOException {
         ConfigServiceClient configServiceClient = mock(ConfigServiceClient.class);
-        when(configServiceClient.checkForUpdate(anyString(), anyString(), anyMap())).thenThrow(
-                new InternalServerErrorException("test InternalServerErrorException message"));
+
+        when(configServiceClient.registerClient(any(ClientRegistrationRequest.class))).thenThrow(InternalServerErrorException.class);
 
         try {
             new CommandRegisterClient("", configServiceClient, "").execute();
+            fail("Should've gotten an exception");
         } catch (HystrixRuntimeException e) {
             Throwable cause = e.getCause();
             assertTrue(cause instanceof InternalServerErrorException);
@@ -57,11 +61,12 @@ public class CommandRegisterClientTest {
     @Test
     public void testBadRequestExceptionShouldThrowHystrixRuntimeException() throws IOException {
         ConfigServiceClient configServiceClient = mock(ConfigServiceClient.class);
-        when(configServiceClient.checkForUpdate(anyString(), anyString(), anyMap())).thenThrow(
-                new BadRequestException("test BadRequestException message"));
+
+        when(configServiceClient.registerClient(any(ClientRegistrationRequest.class))).thenThrow(BadRequestException.class);
 
         try {
             new CommandRegisterClient("", configServiceClient, "").execute();
+            fail("Should've gotten an exception");
         } catch (HystrixRuntimeException e) {
             Throwable cause = e.getCause();
             assertTrue(cause instanceof BadRequestException);
@@ -73,11 +78,12 @@ public class CommandRegisterClientTest {
     @Test
     public void testNoContentExceptionShouldThrowHystrixRuntimeException() throws IOException {
         ConfigServiceClient configServiceClient = mock(ConfigServiceClient.class);
-        when(configServiceClient.checkForUpdate(anyString(), anyString(), anyMap())).thenThrow(
-                new NoContentException("test NoContentException message"));
+
+        when(configServiceClient.registerClient(any(ClientRegistrationRequest.class))).thenThrow(NoContentException.class);
 
         try {
             new CommandRegisterClient("", configServiceClient, "").execute();
+            fail("Should've gotten an exception");
         } catch (HystrixRuntimeException e) {
             Throwable cause = e.getCause();
             assertTrue(cause instanceof NoContentException);
@@ -90,11 +96,12 @@ public class CommandRegisterClientTest {
     @Test
     public void testIllegalStateExceptionShouldThrowHystrixRuntimeException() throws IOException {
         ConfigServiceClient configServiceClient = mock(ConfigServiceClient.class);
-        when(configServiceClient.checkForUpdate(anyString(), anyString(), anyMap())).thenThrow(
-                new IllegalStateException("test NoContentException message"));
+
+        when(configServiceClient.registerClient(any(ClientRegistrationRequest.class))).thenThrow(IllegalStateException.class);
 
         try {
             new CommandRegisterClient("", configServiceClient, "").execute();
+            fail("Should've gotten an exception");
         } catch (HystrixRuntimeException e) {
             Throwable cause = e.getCause();
             assertTrue(cause instanceof IllegalStateException);
