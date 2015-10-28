@@ -190,6 +190,38 @@
                                             <name>wrapper.ntservice.displayname</name>
                                             <value>${service.name}</value>
                                         </property>
+                                        <property>
+                                            <name>wrapper.ntservice.starttype</name>
+                                            <value>AUTO_START</value>
+                                        </property>
+                                        <property>
+                                            <name>wrapper.ntservice.recovery.1.delay</name>
+                                            <value>10</value>
+                                        </property>
+                                        <property>
+                                            <name>wrapper.ntservice.recovery.1.failure</name>
+                                            <value>RESTART</value>
+                                        </property>
+                                        <property>
+                                            <name>wrapper.ntservice.recovery.2.delay</name>
+                                            <value>300</value>
+                                        </property>
+                                        <property>
+                                            <name>wrapper.ntservice.recovery.2.failure</name>
+                                            <value>RESTART</value>
+                                        </property>
+                                        <property>
+                                            <name>wrapper.ntservice.recovery.3.delay</name>
+                                            <value>1000</value>
+                                        </property>
+                                        <property>
+                                            <name>wrapper.ntservice.recovery.3.failure</name>
+                                            <value>RESTART</value>
+                                        </property>
+                                        <property>
+                                            <name>wrapper.ntservice.recovery.reset</name>
+                                            <value>30000</value>
+                                        </property>
                                     </configuration>
                                 </generatorConfiguration>
                             </generatorConfigurations>
