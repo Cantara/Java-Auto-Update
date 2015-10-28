@@ -8,8 +8,8 @@ if exist C:\NMD\avbagent\pharmacy-agent\bin\pharmacy-agent (
 )
 
 :: If previous version of java-auto-update and agent is running remove them
-if exist c:\opt\java-auto-update\bin\java-auto-update (
-	c:\opt\java-auto-update\bin\java-auto-update remove
+if exist bin\java-auto-update (
+	bin\java-auto-update remove
 	taskkill /im java.exe /F
 	echo Removing old Java-Auto-Update
 )
