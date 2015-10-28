@@ -21,7 +21,7 @@ public class CommandRegisterClient extends HystrixCommand<ClientConfig> {
     public CommandRegisterClient(String artifactId, ConfigServiceClient configServiceClient, String clientName) {
         super(Setter.withGroupKey(HystrixCommandGroupKey.Factory.asKey(GROUP_KEY))
                 .andCommandPropertiesDefaults(HystrixCommandProperties.Setter()
-                        .withExecutionIsolationThreadTimeoutInMilliseconds(COMMAND_TIMEOUT)));
+                        .withExecutionTimeoutInMilliseconds(COMMAND_TIMEOUT)));
         this.artifactId = artifactId;
         this.configServiceClient = configServiceClient;
         this.clientName = clientName;

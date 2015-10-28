@@ -44,7 +44,8 @@ public class RegisterClientExceptionHandlerTest {
         when(backOffExecution.nextBackOff()).thenReturn((long) 1);
 
         HystrixRuntimeException hystrixRuntimeException = mock(HystrixRuntimeException.class);
-        when(hystrixRuntimeException.getCause()).thenReturn(new NotFoundException());
+        NotFoundException notFoundException = new NotFoundException();
+        when(hystrixRuntimeException.getCause()).thenReturn(notFoundException);
 
         RegisterClientExceptionHandler.handleRegisterClientException(hystrixRuntimeException, null, backOffExecution, "");
 
