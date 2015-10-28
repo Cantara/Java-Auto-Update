@@ -8,6 +8,8 @@ import no.cantara.jau.serviceconfig.client.ConfigServiceClient;
 import no.cantara.jau.serviceconfig.dto.ClientConfig;
 import no.cantara.jau.serviceconfig.dto.ClientRegistrationRequest;
 
+import java.io.IOException;
+
 public class CommandRegisterClient extends HystrixCommand<ClientConfig> {
 
     private static final int COMMAND_TIMEOUT = 5000;
@@ -26,7 +28,7 @@ public class CommandRegisterClient extends HystrixCommand<ClientConfig> {
     }
 
     @Override
-    protected ClientConfig run() throws Exception {
+    protected ClientConfig run() throws IOException {
         ClientRegistrationRequest registrationRequest = new ClientRegistrationRequest(artifactId);
         registrationRequest.envInfo.putAll(ClientEnvironmentUtil.getClientEnvironment());
         registrationRequest.clientName = clientName;

@@ -111,6 +111,12 @@
             <version>1.10.19</version>
             <scope>test</scope>
         </dependency>
+        <!-- Needed for Hystrix CommandRegisterClient -->
+        <dependency>
+            <groupId>commons-logging</groupId>
+            <artifactId>commons-logging</artifactId>
+            <version>1.1.1</version>
+        </dependency>
     </dependencies>
 
     <build>
