@@ -1,5 +1,6 @@
 package no.cantara.jau;
 
+import no.cantara.jau.coms.CheckForUpdateHelper;
 import no.cantara.jau.coms.RegisterClientHelper;
 import no.cantara.jau.serviceconfig.client.ConfigServiceClient;
 import no.cantara.jau.serviceconfig.client.ConfigurationStoreUtil;
@@ -113,59 +114,12 @@ public class JavaAutoUpdater {
     private ScheduledFuture<?> startUpdaterThread(long interval) {
         log.debug("Starting update scheduler with an update interval of {} seconds.", interval);
         return scheduler.scheduleAtFixedRate(
-                () -> {
-                    ClientConfig newClientConfig = null;
-                    try {
-                        // check for update
-                        Properties applicationState = configServiceClient.getApplicationState();
-                        String clientId = PropertiesHelper.getStringProperty(applicationState, ConfigServiceClient.CLIENT_ID, null);
-                        String lastChanged = PropertiesHelper.getStringProperty(applicationState, ConfigServiceClient.LAST_CHANGED, null);
-                        SortedMap<String, String> clientEnvironment = ClientEnvironmentUtil.getClientEnvironment();
-                        newClientConfig = configServiceClient.checkForUpdate(clientId, lastChanged, clientEnvironment);
-                    } catch (IllegalStateException e) {
-                        // illegal state - reregister client
-                        log.warn(e.getMessage());
-                        configServiceClient.cleanApplicationState();
-                        newClientConfig = registerClient();
-                    } catch (NoContentException e) {
-                        log.debug("No updated config.");
-                        return;
-                    } catch (BadRequestException e) {
-                        log.error("Got BadRequestException: ", e);
-                        return;
-                    } catch (InternalServerErrorException e) {
-                        log.warn("Got InternalServerErrorException: ", e);
-                        return;
-                    } catch (IOException e) {
-                        log.error("checkForUpdate failed, do nothing. Retrying in {} seconds.", interval, e);
-                        return;
-                    }
-
-                    // ExecutorService swallows any exceptions silently, so need to handle them explicitly.
-                    // See http://www.nurkiewicz.com/2014/11/executorservice-10-tips-and-tricks.html (point 6.).
-                    try {
-                        log.debug("We got changes - stopping process and downloading new files.");
-                        processHolder.stopProcess();
-
-                        storeClientFiles(newClientConfig);
-
-                        String[] command = newClientConfig.serviceConfig.getStartServiceScript().split("\\s+");
-                        processHolder.setCommand(command);
-                        processHolder.setClientId(newClientConfig.clientId);
-                        processHolder.setLastChangedTimestamp(newClientConfig.serviceConfig.getLastChanged());
-
-                        configServiceClient.saveApplicationState(newClientConfig);
-
-                        processMonitorHandle.notify();
-                    } catch (Exception e) {
-                        log.debug("Error thrown from scheduled lambda.", e);
-                    }
-                },
+                CheckForUpdateHelper.getCheckForUpdateRunnable(interval, configServiceClient, processHolder, processMonitorHandle, this),
                 1, interval, SECONDS
         );
     }
 
-    private ClientConfig registerClient() {
+    public ClientConfig registerClient() {
         Properties applicationState = configServiceClient.getApplicationState();
         String clientName = applicationState == null ? null : PropertiesHelper.getClientNameFromProperties(applicationState);
         RegisterClientHelper registerClientHelper = new RegisterClientHelper(configServiceClient, artifactId,
@@ -173,7 +127,7 @@ public class JavaAutoUpdater {
         return registerClientHelper.registerClient();
     }
 
-    private void storeClientFiles(ClientConfig clientConfig) {
+    public void storeClientFiles(ClientConfig clientConfig) {
         String workingDirectory = processHolder.getWorkingDirectory().getAbsolutePath();
         ServiceConfig serviceConfig = clientConfig.serviceConfig;
         DownloadUtil.downloadAllFiles(serviceConfig.getDownloadItems(), workingDirectory);
