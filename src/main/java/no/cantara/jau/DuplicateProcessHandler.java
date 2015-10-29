@@ -47,7 +47,7 @@ public class DuplicateProcessHandler {
                 WinNT.HANDLE handle = new WinNT.HANDLE();
                 handle.setPointer(Pointer.createConstant(handleNumber));
                 int pid = kernel.GetProcessId(handle);
-                log.debug("Detected pid: {}", pid);
+                log.debug("Found pid for managed process: {}", pid);
                 return pid + "";
             } catch (Throwable e) {
                 log.error("Could not get PID of managed process. This could lead to duplicate managed processes!",
@@ -128,7 +128,7 @@ public class DuplicateProcessHandler {
         return pid;
     }
 
-    public static boolean processIsRunning(String pid) {
+    private static boolean processIsRunning(String pid) {
         ProcessBuilder processBuilder;
         if (isWindows()) {
             //tasklist exit code is always 0. Parse output
@@ -188,7 +188,7 @@ public class DuplicateProcessHandler {
         }
     }
 
-    public static boolean executeProcess(String pid, ProcessBuilder processBuilder) {
+    private static boolean executeProcess(String pid, ProcessBuilder processBuilder) {
         try {
             Process p = processBuilder.start();
             try {
