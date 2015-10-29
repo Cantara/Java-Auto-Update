@@ -94,11 +94,11 @@ public class DuplicateProcessHandlerTest {
     }
 
     private void createDummyProcess() throws IOException, NoSuchFieldException, IllegalAccessException {
-        currentProcess = Runtime.getRuntime().exec("vi");
+        currentProcess = Runtime.getRuntime().exec("sleep 4");
         Field f = currentProcess.getClass().getDeclaredField("pid");
         f.setAccessible(true);
         PID = f.getInt(currentProcess);
-        log.trace("Created dummy 'vi' process with pid={} ", f.getInt(currentProcess));
+        log.trace("Created dummy 'sleep 4' process with pid={} ", f.getInt(currentProcess));
     }
 
     private void createFileAndWriteLine(String lineToWrite) throws IOException {
