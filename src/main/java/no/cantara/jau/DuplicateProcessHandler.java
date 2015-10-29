@@ -1,9 +1,13 @@
 package no.cantara.jau;
 
+import com.sun.jna.Pointer;
+import com.sun.jna.platform.win32.Kernel32;
+import com.sun.jna.platform.win32.WinNT;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
+import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -31,7 +35,63 @@ public class DuplicateProcessHandler {
         return false;
     }
 
-    public static void writeRunningManagedProcessPidToFile(String pid) {
+    private static String findWindowsProcessId(Process process) {
+        if (process.getClass().getName().equals("java.lang.Win32Process")
+                || process.getClass().getName().equals("java.lang.ProcessImpl")) {
+            try {
+                Field f = process.getClass().getDeclaredField("handle");
+                f.setAccessible(true);
+                long handleNumber = f.getLong(process);
+
+                Kernel32 kernel = Kernel32.INSTANCE;
+                WinNT.HANDLE handle = new WinNT.HANDLE();
+                handle.setPointer(Pointer.createConstant(handleNumber));
+                int pid = kernel.GetProcessId(handle);
+                log.debug("Detected pid: {}", pid);
+                return pid + "";
+            } catch (Throwable e) {
+                log.error("Could not get PID of managed process. This could lead to duplicate managed processes!",
+                        e);
+            }
+        }
+        return null;
+    }
+
+    public static void findRunningManagedProcessPidAndWriteToFile(Process managedProcess) {
+        String pid = null;
+        if (isWindows()) {
+            pid = findWindowsProcessId(managedProcess);
+        }
+        else {
+            pid = findUnixProcessId(managedProcess);
+        }
+        if (pid != null) {
+            writePidToFile(pid);
+        }
+    }
+
+    private static String findUnixProcessId(Process managedProcess) {
+        String pid;
+        Field pidField = null;
+        try {
+            pidField = managedProcess.getClass().getDeclaredField("pid");
+        } catch (NoSuchFieldException e) {
+            log.error("Could not get PID of managed process. This could lead to duplicate managed processes!",
+                    e);
+            return null;
+        }
+        try {
+            pidField.setAccessible(true);
+            pid = Long.toString(pidField.getLong(managedProcess));
+        } catch (IllegalAccessException e) {
+            log.error("Could not get PID of managed process. This could lead to duplicate managed processes!",
+                    e);
+            return null;
+        }
+        return pid;
+    }
+
+    private static void writePidToFile(String pid) {
         Path filePath = Paths.get(RUNNING_PROCESS_FILENAME);
         try {
             if (!Files.exists(filePath)) {

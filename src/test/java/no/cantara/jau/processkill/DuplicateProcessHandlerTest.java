@@ -16,10 +16,12 @@ public class DuplicateProcessHandlerTest {
     private static final Logger log = LoggerFactory.getLogger(DuplicateProcessHandlerTest.class);
     public static final String TEST_RUNNING_PROCESS_FILE = DuplicateProcessHandler.RUNNING_PROCESS_FILENAME;
     private static int PID = 12349876;
+    private static Process currentProcess;
 
     @Test
     public void shouldKillExistingProcessWhenExistingProcessIsRunning() throws IOException, NoSuchFieldException, IllegalAccessException, InterruptedException {
         createDummyProcess();
+        createFileAndWriteLine(PID + "");
 
         boolean processWasKilled = DuplicateProcessHandler.killExistingProcessIfRunning();
         boolean processIsRunning = checkIfProcessIsRunning();
@@ -53,24 +55,26 @@ public class DuplicateProcessHandlerTest {
     }
 
     @Test
-    public void shouldWritePIDToFile() throws IOException {
-        DuplicateProcessHandler.writeRunningManagedProcessPidToFile("123345");
+    public void shouldWritePIDToFile() throws IOException, NoSuchFieldException, IllegalAccessException {
+        createDummyProcess();
+        DuplicateProcessHandler.findRunningManagedProcessPidAndWriteToFile(currentProcess);
 
         String pid = new String(Files.readAllBytes(Paths.get(TEST_RUNNING_PROCESS_FILE)));
 
-        Assert.assertEquals(pid, "123345");
+        Assert.assertEquals(pid, Integer.toString(PID));
     }
 
     @Test
-    public void shouldEraseEarlierContentFromFileWhenWritingPIDToFile() throws IOException {
-        String firstPid = "12345";
-        String secondPid = "34567";
-        DuplicateProcessHandler.writeRunningManagedProcessPidToFile(firstPid);
-        DuplicateProcessHandler.writeRunningManagedProcessPidToFile(secondPid);
+    public void shouldEraseEarlierContentFromFileWhenWritingPIDToFile() throws IOException, NoSuchFieldException, IllegalAccessException {
+        createDummyProcess();
+        int firstPid = PID;
+        createDummyProcess();
+        int secondPid = PID;
+        DuplicateProcessHandler.findRunningManagedProcessPidAndWriteToFile(currentProcess);
 
         String pid = new String(Files.readAllBytes(Paths.get(TEST_RUNNING_PROCESS_FILE)));
 
-        Assert.assertEquals(pid, secondPid);
+        Assert.assertEquals(pid, Integer.toString(secondPid));
     }
 
     private static boolean checkIfProcessIsRunning() throws IOException, InterruptedException {
@@ -90,12 +94,11 @@ public class DuplicateProcessHandlerTest {
     }
 
     private void createDummyProcess() throws IOException, NoSuchFieldException, IllegalAccessException {
-        Process p = Runtime.getRuntime().exec("vi");
-        Field f = p.getClass().getDeclaredField("pid");
+        currentProcess = Runtime.getRuntime().exec("vi");
+        Field f = currentProcess.getClass().getDeclaredField("pid");
         f.setAccessible(true);
-        PID = f.getInt(p);
-        log.trace("Created dummy 'vi' process with pid={} ", f.getInt(p));
-        createFileAndWriteLine(PID + "");
+        PID = f.getInt(currentProcess);
+        log.trace("Created dummy 'vi' process with pid={} ", f.getInt(currentProcess));
     }
 
     private void createFileAndWriteLine(String lineToWrite) throws IOException {
@@ -113,5 +116,11 @@ public class DuplicateProcessHandlerTest {
     private void deleteTestRunningProcessFile() throws IOException {
         Files.deleteIfExists(Paths.get(TEST_RUNNING_PROCESS_FILE));
         log.debug("Deleted test file (if existed) " + TEST_RUNNING_PROCESS_FILE);
+    }
+
+    @AfterMethod
+    private void resetFields() {
+        PID = 12349876;
+        currentProcess = null;
     }
 }
