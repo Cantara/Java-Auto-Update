@@ -60,7 +60,7 @@ public class JavaAutoUpdater {
      */
     public void start(int updateInterval) {
         // https://github.com/Cantara/Java-Auto-Update/issues/4
-        ProcessKiller.killExistingProcessIfRunning();
+        DuplicateProcessHandler.killExistingProcessIfRunning();
 
         // registerClient or fetch applicationState from file
         if (configServiceClient.getApplicationState() == null) {

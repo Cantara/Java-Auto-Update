@@ -96,12 +96,12 @@ public class DuplicateProcessHandler {
     }
 
     private static boolean isValidPid(String pid) {
-        // TODO: How to check if valid pid?
+        // TODO: Is this check of valid PID too naive?
         try {
-            Integer.parseInt(pid);
+            Long.parseLong(pid);
             return true;
         } catch (NumberFormatException e) {
-            log.warn("PID is not valid integer. Got: '{}' {}", pid, e);
+            log.warn("PID is not valid number. Got: '{}' {}", pid, e);
             return false;
         }
     }
