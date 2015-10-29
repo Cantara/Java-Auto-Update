@@ -10,7 +10,7 @@ if exist C:\NMD\avbagent\pharmacy-agent\bin\pharmacy-agent (
 )
 
 :: If previous version of java-auto-update and agent is running remove them and remove directory
-if exist c:\opt\java-auto-update\bin\java-auto-update (
+if exist c:\opt\java-auto-update (
 	echo Removing old Java-Auto-Update
 	c:\opt\java-auto-update\bin\java-auto-update remove
 	taskkill /im java.exe /F
