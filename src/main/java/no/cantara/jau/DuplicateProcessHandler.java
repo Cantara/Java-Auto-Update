@@ -3,9 +3,7 @@ package no.cantara.jau;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -13,9 +11,9 @@ import java.nio.file.Paths;
 /**
  * Makes sure any running managed service is killed if JAU should restart
  */
-public class ProcessKiller {
-    private static final Logger log = LoggerFactory.getLogger(ProcessKiller.class);
-    public static final String RUNNING_PROCESS_FILENAME = "runningProcess.txt";
+public class DuplicateProcessHandler {
+    private static final Logger log = LoggerFactory.getLogger(DuplicateProcessHandler.class);
+    public static final String RUNNING_PROCESS_FILENAME = "last-running-process.txt";
 
     public static boolean killExistingProcessIfRunning() {
         String pid = getRunningProcessPidFromFile();
@@ -33,12 +31,28 @@ public class ProcessKiller {
         return false;
     }
 
-    public static void writeRunningManagedProcessPidToFile() {
+    public static void writeRunningManagedProcessPidToFile(String pid) {
+        Path filePath = Paths.get(RUNNING_PROCESS_FILENAME);
+        try {
+            if (!Files.exists(filePath)) {
+                Files.createFile(Paths.get(RUNNING_PROCESS_FILENAME));
+            }
+        } catch (IOException e) {
+           log.error("Could not create file to managed process pid={}", pid, e);
+            return;
+        }
 
-    }
-
-    public static void removeRunningManagedProcessPidFromFile() {
-
+        try (Writer writer = new BufferedWriter(new OutputStreamWriter(
+                new FileOutputStream(RUNNING_PROCESS_FILENAME), "utf-8"))) {
+            writer.write(pid);
+            log.debug("Wrote pid={} to file={}", pid, RUNNING_PROCESS_FILENAME);
+        } catch (FileNotFoundException e) {
+            log.error("File '{}' to write managed process pid={} not found", RUNNING_PROCESS_FILENAME,pid, e);
+        } catch (UnsupportedEncodingException e) {
+            log.error("Encoding error while writing to {}", RUNNING_PROCESS_FILENAME, e);
+        } catch (IOException e) {
+            log.error("Could not write to file '{}'", RUNNING_PROCESS_FILENAME);
+        }
     }
 
     private static String getRunningProcessPidFromFile() {

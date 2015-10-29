@@ -1,11 +1,10 @@
 package no.cantara.jau.processkill;
 
-import no.cantara.jau.ProcessKiller;
+import no.cantara.jau.DuplicateProcessHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
-import org.testng.annotations.AfterTest;
 import org.testng.annotations.Test;
 
 import java.io.*;
@@ -13,16 +12,16 @@ import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-public class ProcessKillerTest {
-    private static final Logger log = LoggerFactory.getLogger(ProcessKillerTest.class);
-    public static final String TEST_RUNNING_PROCESS_FILE = ProcessKiller.RUNNING_PROCESS_FILENAME;
+public class DuplicateProcessHandlerTest {
+    private static final Logger log = LoggerFactory.getLogger(DuplicateProcessHandlerTest.class);
+    public static final String TEST_RUNNING_PROCESS_FILE = DuplicateProcessHandler.RUNNING_PROCESS_FILENAME;
     private static int PID = 12349876;
 
     @Test
     public void shouldKillExistingProcessWhenExistingProcessIsRunning() throws IOException, NoSuchFieldException, IllegalAccessException, InterruptedException {
         createDummyProcess();
 
-        boolean processWasKilled = ProcessKiller.killExistingProcessIfRunning();
+        boolean processWasKilled = DuplicateProcessHandler.killExistingProcessIfRunning();
         boolean processIsRunning = checkIfProcessIsRunning();
 
         Assert.assertEquals(processWasKilled, !processIsRunning);
@@ -30,7 +29,7 @@ public class ProcessKillerTest {
 
     @Test
     public void shouldFailToKillExistingProcessWhenExistingProcessIsNotRunning() throws IOException, InterruptedException {
-        boolean processWasKilled = ProcessKiller.killExistingProcessIfRunning();
+        boolean processWasKilled = DuplicateProcessHandler.killExistingProcessIfRunning();
         boolean processIsRunning = checkIfProcessIsRunning();
 
         Assert.assertEquals(processWasKilled, processIsRunning);
@@ -40,17 +39,38 @@ public class ProcessKillerTest {
     public void shouldNotKillProcessWhenPidIsNotValid() throws IOException, InterruptedException {
         createFileAndWriteLine("notvalidpid");
 
-        boolean processWasKilled = ProcessKiller.killExistingProcessIfRunning();
+        boolean processWasKilled = DuplicateProcessHandler.killExistingProcessIfRunning();
         boolean processIsRunning = checkIfProcessIsRunning();
 
         Assert.assertEquals(processWasKilled, processIsRunning);
     }
 
     @Test
-    public void shouldNotCrashIfRunningProcessFileDoesNotExist() {
-        boolean processWasKilled = ProcessKiller.killExistingProcessIfRunning();
+    public void shouldHandleIfRunningProcessFileDoesNotExist() {
+        boolean processWasKilled = DuplicateProcessHandler.killExistingProcessIfRunning();
 
         Assert.assertFalse(processWasKilled);
+    }
+
+    @Test
+    public void shouldWritePIDToFile() throws IOException {
+        DuplicateProcessHandler.writeRunningManagedProcessPidToFile("123345");
+
+        String pid = new String(Files.readAllBytes(Paths.get(TEST_RUNNING_PROCESS_FILE)));
+
+        Assert.assertEquals(pid, "123345");
+    }
+
+    @Test
+    public void shouldEraseEarlierContentFromFileWhenWritingPIDToFile() throws IOException {
+        String firstPid = "12345";
+        String secondPid = "34567";
+        DuplicateProcessHandler.writeRunningManagedProcessPidToFile(firstPid);
+        DuplicateProcessHandler.writeRunningManagedProcessPidToFile(secondPid);
+
+        String pid = new String(Files.readAllBytes(Paths.get(TEST_RUNNING_PROCESS_FILE)));
+
+        Assert.assertEquals(pid, secondPid);
     }
 
     private static boolean checkIfProcessIsRunning() throws IOException, InterruptedException {
