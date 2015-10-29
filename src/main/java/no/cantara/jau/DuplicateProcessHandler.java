@@ -173,7 +173,7 @@ public class DuplicateProcessHandler {
         ProcessBuilder processBuilder;
 
         if (isWindows()) {
-            processBuilder = new ProcessBuilder("taskkill", pid);
+            processBuilder = new ProcessBuilder("taskkill", "/pid", pid);
         } else { //unix
             processBuilder = new ProcessBuilder("kill", "-9", pid);
         }
