@@ -20,3 +20,4 @@ if exist c:\opt\java-auto-update\bin\java-auto-update (
 ) else (
     echo Didnt find folder: c:\opt\java-auto-update\bin\java-auto-update . Skipping uninstall of JAU.
 )
+pause
