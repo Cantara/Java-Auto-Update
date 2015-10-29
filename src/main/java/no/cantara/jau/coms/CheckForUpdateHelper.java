@@ -74,7 +74,7 @@ public class CheckForUpdateHelper {
 
                 processMonitorHandle.notify();
             } catch (Exception e) {
-                log.debug("Error thrown from scheduled lambda.", e);
+                log.warn("Error thrown from scheduled lambda.", e);
             }
         };
     }
