@@ -133,8 +133,9 @@ public class DuplicateProcessHandler {
         if (isWindows()) {
             //tasklist exit code is always 0. Parse output
             //findstr exit code 0 if found pid, 1 if it doesn't
-            processBuilder = new ProcessBuilder("C:\\Windows\\System32\\cmd.exe /c \"tasklist /FI \"PID eq " +
-                    pid + "\" | findstr " + pid + "\"");
+//            processBuilder = new ProcessBuilder("C:\\Windows\\System32\\cmd.exe /c \"tasklist /FI \"PID eq " +
+//                    pid + "\" | findstr " + pid + "\"");
+            processBuilder = new ProcessBuilder("C:\\Windows\\System32\\cmd.exe", "/c", "tasklist");
         }
         else {
             processBuilder = new ProcessBuilder("ps", "-p", pid);
