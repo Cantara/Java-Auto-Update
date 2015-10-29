@@ -60,8 +60,8 @@ public class JavaAutoUpdater {
      *   Start new service
      */
     public void start(int updateInterval) {
-        // TODO: Stop existing service if running
         // https://github.com/Cantara/Java-Auto-Update/issues/4
+        DuplicateProcessHandler.killExistingProcessIfRunning();
 
         // registerClient or fetch applicationState from file
         if (configServiceClient.getApplicationState() == null) {

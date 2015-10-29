@@ -27,6 +27,7 @@ public class ApplicationProcess {
         ProcessBuilder pb = new ProcessBuilder(command).inheritIO().directory(workingDirectory);
         try {
             runningProcess = pb.start();
+            DuplicateProcessHandler.findRunningManagedProcessPidAndWriteToFile(runningProcess);
         } catch (IOException e) {
             throw new RuntimeException("IOException while trying to start process with command '" + String.join(" ", command) + "' from directory '" + workingDirectory + "'.", e);
         }
