@@ -17,24 +17,70 @@ public class ProcessKiller {
     private static final Logger log = LoggerFactory.getLogger(ProcessKiller.class);
     private static final String RUNNING_PROCESS_FILENAME = "runningProcess.txt";
 
-    public void killExistingProcessIfRunning() {
+    public static void killExistingProcessIfRunning() {
+        String pid = getRunningProcessPidFromFile();
+        if (pid != null) {
+            if (isValidPid(pid)) {
+                if (processIsRunning(pid)) {
+                    log.info("Last recorded running managed process pid={} is running", pid);
+                    killRunningProcessBasedOnOS(pid);
+                }
+            }
+        }
+        else {
+            log.info("{} not found. Assuming no existing managed process is running.", RUNNING_PROCESS_FILENAME);
+        }
+    }
+
+    public static void writeRunningManagedProcessPidToFile() {
+
+    }
+
+    public static void removeRunningManagedProcessPidFromFile() {
+
+    }
+
+    private static String getRunningProcessPidFromFile() {
         Path file = Paths.get(RUNNING_PROCESS_FILENAME);
+        String pid = null;
         if (Files.exists(file)) {
-            String pid = null;
             try {
                 pid = new String(Files.readAllBytes(Paths.get(RUNNING_PROCESS_FILENAME)));
             } catch (IOException e) {
                 log.warn("Could not read file={}. Possible multiple processes!", RUNNING_PROCESS_FILENAME);
             }
-            if (isValidPid(pid)) {
-                killRunningProcess(pid);
-            }
-        } else {
-            log.info("{} not found. Assuming no existing process is running.", RUNNING_PROCESS_FILENAME);
+        }
+        return pid;
+    }
+
+    private static boolean processIsRunning(String pid) {
+        ProcessBuilder processBuilder;
+        if (isWindows()) {
+            //tasklist exit code is always 0. Parse output
+            //findstr exit code 0 if found pid, 1 if it doesn't
+            processBuilder = new ProcessBuilder("cmd /c \"tasklist /FI \"PID eq " +
+                    pid + "\" | findstr " + pid + "\"");
+        }
+        else {
+            processBuilder = new ProcessBuilder("ps", "-p", pid);
+        }
+        boolean processIsRunning = executeProcessRunningCheck(pid, processBuilder);
+        return processIsRunning;
+    }
+
+    private static boolean executeProcessRunningCheck(String pid, ProcessBuilder processBuilder) {
+        boolean processIsRunning = executeProcess(pid, processBuilder);
+        if (processIsRunning) {
+            log.info("Found pid={} of last recorded running managed process", pid);
+            return true;
+        }
+        else {
+            log.info("Last recorded running managed process pid={} is not running", pid);
+            return false;
         }
     }
 
-    public boolean isValidPid(String pid) {
+    private static boolean isValidPid(String pid) {
         // TODO: How to check if valid pid?
         try {
             Integer.parseInt(pid);
@@ -45,40 +91,46 @@ public class ProcessKiller {
         }
     }
 
-    public void killRunningProcess(String pid) {
+    private static void killRunningProcessBasedOnOS(String pid) {
         log.info("Killing existing managed process with pid={}", pid);
-        Runtime rt = Runtime.getRuntime();
         ProcessBuilder processBuilder;
 
-        if (System.getProperty("os.name").toLowerCase().contains("windows")) {
+        if (isWindows()) {
             processBuilder = new ProcessBuilder("taskkill", pid);
-            killProcess(pid, processBuilder);
         } else { //unix
             processBuilder = new ProcessBuilder("kill", "-9", pid);
-            killProcess(pid, processBuilder);
+        }
+
+        boolean processWasKilled = executeProcess(pid, processBuilder);
+        if (processWasKilled) {
+            log.info("Successfully killed existing running managed process pid={}", pid);
+        }
+        else {
+            log.error("Could not kill existing running managed process pid={}. Possible multiple processes!",
+                    pid);
         }
     }
 
-    public void killProcess(String pid, ProcessBuilder processBuilder) {
+    private static boolean executeProcess(String pid, ProcessBuilder processBuilder) {
         try {
             Process p = processBuilder.start();
             try {
                 p.waitFor();
                 if (p.exitValue() == 0) {
-                    log.info("Successfully killed existing managed process pid={}", pid);
+                    return true;
                 } else {
                     printErrorCommandFromProcess(p);
-                    log.warn("Could not kill existing managed process pid={}, process exitValue={}", pid, p.exitValue());
                 }
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                log.warn("Interrupted execution of process", e);
             }
         } catch (IOException e) {
-            log.warn("Could not kill existing managed process pid={}. Possible duplicate processes!", pid, e);
+            log.warn("IOException with execution of process", e);
         }
+        return false;
     }
 
-    public void printErrorCommandFromProcess(Process p) throws IOException {
+    private static void printErrorCommandFromProcess(Process p) throws IOException {
         BufferedReader reader =
                 new BufferedReader(new InputStreamReader(p.getErrorStream()));
         StringBuilder builder = new StringBuilder();
@@ -87,6 +139,12 @@ public class ProcessKiller {
             builder.append(line);
         }
         String result = builder.toString();
-        log.error("Error output from kill command: '{}'", result);
+        if (!result.isEmpty()) {
+            log.error("Error output from kill command: '{}'", result);
+        }
+    }
+
+    private static boolean isWindows() {
+        return System.getProperty("os.name").toLowerCase().contains("windows");
     }
 }
