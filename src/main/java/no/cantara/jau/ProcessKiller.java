@@ -15,21 +15,22 @@ import java.nio.file.Paths;
  */
 public class ProcessKiller {
     private static final Logger log = LoggerFactory.getLogger(ProcessKiller.class);
-    private static final String RUNNING_PROCESS_FILENAME = "runningProcess.txt";
+    public static final String RUNNING_PROCESS_FILENAME = "runningProcess.txt";
 
-    public static void killExistingProcessIfRunning() {
+    public static boolean killExistingProcessIfRunning() {
         String pid = getRunningProcessPidFromFile();
         if (pid != null) {
             if (isValidPid(pid)) {
                 if (processIsRunning(pid)) {
                     log.info("Last recorded running managed process pid={} is running", pid);
-                    killRunningProcessBasedOnOS(pid);
+                    return killRunningProcessBasedOnOS(pid);
                 }
             }
         }
         else {
             log.info("{} not found. Assuming no existing managed process is running.", RUNNING_PROCESS_FILENAME);
         }
+        return false;
     }
 
     public static void writeRunningManagedProcessPidToFile() {
@@ -53,7 +54,7 @@ public class ProcessKiller {
         return pid;
     }
 
-    private static boolean processIsRunning(String pid) {
+    public static boolean processIsRunning(String pid) {
         ProcessBuilder processBuilder;
         if (isWindows()) {
             //tasklist exit code is always 0. Parse output
@@ -91,7 +92,7 @@ public class ProcessKiller {
         }
     }
 
-    private static void killRunningProcessBasedOnOS(String pid) {
+    private static boolean killRunningProcessBasedOnOS(String pid) {
         log.info("Killing existing managed process with pid={}", pid);
         ProcessBuilder processBuilder;
 
@@ -104,14 +105,16 @@ public class ProcessKiller {
         boolean processWasKilled = executeProcess(pid, processBuilder);
         if (processWasKilled) {
             log.info("Successfully killed existing running managed process pid={}", pid);
+            return true;
         }
         else {
             log.error("Could not kill existing running managed process pid={}. Possible multiple processes!",
                     pid);
+            return false;
         }
     }
 
-    private static boolean executeProcess(String pid, ProcessBuilder processBuilder) {
+    public static boolean executeProcess(String pid, ProcessBuilder processBuilder) {
         try {
             Process p = processBuilder.start();
             try {
