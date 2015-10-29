@@ -18,5 +18,5 @@ if exist c:\opt\java-auto-update\bin\java-auto-update (
 	echo Deleting c:\opt\java-auto-update
 	RMDIR /S /Q c:\opt\java-auto-update
 ) else (
-    echo Didnt find folder: c:\opt\java-auto-update\bin\java-auto-update . Skipping uninstall of it.
+    echo Didnt find folder: c:\opt\java-auto-update\bin\java-auto-update . Skipping uninstall of JAU.
 )
