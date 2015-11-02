@@ -32,8 +32,6 @@ public class JavaAutoUpdater {
     private static ScheduledFuture<?> processMonitorHandle;
     private static ScheduledFuture<?> updaterHandle;
 
-    private final int isRunningCheckInterval = 10; // seconds
-
     private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
     private final ConfigServiceClient configServiceClient;
     private final ApplicationProcess processHolder;
@@ -59,7 +57,7 @@ public class JavaAutoUpdater {
      *   Stop existing service if running
      *   Start new service
      */
-    public void start(int updateInterval) {
+    public void start(int updateInterval, int isRunningInterval) {
         // https://github.com/Cantara/Java-Auto-Update/issues/4
         DuplicateProcessHandler.killExistingProcessIfRunning();
 
@@ -81,7 +79,7 @@ public class JavaAutoUpdater {
             }
 
             if (processMonitorHandle == null || processMonitorHandle.isCancelled() || processMonitorHandle.isDone()) {
-                processMonitorHandle = startProcessMonitorThread(isRunningCheckInterval);
+                processMonitorHandle = startProcessMonitorThread(isRunningInterval);
             }
 
             // make sure everything runs, forever
