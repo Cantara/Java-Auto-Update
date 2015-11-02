@@ -2,6 +2,8 @@ package no.cantara.jau;
 
 import no.cantara.jau.coms.CheckForUpdateHelper;
 import no.cantara.jau.coms.RegisterClientHelper;
+import no.cantara.jau.processkill.DuplicateProcessHandler;
+import no.cantara.jau.processkill.ProcessAdapter;
 import no.cantara.jau.serviceconfig.client.ConfigServiceClient;
 import no.cantara.jau.serviceconfig.client.ConfigurationStoreUtil;
 import no.cantara.jau.serviceconfig.client.DownloadUtil;
@@ -29,6 +31,7 @@ public class JavaAutoUpdater {
     private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
     private final ConfigServiceClient configServiceClient;
     private final ApplicationProcess processHolder;
+    private final DuplicateProcessHandler duplicateProcessHandler;
 
     private final String artifactId;
     private final String clientName;
@@ -40,6 +43,8 @@ public class JavaAutoUpdater {
 
         processHolder = new ApplicationProcess();
         processHolder.setWorkingDirectory(new File(workingDirectory));
+
+        duplicateProcessHandler = new DuplicateProcessHandler(new ProcessAdapter());
     }
 
     /**
@@ -52,7 +57,7 @@ public class JavaAutoUpdater {
      */
     public void start(int updateInterval, int isRunningInterval) {
         // https://github.com/Cantara/Java-Auto-Update/issues/4
-        DuplicateProcessHandler.killExistingProcessIfRunning();
+        duplicateProcessHandler.killExistingProcessIfRunning();
 
         // registerClient or fetch applicationState from file
         if (configServiceClient.getApplicationState() == null) {

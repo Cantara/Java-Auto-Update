@@ -1,5 +1,7 @@
 package no.cantara.jau;
 
+import no.cantara.jau.processkill.DuplicateProcessHandler;
+import no.cantara.jau.processkill.ProcessAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,10 +26,11 @@ public class ApplicationProcess {
     }
 
     public void startProcess() {
+        DuplicateProcessHandler duplicateProcessHandler = new DuplicateProcessHandler(new ProcessAdapter());
         ProcessBuilder pb = new ProcessBuilder(command).inheritIO().directory(workingDirectory);
         try {
             runningProcess = pb.start();
-            DuplicateProcessHandler.findRunningManagedProcessPidAndWriteToFile(runningProcess);
+            duplicateProcessHandler.findRunningManagedProcessPidAndWriteToFile(runningProcess);
         } catch (IOException e) {
             throw new RuntimeException("IOException while trying to start process with command '" + String.join(" ", command) + "' from directory '" + workingDirectory + "'.", e);
         }
