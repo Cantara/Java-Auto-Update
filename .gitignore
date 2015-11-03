@@ -8,6 +8,7 @@ dependency-reduced-pom.xml
 *.war
 *.ear
 target/
+test-output/
 
 #IDE files#
 .idea/

@@ -14,10 +14,13 @@ import java.util.Properties;
 public class Main {
 
     private static final int DEFAULT_UPDATE_INTERVAL = 3 * 60; // seconds
+    private static final int DEFAULT_IS_RUNNING_INTERVAL = 10; // seconds
+    
     private static final String CONFIG_FILENAME = "config.properties";
     private static final String CONFIG_SERVICE_URL_KEY = "configservice.url";
     private static final String CONFIG_SERVICE_USERNAME_KEY = "configservice.username";
     private static final String CONFIG_SERVICE_PASSWORD_KEY = "configservice.password";
+    private static final String IS_RUNNING_INTERVAL_KEY = "isrunninginterval";
     private static final String UPDATE_INTERVAL_KEY = "updateinterval";
 
     private static final Logger log = LoggerFactory.getLogger(Main.class);
@@ -45,11 +48,11 @@ public class Main {
         String artifactId = PropertiesHelper.getArtifactId(properties);
 
         int updateInterval = PropertiesHelper.getIntProperty(properties, UPDATE_INTERVAL_KEY, DEFAULT_UPDATE_INTERVAL);
+        int isRunningInterval = PropertiesHelper.getIntProperty(properties, IS_RUNNING_INTERVAL_KEY, DEFAULT_IS_RUNNING_INTERVAL);
 
         String workingDirectory = "./";
 
         final JavaAutoUpdater javaAutoUpdater = new JavaAutoUpdater(serviceConfigUrl, username, password, artifactId, workingDirectory);
-        javaAutoUpdater.start(updateInterval);
+        javaAutoUpdater.start(updateInterval, isRunningInterval);
     }
-
 }

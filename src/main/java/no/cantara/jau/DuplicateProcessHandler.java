@@ -58,7 +58,7 @@ public class DuplicateProcessHandler {
     }
 
     public static void findRunningManagedProcessPidAndWriteToFile(Process managedProcess) {
-        String pid = null;
+        String pid;
         if (isWindows()) {
             pid = findWindowsProcessId(managedProcess);
         }
@@ -72,7 +72,7 @@ public class DuplicateProcessHandler {
 
     private static String findUnixProcessId(Process managedProcess) {
         String pid;
-        Field pidField = null;
+        Field pidField;
         try {
             pidField = managedProcess.getClass().getDeclaredField("pid");
         } catch (NoSuchFieldException e) {
@@ -131,10 +131,6 @@ public class DuplicateProcessHandler {
     private static boolean processIsRunning(String pid) {
         ProcessBuilder processBuilder;
         if (isWindows()) {
-            //tasklist exit code is always 0. Parse output
-            //findstr exit code 0 if found pid, 1 if it doesn't
-//            processBuilder = new ProcessBuilder("C:\\Windows\\System32\\cmd.exe /c \"tasklist /FI \"PID eq " +
-//                    pid + "\" | findstr " + pid + "\"");
             processBuilder = new ProcessBuilder("C:\\Windows\\System32\\cmd.exe", "/c", "tasklist",
                     "/FI", "\"PID eq " + pid + "\" | findstr " + pid + "\"");
         }
@@ -146,7 +142,7 @@ public class DuplicateProcessHandler {
     }
 
     private static boolean executeProcessRunningCheck(String pid, ProcessBuilder processBuilder) {
-        boolean processIsRunning = executeProcess(pid, processBuilder);
+        boolean processIsRunning = executeProcess(processBuilder);
         if (processIsRunning) {
             log.info("Found pid={} of last recorded running managed process", pid);
             return true;
@@ -178,7 +174,7 @@ public class DuplicateProcessHandler {
             processBuilder = new ProcessBuilder("kill", "-9", pid);
         }
 
-        boolean processWasKilled = executeProcess(pid, processBuilder);
+        boolean processWasKilled = executeProcess(processBuilder);
         if (processWasKilled) {
             log.info("Successfully killed existing running managed process pid={}", pid);
             return true;
@@ -190,7 +186,7 @@ public class DuplicateProcessHandler {
         }
     }
 
-    private static boolean executeProcess(String pid, ProcessBuilder processBuilder) {
+    private static boolean executeProcess(ProcessBuilder processBuilder) {
         try {
             Process p = processBuilder.start();
             try {
@@ -213,7 +209,7 @@ public class DuplicateProcessHandler {
         BufferedReader reader =
                 new BufferedReader(new InputStreamReader(p.getErrorStream()));
         StringBuilder builder = new StringBuilder();
-        String line = null;
+        String line;
         while ((line = reader.readLine()) != null) {
             builder.append(line);
         }
