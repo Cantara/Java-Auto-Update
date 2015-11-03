@@ -25,9 +25,9 @@ public class CheckForUpdateHelper {
     private static final Logger log = LoggerFactory.getLogger(CheckForUpdateHelper.class);
 
     public static Runnable getCheckForUpdateRunnable(long interval, ConfigServiceClient configServiceClient,
-                                               ApplicationProcess processHolder,
-                                               ScheduledFuture<?> processMonitorHandle,
-                                              JavaAutoUpdater jau) {
+                                                     ApplicationProcess processHolder,
+                                                     ScheduledFuture<?> processMonitorHandle,
+                                                     JavaAutoUpdater jau) {
         return () -> {
             ClientConfig newClientConfig = null;
             try {
@@ -36,7 +36,8 @@ public class CheckForUpdateHelper {
                 String clientId = PropertiesHelper.getStringProperty(applicationState, ConfigServiceClient.CLIENT_ID, null);
                 String lastChanged = PropertiesHelper.getStringProperty(applicationState, ConfigServiceClient.LAST_CHANGED, null);
                 SortedMap<String, String> clientEnvironment = ClientEnvironmentUtil.getClientEnvironment();
-                newClientConfig = configServiceClient.checkForUpdate(clientId, lastChanged, clientEnvironment);
+                String clientName = PropertiesHelper.getClientNameFromProperties(applicationState);
+                newClientConfig = configServiceClient.checkForUpdate(clientId, lastChanged, clientEnvironment, clientName);
             } catch (IllegalStateException e) {
                 log.debug("Illegal state - reregister client");
                 log.warn(e.getMessage());
