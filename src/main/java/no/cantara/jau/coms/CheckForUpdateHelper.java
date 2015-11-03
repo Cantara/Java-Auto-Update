@@ -3,6 +3,7 @@ package no.cantara.jau.coms;
 import no.cantara.jau.ApplicationProcess;
 import no.cantara.jau.JavaAutoUpdater;
 import no.cantara.jau.serviceconfig.client.ConfigServiceClient;
+import no.cantara.jau.serviceconfig.dto.CheckForUpdateRequest;
 import no.cantara.jau.serviceconfig.dto.ClientConfig;
 import no.cantara.jau.util.ClientEnvironmentUtil;
 import no.cantara.jau.util.PropertiesHelper;
@@ -37,7 +38,8 @@ public class CheckForUpdateHelper {
                 String lastChanged = PropertiesHelper.getStringProperty(applicationState, ConfigServiceClient.LAST_CHANGED, null);
                 SortedMap<String, String> clientEnvironment = ClientEnvironmentUtil.getClientEnvironment();
                 String clientName = PropertiesHelper.getClientNameFromProperties(applicationState);
-                newClientConfig = configServiceClient.checkForUpdate(clientId, lastChanged, clientEnvironment, clientName);
+                CheckForUpdateRequest checkForUpdateRequest = new CheckForUpdateRequest(lastChanged, clientEnvironment, clientName);
+                newClientConfig = configServiceClient.checkForUpdate(clientId, checkForUpdateRequest);
             } catch (IllegalStateException e) {
                 log.debug("Illegal state - reregister client");
                 log.warn(e.getMessage());

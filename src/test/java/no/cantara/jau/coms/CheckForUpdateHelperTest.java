@@ -3,6 +3,7 @@ package no.cantara.jau.coms;
 import no.cantara.jau.ApplicationProcess;
 import no.cantara.jau.JavaAutoUpdater;
 import no.cantara.jau.serviceconfig.client.ConfigServiceClient;
+import no.cantara.jau.serviceconfig.dto.CheckForUpdateRequest;
 import org.testng.annotations.Test;
 
 import javax.ws.rs.InternalServerErrorException;
@@ -24,7 +25,7 @@ public class CheckForUpdateHelperTest {
     public void testPreconditionFailed() throws IOException {
         ConfigServiceClient configServiceClient = mock(ConfigServiceClient.class);
         when(configServiceClient.getApplicationState()).thenReturn(new Properties());
-        when(configServiceClient.checkForUpdate(anyString(), anyString(), anyMap())).thenThrow(IllegalStateException.class);
+        when(configServiceClient.checkForUpdate(anyString(), any(CheckForUpdateRequest.class))).thenThrow(IllegalStateException.class);
 
         ApplicationProcess processHolder = mock(ApplicationProcess.class);
         ScheduledFuture processMonitorHandle = mock(ScheduledFuture.class);
@@ -41,7 +42,7 @@ public class CheckForUpdateHelperTest {
     public void testNotChanged() throws IOException {
         ConfigServiceClient configServiceClient = mock(ConfigServiceClient.class);
         when(configServiceClient.getApplicationState()).thenReturn(new Properties());
-        when(configServiceClient.checkForUpdate(anyString(), anyString(), anyMap())).thenThrow(NoContentException.class);
+        when(configServiceClient.checkForUpdate(anyString(), any(CheckForUpdateRequest.class))).thenThrow(NoContentException.class);
 
         ApplicationProcess processHolder = mock(ApplicationProcess.class);
         ScheduledFuture processMonitorHandle = mock(ScheduledFuture.class);
@@ -57,7 +58,7 @@ public class CheckForUpdateHelperTest {
     public void testServerProblems() throws IOException {
         ConfigServiceClient configServiceClient = mock(ConfigServiceClient.class);
         when(configServiceClient.getApplicationState()).thenReturn(new Properties());
-        when(configServiceClient.checkForUpdate(anyString(), anyString(), anyMap())).thenThrow(InternalServerErrorException.class);
+        when(configServiceClient.checkForUpdate(anyString(), any(CheckForUpdateRequest.class))).thenThrow(InternalServerErrorException.class);
 
         ApplicationProcess processHolder = mock(ApplicationProcess.class);
         ScheduledFuture processMonitorHandle = mock(ScheduledFuture.class);
