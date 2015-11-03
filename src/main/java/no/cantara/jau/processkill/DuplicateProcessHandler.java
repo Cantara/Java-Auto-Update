@@ -23,7 +23,12 @@ public class DuplicateProcessHandler {
     }
 
     public boolean killExistingProcessIfRunning() {
-        String pid = fileUtil.getRunningProcessPidFromFile();
+        String pid = null;
+        try {
+            pid = fileUtil.getRunningProcessPidFromFile();
+        } catch (IOException e) {
+            log.warn("Could not read file={}.", fileUtil.getFileName());
+        }
         if (pid != null) {
             if (isValidPid(pid)) {
                 if (processAdapter.processIsRunning(pid)) {

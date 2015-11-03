@@ -16,6 +16,10 @@ public class LastRunningProcessFileUtil {
         this.fileName = fileName;
     }
 
+    public String getFileName() {
+        return fileName;
+    }
+
     public void writePidToFile(String pid) {
         Path filePath = Paths.get(fileName);
         try {
@@ -32,7 +36,7 @@ public class LastRunningProcessFileUtil {
             writer.write(pid);
             log.debug("Wrote pid={} to file={}", pid, fileName);
         } catch (FileNotFoundException e) {
-            log.error("File '{}' to write managed process pid={} not found", fileName,pid, e);
+            log.error("File '{}' to write managed process pid={} not found", fileName, pid, e);
         } catch (UnsupportedEncodingException e) {
             log.error("Encoding error while writing to {}", fileName, e);
         } catch (IOException e) {
@@ -40,15 +44,11 @@ public class LastRunningProcessFileUtil {
         }
     }
 
-    public String getRunningProcessPidFromFile() {
+    public String getRunningProcessPidFromFile() throws IOException {
         Path file = Paths.get(fileName);
         String pid = null;
         if (Files.exists(file)) {
-            try {
-                pid = new String(Files.readAllBytes(Paths.get(fileName)));
-            } catch (IOException e) {
-                log.warn("Could not read file={}. Possible multiple processes!", fileName);
-            }
+            pid = new String(Files.readAllBytes(Paths.get(fileName)));
         }
         return pid;
     }
