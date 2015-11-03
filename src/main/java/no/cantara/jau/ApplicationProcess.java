@@ -2,6 +2,7 @@ package no.cantara.jau;
 
 import no.cantara.jau.processkill.DuplicateProcessHandler;
 import no.cantara.jau.processkill.ProcessAdapter;
+import no.cantara.jau.processkill.ProcessExecutorFetcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,7 +27,7 @@ public class ApplicationProcess {
     }
 
     public void startProcess() {
-        DuplicateProcessHandler duplicateProcessHandler = new DuplicateProcessHandler(new ProcessAdapter());
+        DuplicateProcessHandler duplicateProcessHandler = new DuplicateProcessHandler(new ProcessExecutorFetcher());
         ProcessBuilder pb = new ProcessBuilder(command).inheritIO().directory(workingDirectory);
         try {
             runningProcess = pb.start();

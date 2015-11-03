@@ -16,8 +16,8 @@ public class DuplicateProcessHandler {
     public static final String RUNNING_PROCESS_FILENAME = "last-running-process.txt";
     private ProcessAdapter processAdapter;
 
-    public DuplicateProcessHandler(ProcessAdapter processAdapter) {
-        this.processAdapter = processAdapter;
+    public DuplicateProcessHandler(ProcessExecutorFetcher processExecutorFetcher) {
+        this.processAdapter = new ProcessAdapter(processExecutorFetcher);
     }
 
     public boolean killExistingProcessIfRunning() {

@@ -5,5 +5,5 @@ public interface ProcessExecutor {
 
     ProcessBuilder createProcessIsRunningCommand(String pid);
 
-    String findProcessId(Process process);
+    String findProcessId(Process process) throws ReflectiveOperationException;
 }

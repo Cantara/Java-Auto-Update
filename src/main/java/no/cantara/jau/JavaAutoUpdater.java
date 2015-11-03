@@ -4,6 +4,7 @@ import no.cantara.jau.coms.CheckForUpdateHelper;
 import no.cantara.jau.coms.RegisterClientHelper;
 import no.cantara.jau.processkill.DuplicateProcessHandler;
 import no.cantara.jau.processkill.ProcessAdapter;
+import no.cantara.jau.processkill.ProcessExecutorFetcher;
 import no.cantara.jau.serviceconfig.client.ConfigServiceClient;
 import no.cantara.jau.serviceconfig.client.ConfigurationStoreUtil;
 import no.cantara.jau.serviceconfig.client.DownloadUtil;
@@ -44,7 +45,7 @@ public class JavaAutoUpdater {
         processHolder = new ApplicationProcess();
         processHolder.setWorkingDirectory(new File(workingDirectory));
 
-        duplicateProcessHandler = new DuplicateProcessHandler(new ProcessAdapter());
+        duplicateProcessHandler = new DuplicateProcessHandler(new ProcessExecutorFetcher());
     }
 
     /**

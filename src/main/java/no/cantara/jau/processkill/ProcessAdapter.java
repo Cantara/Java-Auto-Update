@@ -11,17 +11,8 @@ public class ProcessAdapter {
     private static final Logger log = LoggerFactory.getLogger(ProcessAdapter.class);
     private ProcessExecutor processExecutor;
 
-    public ProcessAdapter() {
-        if (isWindows()) {
-            processExecutor = new WindowsProcessExecutor();
-        }
-        else {
-            processExecutor = new UnixProcessExecutor();
-        }
-    }
-
-    private static boolean isWindows() {
-        return System.getProperty("os.name").toLowerCase().contains("windows");
+    public ProcessAdapter(ProcessExecutorFetcher processExecutorFetcher) {
+        this.processExecutor = processExecutorFetcher.getProcessExecutorBasedOnOs();
     }
 
     public boolean killRunningProcess(String pid) {
@@ -41,7 +32,12 @@ public class ProcessAdapter {
     }
 
     public String findProcessId(Process process) {
-        String pid = processExecutor.findProcessId(process);
+        String pid = null;
+        try {
+            pid = processExecutor.findProcessId(process);
+        } catch (ReflectiveOperationException e) {
+            log.warn("Finding PID of managed process failed", e);
+        }
         return pid;
     }
 
@@ -57,21 +53,6 @@ public class ProcessAdapter {
             return false;
         }
     }
-
-    private static void printErrorCommandFromProcess(Process p) throws IOException {
-        BufferedReader reader =
-                new BufferedReader(new InputStreamReader(p.getErrorStream()));
-        StringBuilder builder = new StringBuilder();
-        String line;
-        while ((line = reader.readLine()) != null) {
-            builder.append(line);
-        }
-        String result = builder.toString();
-        if (!result.isEmpty()) {
-            log.error("Error output from kill command: '{}'", result);
-        }
-    }
-
 
     private static boolean executeProcess(ProcessBuilder processBuilder) {
         try {
@@ -90,5 +71,20 @@ public class ProcessAdapter {
             log.warn("IOException with execution of process", e);
         }
         return false;
+    }
+
+
+    private static void printErrorCommandFromProcess(Process p) throws IOException {
+        BufferedReader reader =
+                new BufferedReader(new InputStreamReader(p.getErrorStream()));
+        StringBuilder builder = new StringBuilder();
+        String line;
+        while ((line = reader.readLine()) != null) {
+            builder.append(line);
+        }
+        String result = builder.toString();
+        if (!result.isEmpty()) {
+            log.error("Error output from kill command: '{}'", result);
+        }
     }
 }

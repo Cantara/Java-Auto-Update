@@ -26,10 +26,9 @@ public class WindowsProcessExecutor implements ProcessExecutor {
     }
 
     @Override
-    public String findProcessId(Process process) {
+    public String findProcessId(Process process) throws NoSuchFieldException, IllegalAccessException {
         if (process.getClass().getName().equals("java.lang.Win32Process")
                 || process.getClass().getName().equals("java.lang.ProcessImpl")) {
-            try {
                 Field f = process.getClass().getDeclaredField("handle");
                 f.setAccessible(true);
                 long handleNumber = f.getLong(process);
@@ -40,10 +39,6 @@ public class WindowsProcessExecutor implements ProcessExecutor {
                 int pid = kernel.GetProcessId(handle);
                 log.debug("Found pid for managed process: {}", pid);
                 return pid + "";
-            } catch (Throwable e) {
-                log.error("Could not get PID of managed process. This could lead to duplicate managed processes!",
-                        e);
-            }
         }
         return null;
     }

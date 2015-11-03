@@ -22,24 +22,12 @@ public class UnixProcessExecutor implements ProcessExecutor {
     }
 
     @Override
-    public String findProcessId(Process process) {
+    public String findProcessId(Process process) throws NoSuchFieldException, IllegalAccessException {
         String pid;
         Field pidField;
-        try {
             pidField = process.getClass().getDeclaredField("pid");
-        } catch (NoSuchFieldException e) {
-            log.error("Could not get PID of managed process. This could lead to duplicate managed processes!",
-                    e);
-            return null;
-        }
-        try {
             pidField.setAccessible(true);
             pid = Long.toString(pidField.getLong(process));
-        } catch (IllegalAccessException e) {
-            log.error("Could not get PID of managed process. This could lead to duplicate managed processes!",
-                    e);
-            return null;
-        }
         return pid;
     }
 }
