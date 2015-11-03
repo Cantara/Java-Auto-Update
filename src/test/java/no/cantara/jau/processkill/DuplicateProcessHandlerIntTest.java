@@ -10,8 +10,8 @@ import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-public class ProcessExecutorTest {
-    private static final Logger log = LoggerFactory.getLogger(ProcessExecutorTest.class);
+public class DuplicateProcessHandlerIntTest {
+    private static final Logger log = LoggerFactory.getLogger(DuplicateProcessHandlerIntTest.class);
 
     @Test
     public void shouldKillExistingProcessWhenExistingProcessIsRunning() throws IOException,
