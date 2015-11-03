@@ -6,23 +6,24 @@ import com.sun.jna.platform.win32.WinNT;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.lang.reflect.Field;
 
-public class WindowsProcessExecutor implements ProcessExecutor {
+public class WindowsProcessExecutor extends ProcessExecutor {
     private static final Logger log = LoggerFactory.getLogger(WindowsProcessExecutor.class);
 
     @Override
-    public ProcessBuilder createKillProcessCommand(String pid) {
+    public void killProcess(String pid) throws IOException, InterruptedException {
         ProcessBuilder processBuilder = new ProcessBuilder("taskkill", "/pid", pid, "/f");
-        return processBuilder;
+        executeProcess(processBuilder);
     }
 
     @Override
-    public ProcessBuilder createProcessIsRunningCommand(String pid) {
+    public boolean isProcessRunning(String pid) throws IOException, InterruptedException {
         ProcessBuilder processBuilder;
         processBuilder = new ProcessBuilder("C:\\Windows\\System32\\cmd.exe", "/c", "tasklist",
-                    "/FI", "\"PID eq " + pid + "\" | findstr " + pid + "\"");
-        return processBuilder;
+                "/FI", "\"PID eq " + pid + "\" | findstr " + pid + "\"");
+        return executeProcess(processBuilder);
     }
 
     @Override

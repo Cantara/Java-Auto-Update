@@ -3,22 +3,23 @@ package no.cantara.jau.processkill;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.lang.reflect.Field;
 
-public class UnixProcessExecutor implements ProcessExecutor {
+public class UnixProcessExecutor extends ProcessExecutor {
     private static final Logger log = LoggerFactory.getLogger(UnixProcessExecutor.class);
 
     @Override
-    public ProcessBuilder createKillProcessCommand(String pid) {
+    public void killProcess(String pid) throws IOException, InterruptedException {
         ProcessBuilder processBuilder = new ProcessBuilder("kill", "-9", pid);
-        return processBuilder;
+        executeProcess(processBuilder);
     }
 
     @Override
-    public ProcessBuilder createProcessIsRunningCommand(String pid) {
+    public boolean isProcessRunning(String pid) throws IOException, InterruptedException {
         ProcessBuilder processBuilder;
         processBuilder = new ProcessBuilder("ps", "-p", pid);
-        return processBuilder;
+        return executeProcess(processBuilder);
     }
 
     @Override
