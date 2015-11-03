@@ -45,7 +45,6 @@ public class CheckForUpdateHelper {
                 log.warn(e.getMessage());
                 configServiceClient.cleanApplicationState();
                 newClientConfig = jau.registerClient();
-                return;
             } catch (NoContentException e) {
                 log.debug("No updated config.");
                 return;
