@@ -63,7 +63,7 @@ public class DuplicateProcessHandler {
         } catch (UnsupportedEncodingException e) {
             log.error("Encoding error while writing to {}", RUNNING_PROCESS_FILENAME, e);
         } catch (IOException e) {
-            log.error("Could not write to file '{}'", RUNNING_PROCESS_FILENAME);
+            log.error("Could not write to file '{}'", RUNNING_PROCESS_FILENAME, e);
         }
     }
 
