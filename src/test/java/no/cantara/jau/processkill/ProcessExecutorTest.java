@@ -3,7 +3,6 @@ package no.cantara.jau.processkill;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.Assert;
-import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Test;
 
 import java.io.*;
@@ -11,27 +10,34 @@ import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-public class DuplicateProcessHandlerTest {
-    private static final Logger log = LoggerFactory.getLogger(DuplicateProcessHandlerTest.class);
-    public static final String TEST_RUNNING_PROCESS_FILE = DuplicateProcessHandler.RUNNING_PROCESS_FILENAME;
+public class ProcessExecutorTest {
+    private static final Logger log = LoggerFactory.getLogger(ProcessExecutorTest.class);
 
     @Test
     public void shouldKillExistingProcessWhenExistingProcessIsRunning() throws IOException,
             NoSuchFieldException, IllegalAccessException, InterruptedException {
-        DuplicateProcessHandler duplicateProcessHandler = new DuplicateProcessHandler(new ProcessExecutorFetcher());
+        String fileName = "killExistingProcessWhenRunningTest.txt";
+        LastRunningProcessFileUtil fileUtil = new LastRunningProcessFileUtil(fileName);
+        DuplicateProcessHandler duplicateProcessHandler = new DuplicateProcessHandler(new ProcessAdapter(
+                new ProcessExecutorFetcher()), fileUtil);
         Process p = createDummyProcess();
         int PID = getPIDFromProcess(p);
-        createFileAndWriteLine(PID + "");
+        createFileAndWriteLine(fileName, PID + "");
 
         boolean processWasKilled = duplicateProcessHandler.killExistingProcessIfRunning();
         boolean processIsRunning = checkIfProcessIsRunning(PID);
 
         Assert.assertEquals(processWasKilled, !processIsRunning);
+
+        deleteTestRunningProcessFile(fileName);
     }
 
     @Test
     public void shouldFailToKillExistingProcessWhenExistingProcessIsNotRunning() throws IOException, InterruptedException {
-        DuplicateProcessHandler duplicateProcessHandler = new DuplicateProcessHandler(new ProcessExecutorFetcher());
+        String fileName = "shouldFailToKillExistingProcessTest.txt";
+        LastRunningProcessFileUtil fileUtil = new LastRunningProcessFileUtil(fileName);
+        DuplicateProcessHandler duplicateProcessHandler = new DuplicateProcessHandler(new ProcessAdapter(
+                new ProcessExecutorFetcher()), fileUtil);
         int PID = 987654;
 
         boolean processWasKilled = duplicateProcessHandler.killExistingProcessIfRunning();
@@ -42,18 +48,26 @@ public class DuplicateProcessHandlerTest {
 
     @Test
     public void shouldNotKillProcessWhenPidIsNotValid() throws IOException, InterruptedException {
-        DuplicateProcessHandler duplicateProcessHandler = new DuplicateProcessHandler(new ProcessExecutorFetcher());
-        createFileAndWriteLine("notvalidpid");
+        String fileName = "pidNotValidTest.txt";
+        LastRunningProcessFileUtil fileUtil = new LastRunningProcessFileUtil(fileName);
+        DuplicateProcessHandler duplicateProcessHandler = new DuplicateProcessHandler(new ProcessAdapter(
+                new ProcessExecutorFetcher()), fileUtil);
+        createFileAndWriteLine(fileName, "notvalidpid");
 
         boolean processWasKilled = duplicateProcessHandler.killExistingProcessIfRunning();
         //boolean processIsRunning = checkIfProcessIsRunning(PID);
 
         Assert.assertFalse(processWasKilled);
+
+        deleteTestRunningProcessFile(fileName);
     }
 
     @Test
     public void shouldHandleIfRunningProcessFileDoesNotExist() {
-        DuplicateProcessHandler duplicateProcessHandler = new DuplicateProcessHandler(new ProcessExecutorFetcher());
+        String fileName = "nonExistantFileTest.txt";
+        LastRunningProcessFileUtil fileUtil = new LastRunningProcessFileUtil(fileName);
+        DuplicateProcessHandler duplicateProcessHandler = new DuplicateProcessHandler(new ProcessAdapter(
+                new ProcessExecutorFetcher()), fileUtil);
 
         boolean processWasKilled = duplicateProcessHandler.killExistingProcessIfRunning();
 
@@ -62,28 +76,38 @@ public class DuplicateProcessHandlerTest {
 
     @Test
     public void shouldWritePIDToFile() throws IOException, NoSuchFieldException, IllegalAccessException {
-        DuplicateProcessHandler duplicateProcessHandler = new DuplicateProcessHandler(new ProcessExecutorFetcher());
+        String fileName = "shouldWritePidToFileTest.txt";
+        LastRunningProcessFileUtil fileUtil = new LastRunningProcessFileUtil(fileName);
+        DuplicateProcessHandler duplicateProcessHandler = new DuplicateProcessHandler(new ProcessAdapter(
+                new ProcessExecutorFetcher()), fileUtil);
         Process currentProcess = createDummyProcess();
         long PID = getPIDFromProcess(currentProcess);
         duplicateProcessHandler.findRunningManagedProcessPidAndWriteToFile(currentProcess);
 
-        String pid = new String(Files.readAllBytes(Paths.get(TEST_RUNNING_PROCESS_FILE)));
+        String pid = new String(Files.readAllBytes(Paths.get(fileName)));
 
         Assert.assertEquals(pid, Long.toString(PID));
+
+        deleteTestRunningProcessFile(fileName);
     }
 
     @Test
-    public void shouldEraseEarlierContentFromFileWhenWritingPIDToFile() throws IOException, NoSuchFieldException, IllegalAccessException {
-        DuplicateProcessHandler duplicateProcessHandler = new DuplicateProcessHandler(new ProcessExecutorFetcher());
+    public void shouldOverwriteFileWhenWritingPIDToFile() throws IOException, NoSuchFieldException, IllegalAccessException {
+        String fileName = "shouldOverwriteFileTest.txt";
+        LastRunningProcessFileUtil fileUtil = new LastRunningProcessFileUtil(fileName);
+        DuplicateProcessHandler duplicateProcessHandler = new DuplicateProcessHandler(new ProcessAdapter(
+                new ProcessExecutorFetcher()), fileUtil);
         Process currentProcess = createDummyProcess();
         long firstPid = getPIDFromProcess(currentProcess);
         currentProcess = createDummyProcess();
         long secondPid = getPIDFromProcess(currentProcess);
         duplicateProcessHandler.findRunningManagedProcessPidAndWriteToFile(currentProcess);
 
-        String pid = new String(Files.readAllBytes(Paths.get(TEST_RUNNING_PROCESS_FILE)));
+        String pid = new String(Files.readAllBytes(Paths.get(fileName)));
 
         Assert.assertEquals(pid, Long.toString(secondPid));
+
+        deleteTestRunningProcessFile(fileName);
     }
 
     private static boolean checkIfProcessIsRunning(long PID) throws IOException, InterruptedException {
@@ -114,20 +138,20 @@ public class DuplicateProcessHandlerTest {
         return PID;
     }
 
-    private void createFileAndWriteLine(String lineToWrite) throws IOException {
-        Files.createFile(Paths.get(TEST_RUNNING_PROCESS_FILE));
+    private void createFileAndWriteLine(String fileName, String lineToWrite) throws IOException {
+        Files.createFile(Paths.get(fileName));
 
         try (Writer writer = new BufferedWriter(new OutputStreamWriter(
-                new FileOutputStream(TEST_RUNNING_PROCESS_FILE), "utf-8"))) {
+                new FileOutputStream(fileName), "utf-8"))) {
             writer.write(lineToWrite);
         }
 
-        log.debug("Created test file " + TEST_RUNNING_PROCESS_FILE);
+        log.debug("Created test file " + fileName);
     }
 
-    @AfterMethod
-    private void deleteTestRunningProcessFile() throws IOException {
-        Files.deleteIfExists(Paths.get(TEST_RUNNING_PROCESS_FILE));
-        log.debug("Deleted test file (if existed) " + TEST_RUNNING_PROCESS_FILE);
+
+    private void deleteTestRunningProcessFile(String fileName) throws IOException {
+        Files.deleteIfExists(Paths.get(fileName));
+        log.debug("Deleted test file (if existed) " + fileName);
     }
 }

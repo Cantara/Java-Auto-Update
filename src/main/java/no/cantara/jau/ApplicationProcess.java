@@ -1,6 +1,7 @@
 package no.cantara.jau;
 
 import no.cantara.jau.processkill.DuplicateProcessHandler;
+import no.cantara.jau.processkill.LastRunningProcessFileUtil;
 import no.cantara.jau.processkill.ProcessAdapter;
 import no.cantara.jau.processkill.ProcessExecutorFetcher;
 import org.slf4j.Logger;
@@ -21,13 +22,17 @@ public class ApplicationProcess {
 
     private String clientId;
     private String lastChangedTimestamp;
+    private DuplicateProcessHandler duplicateProcessHandler;
+
+    public ApplicationProcess(DuplicateProcessHandler duplicateProcessHandler) {
+        this.duplicateProcessHandler = duplicateProcessHandler;
+    }
 
     public boolean processIsrunning() {
         return runningProcess != null && runningProcess.isAlive();
     }
 
     public void startProcess() {
-        DuplicateProcessHandler duplicateProcessHandler = new DuplicateProcessHandler(new ProcessExecutorFetcher());
         ProcessBuilder pb = new ProcessBuilder(command).inheritIO().directory(workingDirectory);
         try {
             runningProcess = pb.start();
@@ -77,5 +82,4 @@ public class ApplicationProcess {
     public String getLastChangedTimestamp() {
         return lastChangedTimestamp;
     }
-
 }

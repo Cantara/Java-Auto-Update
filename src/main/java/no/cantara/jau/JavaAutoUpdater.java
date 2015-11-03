@@ -3,6 +3,7 @@ package no.cantara.jau;
 import no.cantara.jau.coms.CheckForUpdateHelper;
 import no.cantara.jau.coms.RegisterClientHelper;
 import no.cantara.jau.processkill.DuplicateProcessHandler;
+import no.cantara.jau.processkill.LastRunningProcessFileUtil;
 import no.cantara.jau.processkill.ProcessAdapter;
 import no.cantara.jau.processkill.ProcessExecutorFetcher;
 import no.cantara.jau.serviceconfig.client.ConfigServiceClient;
@@ -42,10 +43,15 @@ public class JavaAutoUpdater {
         this.artifactId = artifactId;
         this.clientName = clientName;
 
-        processHolder = new ApplicationProcess();
-        processHolder.setWorkingDirectory(new File(workingDirectory));
+        ProcessAdapter processAdapter = new ProcessAdapter(new ProcessExecutorFetcher());
+        LastRunningProcessFileUtil fileUtil = new LastRunningProcessFileUtil(DuplicateProcessHandler.RUNNING_PROCESS_FILENAME);
+        duplicateProcessHandler = new DuplicateProcessHandler(processAdapter, fileUtil);
 
-        duplicateProcessHandler = new DuplicateProcessHandler(new ProcessExecutorFetcher());
+        // Because of Java 8's "final" limitation on closures, any outside variables that need to be changed inside the
+        // closure must be wrapped in a final object.
+        processHolder = new ApplicationProcess(duplicateProcessHandler);
+
+        processHolder.setWorkingDirectory(new File(workingDirectory));
     }
 
     /**
