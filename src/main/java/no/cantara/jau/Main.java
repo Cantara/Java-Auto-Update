@@ -43,6 +43,10 @@ public class Main {
                     CONFIG_SERVICE_URL_KEY, CONFIG_FILENAME, CONFIG_SERVICE_URL_KEY);
             System.exit(1);
         }
+
+        String clientName = PropertiesHelper.getClientName(properties);
+        log.debug("Resolved clientName={}", clientName);
+
         String username = PropertiesHelper.getStringProperty(properties, CONFIG_SERVICE_USERNAME_KEY, null);
         String password = PropertiesHelper.getStringProperty(properties, CONFIG_SERVICE_PASSWORD_KEY, null);
         String artifactId = PropertiesHelper.getArtifactId(properties);
@@ -52,7 +56,8 @@ public class Main {
 
         String workingDirectory = "./";
 
-        final JavaAutoUpdater javaAutoUpdater = new JavaAutoUpdater(serviceConfigUrl, username, password, artifactId, workingDirectory);
+        final JavaAutoUpdater javaAutoUpdater = new JavaAutoUpdater(serviceConfigUrl, username, password, artifactId,
+                workingDirectory, clientName);
         javaAutoUpdater.start(updateInterval, isRunningInterval);
     }
 }

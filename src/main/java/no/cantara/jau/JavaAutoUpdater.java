@@ -7,18 +7,12 @@ import no.cantara.jau.serviceconfig.client.ConfigurationStoreUtil;
 import no.cantara.jau.serviceconfig.client.DownloadUtil;
 import no.cantara.jau.serviceconfig.dto.ClientConfig;
 import no.cantara.jau.serviceconfig.dto.ServiceConfig;
-import no.cantara.jau.util.ClientEnvironmentUtil;
 import no.cantara.jau.util.PropertiesHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.ws.rs.BadRequestException;
-import javax.ws.rs.InternalServerErrorException;
-import javax.ws.rs.core.NoContentException;
 import java.io.File;
-import java.io.IOException;
 import java.util.Properties;
-import java.util.SortedMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -38,11 +32,14 @@ public class JavaAutoUpdater {
 
     private final String serviceConfigUrl;
     private final String artifactId;
+    private final String clientName;
 
-    public JavaAutoUpdater(String serviceConfigUrl, String username, String password, String artifactId, String workingDirectory) {
+    public JavaAutoUpdater(String serviceConfigUrl, String username, String password, String artifactId,
+                           String workingDirectory, String clientName) {
         this.serviceConfigUrl = serviceConfigUrl;
         this.configServiceClient = new ConfigServiceClient(serviceConfigUrl, username, password);
         this.artifactId = artifactId;
+        this.clientName = clientName;
         // Because of Java 8's "final" limitation on closures, any outside variables that need to be changed inside the
         // closure must be wrapped in a final object.
         processHolder = new ApplicationProcess();
@@ -118,8 +115,6 @@ public class JavaAutoUpdater {
     }
 
     public ClientConfig registerClient() {
-        Properties applicationState = configServiceClient.getApplicationState();
-        String clientName = applicationState == null ? null : PropertiesHelper.getClientNameFromProperties(applicationState);
         RegisterClientHelper registerClientHelper = new RegisterClientHelper(configServiceClient, artifactId,
                 clientName, serviceConfigUrl);
         return registerClientHelper.registerClient();
@@ -141,4 +136,7 @@ public class JavaAutoUpdater {
         processHolder.setLastChangedTimestamp(initialLastChanged);
     }
 
+    public String getClientName() {
+        return clientName;
+    }
 }

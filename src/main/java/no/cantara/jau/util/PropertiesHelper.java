@@ -4,8 +4,9 @@ import java.util.Properties;
 
 public class PropertiesHelper {
 
+    public static final String CLIENT_NAME_PROPERTY_DEFAULT_VALUE = "Default clientName";
+
     private static final String CLIENT_NAME_PROPERTY_KEY = "clientName";
-    private static final String CLIENT_NAME_PROPERTY_DEFAULT_VALUE = "Default clientName";
     private static final String ARTIFACT_ID = "configservice.artifactid";
 
     public static String getStringProperty(final Properties properties, String propertyKey, String defaultValue) {
@@ -24,7 +25,7 @@ public class PropertiesHelper {
         return Integer.valueOf(property);
     }
 
-    public static String getClientNameFromProperties(Properties properties) {
+    public static String getClientName(Properties properties) {
         return getStringProperty(properties, CLIENT_NAME_PROPERTY_KEY, CLIENT_NAME_PROPERTY_DEFAULT_VALUE);
     }
 
