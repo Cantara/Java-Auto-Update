@@ -38,7 +38,7 @@ public class DuplicateProcessHandler {
             }
         }
         else {
-            log.info("{} not found. Assuming no existing managed process is running.", RUNNING_PROCESS_FILENAME);
+            log.info("{} not found. Assuming no existing managed process is running.", fileUtil.getFileName());
         }
         return false;
     }
