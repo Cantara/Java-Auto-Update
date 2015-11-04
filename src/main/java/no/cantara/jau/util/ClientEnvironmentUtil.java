@@ -42,6 +42,8 @@ public class ClientEnvironmentUtil {
         }
 
         clientEnv.putAll(System.getenv());
+        String version = PropertiesHelper.getVersion();
+        clientEnv.put("version", version);
         log.debug("clientEnvironment: {}", clientEnv);
         return clientEnv;
     }

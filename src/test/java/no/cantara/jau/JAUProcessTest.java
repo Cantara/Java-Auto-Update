@@ -1,6 +1,7 @@
 package no.cantara.jau;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import no.cantara.jau.processkill.DuplicateProcessHandler;
 import no.cantara.jau.serviceconfig.client.ConfigServiceClient;
 import no.cantara.jau.serviceconfig.client.ConfigurationStoreUtil;
 import no.cantara.jau.serviceconfig.client.DownloadUtil;
@@ -11,6 +12,7 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import static org.mockito.Mockito.mock;
 import static org.testng.Assert.assertTrue;
 import static org.testng.Assert.assertFalse;
 
@@ -37,7 +39,8 @@ public class JAUProcessTest {
 
     @BeforeClass
     public void startServer() throws InterruptedException {
-        processHolder = new ApplicationProcess();
+        DuplicateProcessHandler duplicateProcessHandler = mock(DuplicateProcessHandler.class);
+        processHolder = new ApplicationProcess(duplicateProcessHandler);
 
     }
 
@@ -62,7 +65,8 @@ public class JAUProcessTest {
         ServiceConfig serviceConfig = mapper.readValue(jsonResponse, ServiceConfig.class);
 
         // Process stuff
-        ApplicationProcess processHolder= new ApplicationProcess();
+        DuplicateProcessHandler duplicateProcessHandler = mock(DuplicateProcessHandler.class);
+        ApplicationProcess processHolder= new ApplicationProcess(duplicateProcessHandler);
         processHolder.setWorkingDirectory(new File("./"));
         String workingDirectory = processHolder.getWorkingDirectory().getAbsolutePath();
 

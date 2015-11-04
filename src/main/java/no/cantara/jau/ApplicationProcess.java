@@ -1,5 +1,9 @@
 package no.cantara.jau;
 
+import no.cantara.jau.processkill.DuplicateProcessHandler;
+import no.cantara.jau.processkill.LastRunningProcessFileUtil;
+import no.cantara.jau.processkill.ProcessAdapter;
+import no.cantara.jau.processkill.ProcessExecutorFetcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,6 +22,11 @@ public class ApplicationProcess {
 
     private String clientId;
     private String lastChangedTimestamp;
+    private DuplicateProcessHandler duplicateProcessHandler;
+
+    public ApplicationProcess(DuplicateProcessHandler duplicateProcessHandler) {
+        this.duplicateProcessHandler = duplicateProcessHandler;
+    }
 
     public boolean processIsrunning() {
         return runningProcess != null && runningProcess.isAlive();
@@ -27,7 +36,7 @@ public class ApplicationProcess {
         ProcessBuilder pb = new ProcessBuilder(command).inheritIO().directory(workingDirectory);
         try {
             runningProcess = pb.start();
-            DuplicateProcessHandler.findRunningManagedProcessPidAndWriteToFile(runningProcess);
+            duplicateProcessHandler.findRunningManagedProcessPidAndWriteToFile(runningProcess);
         } catch (IOException e) {
             throw new RuntimeException("IOException while trying to start process with command '" + String.join(" ", command) + "' from directory '" + workingDirectory + "'.", e);
         }
@@ -73,5 +82,4 @@ public class ApplicationProcess {
     public String getLastChangedTimestamp() {
         return lastChangedTimestamp;
     }
-
 }
