@@ -73,8 +73,6 @@ public class CheckForUpdateHelper {
                 processHolder.setLastChangedTimestamp(newClientConfig.serviceConfig.getLastChanged());
 
                 configServiceClient.saveApplicationState(newClientConfig);
-
-                processMonitorHandle.notify();
             } catch (Exception e) {
                 log.warn("Error thrown from scheduled lambda.", e);
             }
