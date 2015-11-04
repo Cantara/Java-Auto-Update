@@ -2,7 +2,6 @@ package no.cantara.jau;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import no.cantara.jau.processkill.DuplicateProcessHandler;
-import no.cantara.jau.serviceconfig.client.ConfigServiceClient;
 import no.cantara.jau.serviceconfig.client.ConfigurationStoreUtil;
 import no.cantara.jau.serviceconfig.client.DownloadUtil;
 import no.cantara.jau.serviceconfig.dto.ServiceConfig;
@@ -90,7 +89,7 @@ public class JAUProcessTest {
 
                     try {
                         // Restart, whatever the reason the process is not running.
-                        if (!processHolder.processIsrunning()) {
+                        if (!processHolder.processIsRunning()) {
                             log.info("Process is not running - restarting... clientId={}, lastChanged={}, command={}",
                                     processHolder.getClientId(), processHolder.getLastChangedTimestamp(), processHolder.getCommand());
                             processHolder.startProcess();
@@ -104,14 +103,14 @@ public class JAUProcessTest {
 
 
         Thread.sleep(4000);
-        assertTrue(processHolder.processIsrunning(), "First check");
+        assertTrue(processHolder.processIsRunning(), "First check");
         Thread.sleep(1000);
-        assertTrue(processHolder.processIsrunning(), "Second check");
+        assertTrue(processHolder.processIsRunning(), "Second check");
 
         processHolder.stopProcess();
-        assertFalse(processHolder.processIsrunning(), "Seventh check");
+        assertFalse(processHolder.processIsRunning(), "Seventh check");
         Thread.sleep(4000);
-        assertTrue(processHolder.processIsrunning(), "Eigth check");
+        assertTrue(processHolder.processIsRunning(), "Eigth check");
 
     }
 

@@ -36,9 +36,10 @@ public class CheckForUpdateHelper {
                 Properties applicationState = configServiceClient.getApplicationState();
                 String clientId = PropertiesHelper.getStringProperty(applicationState, ConfigServiceClient.CLIENT_ID, null);
                 String lastChanged = PropertiesHelper.getStringProperty(applicationState, ConfigServiceClient.LAST_CHANGED, null);
-                SortedMap<String, String> clientEnvironment = ClientEnvironmentUtil.getClientEnvironment();
+                SortedMap<String, String> clientEnvironment = ClientEnvironmentUtil.getClientEnvironment(applicationState,
+                        String.valueOf(processHolder.processIsRunning()));
                 CheckForUpdateRequest checkForUpdateRequest = new CheckForUpdateRequest(lastChanged, clientEnvironment,
-                        jau.getClientName());
+                        PropertiesHelper.getClientName());
                 newClientConfig = configServiceClient.checkForUpdate(clientId, checkForUpdateRequest);
             } catch (IllegalStateException e) {
                 log.debug("Illegal state - reregister client");

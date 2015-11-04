@@ -1,9 +1,6 @@
 package no.cantara.jau;
 
 import no.cantara.jau.processkill.DuplicateProcessHandler;
-import no.cantara.jau.processkill.LastRunningProcessFileUtil;
-import no.cantara.jau.processkill.ProcessAdapter;
-import no.cantara.jau.processkill.ProcessExecutorFetcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,7 +25,7 @@ public class ApplicationProcess {
         this.duplicateProcessHandler = duplicateProcessHandler;
     }
 
-    public boolean processIsrunning() {
+    public boolean processIsRunning() {
         return runningProcess != null && runningProcess.isAlive();
     }
 
@@ -51,7 +48,7 @@ public class ApplicationProcess {
 
     public void stopProcess() {
         log.debug("Destroying running process");
-        if (!processIsrunning()) {
+        if (!processIsRunning()) {
             log.debug("Tried to stop process, but no process was running.");
             return;
         }

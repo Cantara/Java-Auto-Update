@@ -1,5 +1,6 @@
 package no.cantara.jau.util;
 
+import no.cantara.jau.ApplicationProcess;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -7,10 +8,7 @@ import java.net.InetAddress;
 import java.net.InterfaceAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
-import java.util.Enumeration;
-import java.util.Properties;
-import java.util.SortedMap;
-import java.util.TreeMap;
+import java.util.*;
 
 /**
  * @author <a href="mailto:erik-dev@fjas.no">Erik Drolshammer</a> 2015-09-20.
@@ -19,7 +17,7 @@ public class ClientEnvironmentUtil {
     private static final Logger log = LoggerFactory.getLogger(ClientEnvironmentUtil.class);
     public static final String NETWORKINTERFACE = "networkinterface_";
 
-    public static SortedMap<String, String> getClientEnvironment() {
+    public static SortedMap<String, String> getClientEnvironment(Properties applicationState, String processIsRunning) {
         SortedMap<String, String> clientEnv = new TreeMap<>();
 
         try {
@@ -44,7 +42,14 @@ public class ClientEnvironmentUtil {
         clientEnv.putAll(System.getenv());
         String version = PropertiesHelper.getVersion();
         clientEnv.put("version", version);
+        clientEnv.put("applicationState", String.valueOf(applicationState));
+        clientEnv.put("processIsRunning", processIsRunning);
+        clientEnv.put("processIsRunning timestamp", new Date().toString());
         log.debug("clientEnvironment: {}", clientEnv);
         return clientEnv;
+    }
+
+    public static SortedMap<String, String> getClientEnvironment() {
+        return getClientEnvironment(new Properties(), "information not available");
     }
 }
