@@ -24,7 +24,7 @@ public class PropertiesHelper {
     private static final int DEFAULT_UPDATE_INTERVAL = 3 * 60; // seconds
     private static final int DEFAULT_IS_RUNNING_INTERVAL = 10; // seconds
 
-    public static Properties getProperties() {
+    public static Properties getPropertiesFromConfigFile() {
         Properties properties = new Properties();
         try {
             properties.load(PropertiesHelper.class.getClassLoader().getResourceAsStream(CONFIG_FILENAME));
@@ -51,34 +51,34 @@ public class PropertiesHelper {
     }
 
     public static String getClientName() {
-        return getStringProperty(getProperties(), CLIENT_NAME_PROPERTY_KEY, CLIENT_NAME_PROPERTY_DEFAULT_VALUE);
+        return getStringProperty(getPropertiesFromConfigFile(), CLIENT_NAME_PROPERTY_KEY, CLIENT_NAME_PROPERTY_DEFAULT_VALUE);
     }
 
     public static String getArtifactId() {
-        return getStringProperty(getProperties(), ARTIFACT_ID, null);
+        return getStringProperty(getPropertiesFromConfigFile(), ARTIFACT_ID, null);
     }
 
     public static String getServiceConfigUrl() {
-        return getStringProperty(getProperties(), CONFIG_SERVICE_URL_KEY, null);
+        return getStringProperty(getPropertiesFromConfigFile(), CONFIG_SERVICE_URL_KEY, null);
     }
 
     public static String getUsername() {
-        return getStringProperty(getProperties(), CONFIG_SERVICE_USERNAME_KEY, null);
+        return getStringProperty(getPropertiesFromConfigFile(), CONFIG_SERVICE_USERNAME_KEY, null);
     }
 
     public static String getPassword() {
-        return getStringProperty(getProperties(), CONFIG_SERVICE_PASSWORD_KEY, null);
+        return getStringProperty(getPropertiesFromConfigFile(), CONFIG_SERVICE_PASSWORD_KEY, null);
     }
 
     public static int getUpdateInterval() {
-        return getIntProperty(getProperties(), UPDATE_INTERVAL_KEY, DEFAULT_UPDATE_INTERVAL);
+        return getIntProperty(getPropertiesFromConfigFile(), UPDATE_INTERVAL_KEY, DEFAULT_UPDATE_INTERVAL);
     }
 
     public static int getIsRunningInterval() {
-        return getIntProperty(getProperties(), IS_RUNNING_INTERVAL_KEY, DEFAULT_IS_RUNNING_INTERVAL);
+        return getIntProperty(getPropertiesFromConfigFile(), IS_RUNNING_INTERVAL_KEY, DEFAULT_IS_RUNNING_INTERVAL);
     }
 
     public static String getVersion() {
-        return getStringProperty(getProperties(), VERSION_PROPERTY_KEY, null);
+        return getStringProperty(getPropertiesFromConfigFile(), VERSION_PROPERTY_KEY, null);
     }
 }

@@ -1,9 +1,6 @@
 package no.cantara.jau;
 
 import no.cantara.jau.processkill.DuplicateProcessHandler;
-import no.cantara.jau.processkill.LastRunningProcessFileUtil;
-import no.cantara.jau.processkill.ProcessAdapter;
-import no.cantara.jau.processkill.ProcessExecutorFetcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.annotations.AfterClass;
@@ -49,7 +46,7 @@ public class ApplicationProcessTest {
 
                     try {
                         // Restart, whatever the reason the process is not running.
-                        if (!processHolder.processIsrunning()) {
+                        if (!processHolder.processIsRunning()) {
                             log.info("Process is not running - restarting... clientId={}, lastChanged={}, command={}",
                                     processHolder.getClientId(), processHolder.getLastChangedTimestamp(), processHolder.getCommand());
                             processHolder.startProcess();
@@ -74,21 +71,21 @@ public class ApplicationProcessTest {
     @Test
     public void testProcessRunning() throws Exception {
         Thread.sleep(1232);
-        assertTrue(processHolder.processIsrunning(), "First check");
+        assertTrue(processHolder.processIsRunning(), "First check");
         Thread.sleep(1232);
-        assertTrue(processHolder.processIsrunning(), "Second check");
+        assertTrue(processHolder.processIsRunning(), "Second check");
         Thread.sleep(1232);
-        assertTrue(processHolder.processIsrunning(), "Third check");
+        assertTrue(processHolder.processIsRunning(), "Third check");
         Thread.sleep(2232);
-        assertTrue(processHolder.processIsrunning(), "Fourth check");
+        assertTrue(processHolder.processIsRunning(), "Fourth check");
         processHolder.stopProcess();
-        assertFalse(processHolder.processIsrunning(), "Fifth check");
+        assertFalse(processHolder.processIsRunning(), "Fifth check");
         Thread.sleep(1331);
-        assertTrue(processHolder.processIsrunning(), "Sixt check");
+        assertTrue(processHolder.processIsRunning(), "Sixt check");
         processHolder.stopProcess();
-        assertFalse(processHolder.processIsrunning(), "Seventh check");
+        assertFalse(processHolder.processIsRunning(), "Seventh check");
         Thread.sleep(3223);
-        assertTrue(processHolder.processIsrunning(), "Eigth check");
+        assertTrue(processHolder.processIsRunning(), "Eigth check");
 
 
     }

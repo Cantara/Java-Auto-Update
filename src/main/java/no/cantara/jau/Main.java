@@ -21,7 +21,7 @@ public class Main {
     private static final Logger log = LoggerFactory.getLogger(Main.class);
 
     public static void main(String[] args) {
-        ProxyFixer.fixProxy(PropertiesHelper.getProperties());
+        ProxyFixer.fixProxy(PropertiesHelper.getPropertiesFromConfigFile());
 
         String serviceConfigUrl = PropertiesHelper.getServiceConfigUrl();
 
@@ -52,7 +52,7 @@ public class Main {
         ApplicationProcess processHolder = new ApplicationProcess(duplicateProcessHandler);
         processHolder.setWorkingDirectory(new File(workingDirectory));
 
-        new JavaAutoUpdater(configServiceClient, registerClientHelper, processHolder, clientName, duplicateProcessHandler)
+        new JavaAutoUpdater(configServiceClient, registerClientHelper, processHolder, duplicateProcessHandler)
                 .start(updateInterval, isRunningInterval);
     }
 }

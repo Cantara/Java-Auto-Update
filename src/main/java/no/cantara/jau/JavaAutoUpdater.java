@@ -3,9 +3,6 @@ package no.cantara.jau;
 import no.cantara.jau.coms.CheckForUpdateHelper;
 import no.cantara.jau.coms.RegisterClientHelper;
 import no.cantara.jau.processkill.DuplicateProcessHandler;
-import no.cantara.jau.processkill.LastRunningProcessFileUtil;
-import no.cantara.jau.processkill.ProcessAdapter;
-import no.cantara.jau.processkill.ProcessExecutorFetcher;
 import no.cantara.jau.serviceconfig.client.ConfigServiceClient;
 import no.cantara.jau.serviceconfig.client.ConfigurationStoreUtil;
 import no.cantara.jau.serviceconfig.client.DownloadUtil;
@@ -15,7 +12,6 @@ import no.cantara.jau.util.PropertiesHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
 import java.util.Properties;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -35,13 +31,11 @@ public class JavaAutoUpdater {
     private final ApplicationProcess processHolder;
     private final DuplicateProcessHandler duplicateProcessHandler;
 
-    private final String clientName;
     private RegisterClientHelper registerClientHelper;
 
     public JavaAutoUpdater(ConfigServiceClient configServiceClient, RegisterClientHelper registerClientHelper,
-                           ApplicationProcess applicationProcess, String clientName, DuplicateProcessHandler duplicateProcessHandler) {
+                           ApplicationProcess applicationProcess, DuplicateProcessHandler duplicateProcessHandler) {
         this.configServiceClient = configServiceClient;
-        this.clientName = clientName;
         this.registerClientHelper = registerClientHelper;
         this.processHolder = applicationProcess;
         this.duplicateProcessHandler = duplicateProcessHandler;
@@ -96,7 +90,7 @@ public class JavaAutoUpdater {
                     log.debug("Checking if process is running...");
 
                     // Restart, whatever the reason the process is not running.
-                    if (!processHolder.processIsrunning()) {
+                    if (!processHolder.processIsRunning()) {
                         log.debug("Process is not running - restarting... clientId={}, lastChanged={}, command={}",
                                 processHolder.getClientId(), processHolder.getLastChangedTimestamp(), processHolder.getCommand());
 
@@ -135,7 +129,4 @@ public class JavaAutoUpdater {
         processHolder.setLastChangedTimestamp(initialLastChanged);
     }
 
-    public String getClientName() {
-        return clientName;
-    }
 }
