@@ -31,7 +31,9 @@ public class ProcessAdapterTest {
 
         when(processAdapter.killRunningProcess("12345")).thenThrow(new IOException());
 
-        processAdapter.killRunningProcess("12345");
+        boolean result = processAdapter.killRunningProcess("12345");
+
+        Assert.assertFalse(result);
     }
 
     @Test
