@@ -35,23 +35,16 @@ public class JavaAutoUpdater {
     private final ApplicationProcess processHolder;
     private final DuplicateProcessHandler duplicateProcessHandler;
 
-    private final String artifactId;
     private final String clientName;
+    private RegisterClientHelper registerClientHelper;
 
-    public JavaAutoUpdater(ConfigServiceClient configServiceClient, String artifactId, String workingDirectory, String clientName) {
+    public JavaAutoUpdater(ConfigServiceClient configServiceClient, RegisterClientHelper registerClientHelper,
+                           ApplicationProcess applicationProcess, String clientName, DuplicateProcessHandler duplicateProcessHandler) {
         this.configServiceClient = configServiceClient;
-        this.artifactId = artifactId;
         this.clientName = clientName;
-
-        ProcessAdapter processAdapter = new ProcessAdapter(new ProcessExecutorFetcher());
-        LastRunningProcessFileUtil fileUtil = new LastRunningProcessFileUtil(DuplicateProcessHandler.RUNNING_PROCESS_FILENAME);
-        duplicateProcessHandler = new DuplicateProcessHandler(processAdapter, fileUtil);
-
-        // Because of Java 8's "final" limitation on closures, any outside variables that need to be changed inside the
-        // closure must be wrapped in a final object.
-        processHolder = new ApplicationProcess(duplicateProcessHandler);
-
-        processHolder.setWorkingDirectory(new File(workingDirectory));
+        this.registerClientHelper = registerClientHelper;
+        this.processHolder = applicationProcess;
+        this.duplicateProcessHandler = duplicateProcessHandler;
     }
 
     /**
@@ -123,7 +116,6 @@ public class JavaAutoUpdater {
     }
 
     public ClientConfig registerClient() {
-        RegisterClientHelper registerClientHelper = new RegisterClientHelper(configServiceClient, artifactId, clientName);
         return registerClientHelper.registerClient();
     }
 
