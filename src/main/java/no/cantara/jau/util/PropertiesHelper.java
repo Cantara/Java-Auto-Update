@@ -21,8 +21,8 @@ public class PropertiesHelper {
     private static final String VERSION_PROPERTY_KEY = "version";
     private static final String IS_RUNNING_INTERVAL_KEY = "isrunninginterval";
     private static final String UPDATE_INTERVAL_KEY = "updateinterval";
-    private static final int DEFAULT_UPDATE_INTERVAL = 3 * 60; // seconds
-    private static final int DEFAULT_IS_RUNNING_INTERVAL = 10; // seconds
+    private static final int DEFAULT_UPDATE_INTERVAL = 60; // seconds
+    private static final int DEFAULT_IS_RUNNING_INTERVAL = 40; // seconds
 
     public static Properties getPropertiesFromConfigFile() {
         Properties properties = new Properties();
