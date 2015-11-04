@@ -1,10 +1,13 @@
 package no.cantara.jau;
 
+import no.cantara.jau.coms.RegisterClientHelper;
 import no.cantara.jau.serviceconfig.client.ConfigServiceClient;
 import no.cantara.jau.util.PropertiesHelper;
 import no.cantara.jau.util.ProxyFixer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.File;
 
 /**
  * @author <a href="mailto:erik-dev@fjas.no">Erik Drolshammer</a> 2015-07-13.
@@ -35,10 +38,13 @@ public class Main {
         int isRunningInterval = PropertiesHelper.getIsRunningInterval();
 
         String workingDirectory = "./";
+        ApplicationProcess processHolder = new ApplicationProcess();
+        processHolder.setWorkingDirectory(new File(workingDirectory));
 
         ConfigServiceClient configServiceClient = new ConfigServiceClient(serviceConfigUrl, username, password);
+        RegisterClientHelper registerClientHelper = new RegisterClientHelper(configServiceClient, artifactId, clientName);
 
-        new JavaAutoUpdater(configServiceClient, artifactId, workingDirectory, clientName)
+        new JavaAutoUpdater(configServiceClient, registerClientHelper, processHolder, clientName)
                 .start(updateInterval, isRunningInterval);
     }
 }

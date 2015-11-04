@@ -30,16 +30,16 @@ public class JavaAutoUpdater {
     private final ConfigServiceClient configServiceClient;
     private final ApplicationProcess processHolder;
 
-    private final String artifactId;
     private final String clientName;
+    private RegisterClientHelper registerClientHelper;
 
-    public JavaAutoUpdater(ConfigServiceClient configServiceClient, String artifactId, String workingDirectory, String clientName) {
+    public JavaAutoUpdater(ConfigServiceClient configServiceClient, RegisterClientHelper registerClientHelper,
+                           ApplicationProcess applicationProcess, String clientName) {
         this.configServiceClient = configServiceClient;
-        this.artifactId = artifactId;
         this.clientName = clientName;
 
-        processHolder = new ApplicationProcess();
-        processHolder.setWorkingDirectory(new File(workingDirectory));
+        this.registerClientHelper = registerClientHelper;
+        this.processHolder = applicationProcess;
     }
 
     /**
@@ -111,7 +111,6 @@ public class JavaAutoUpdater {
     }
 
     public ClientConfig registerClient() {
-        RegisterClientHelper registerClientHelper = new RegisterClientHelper(configServiceClient, artifactId, clientName);
         return registerClientHelper.registerClient();
     }
 
