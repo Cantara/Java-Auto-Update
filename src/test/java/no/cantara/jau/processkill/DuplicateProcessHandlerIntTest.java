@@ -33,7 +33,9 @@ public class DuplicateProcessHandlerIntTest {
         deleteTestRunningProcessFile(fileName);
     }
 
-    @Test
+    //Tries to kill a process with given PID, so disabled for CI tool.
+    //Cannot be certain that process with PID does not exists
+    @Test(enabled = false)
     public void shouldFailToKillExistingProcessWhenExistingProcessIsNotRunning() throws IOException, InterruptedException {
         String fileName = "shouldFailToKillExistingProcessTest.txt";
         deleteTestRunningProcessFile(fileName); //make sure any old file is removed
