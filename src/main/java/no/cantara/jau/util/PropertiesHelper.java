@@ -18,6 +18,7 @@ public class PropertiesHelper {
     private static final String ARTIFACT_ID = "configservice.artifactid";
     private static final String CONFIG_SERVICE_USERNAME_KEY = "configservice.username";
     private static final String CONFIG_SERVICE_PASSWORD_KEY = "configservice.password";
+    private static final String VERSION_PROPERTY_KEY = "version";
     private static final String IS_RUNNING_INTERVAL_KEY = "isrunninginterval";
     private static final String UPDATE_INTERVAL_KEY = "updateinterval";
     private static final int DEFAULT_UPDATE_INTERVAL = 3 * 60; // seconds
@@ -75,5 +76,9 @@ public class PropertiesHelper {
 
     public static int getIsRunningInterval() {
         return getIntProperty(getProperties(), IS_RUNNING_INTERVAL_KEY, DEFAULT_IS_RUNNING_INTERVAL);
+    }
+
+    public static String getVersion() {
+        return getStringProperty(getProperties(), VERSION_PROPERTY_KEY, null);
     }
 }
