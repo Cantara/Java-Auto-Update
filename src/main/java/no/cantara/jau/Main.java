@@ -1,6 +1,10 @@
 package no.cantara.jau;
 
 import no.cantara.jau.coms.RegisterClientHelper;
+import no.cantara.jau.processkill.DuplicateProcessHandler;
+import no.cantara.jau.processkill.LastRunningProcessFileUtil;
+import no.cantara.jau.processkill.ProcessAdapter;
+import no.cantara.jau.processkill.ProcessExecutorFetcher;
 import no.cantara.jau.serviceconfig.client.ConfigServiceClient;
 import no.cantara.jau.util.PropertiesHelper;
 import no.cantara.jau.util.ProxyFixer;
@@ -37,14 +41,18 @@ public class Main {
         int updateInterval = PropertiesHelper.getUpdateInterval();
         int isRunningInterval = PropertiesHelper.getIsRunningInterval();
 
-        String workingDirectory = "./";
-        ApplicationProcess processHolder = new ApplicationProcess();
-        processHolder.setWorkingDirectory(new File(workingDirectory));
-
         ConfigServiceClient configServiceClient = new ConfigServiceClient(serviceConfigUrl, username, password);
         RegisterClientHelper registerClientHelper = new RegisterClientHelper(configServiceClient, artifactId, clientName);
 
-        new JavaAutoUpdater(configServiceClient, registerClientHelper, processHolder, clientName)
+        ProcessAdapter processAdapter = new ProcessAdapter(new ProcessExecutorFetcher());
+        LastRunningProcessFileUtil fileUtil = new LastRunningProcessFileUtil(DuplicateProcessHandler.RUNNING_PROCESS_FILENAME);
+        DuplicateProcessHandler duplicateProcessHandler = new DuplicateProcessHandler(processAdapter, fileUtil);
+
+        String workingDirectory = "./";
+        ApplicationProcess processHolder = new ApplicationProcess(duplicateProcessHandler);
+        processHolder.setWorkingDirectory(new File(workingDirectory));
+
+        new JavaAutoUpdater(configServiceClient, registerClientHelper, processHolder, clientName, duplicateProcessHandler)
                 .start(updateInterval, isRunningInterval);
     }
 }

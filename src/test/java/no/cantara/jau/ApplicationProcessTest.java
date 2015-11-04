@@ -1,11 +1,16 @@
 package no.cantara.jau;
 
+import no.cantara.jau.processkill.DuplicateProcessHandler;
+import no.cantara.jau.processkill.LastRunningProcessFileUtil;
+import no.cantara.jau.processkill.ProcessAdapter;
+import no.cantara.jau.processkill.ProcessExecutorFetcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import static org.mockito.Mockito.mock;
 import static org.testng.Assert.assertTrue;
 import static org.testng.Assert.assertFalse;
 
@@ -28,7 +33,9 @@ public class ApplicationProcessTest {
 
     @BeforeClass
     public void startServer() throws InterruptedException {
-        processHolder = new ApplicationProcess();
+        //Mock out duplicate process handler. Not the point of the test
+        DuplicateProcessHandler duplicateProcessHandler = mock(DuplicateProcessHandler.class);
+        processHolder = new ApplicationProcess(duplicateProcessHandler);
         processHolder.setWorkingDirectory(new File("./"));
         String[] command = new String[2];
         command[0] = "sleep";

@@ -2,6 +2,10 @@ package no.cantara.jau;
 
 import no.cantara.jau.coms.CheckForUpdateHelper;
 import no.cantara.jau.coms.RegisterClientHelper;
+import no.cantara.jau.processkill.DuplicateProcessHandler;
+import no.cantara.jau.processkill.LastRunningProcessFileUtil;
+import no.cantara.jau.processkill.ProcessAdapter;
+import no.cantara.jau.processkill.ProcessExecutorFetcher;
 import no.cantara.jau.serviceconfig.client.ConfigServiceClient;
 import no.cantara.jau.serviceconfig.client.ConfigurationStoreUtil;
 import no.cantara.jau.serviceconfig.client.DownloadUtil;
@@ -29,17 +33,18 @@ public class JavaAutoUpdater {
     private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
     private final ConfigServiceClient configServiceClient;
     private final ApplicationProcess processHolder;
+    private final DuplicateProcessHandler duplicateProcessHandler;
 
     private final String clientName;
     private RegisterClientHelper registerClientHelper;
 
     public JavaAutoUpdater(ConfigServiceClient configServiceClient, RegisterClientHelper registerClientHelper,
-                           ApplicationProcess applicationProcess, String clientName) {
+                           ApplicationProcess applicationProcess, String clientName, DuplicateProcessHandler duplicateProcessHandler) {
         this.configServiceClient = configServiceClient;
         this.clientName = clientName;
-
         this.registerClientHelper = registerClientHelper;
         this.processHolder = applicationProcess;
+        this.duplicateProcessHandler = duplicateProcessHandler;
     }
 
     /**
@@ -52,7 +57,7 @@ public class JavaAutoUpdater {
      */
     public void start(int updateInterval, int isRunningInterval) {
         // https://github.com/Cantara/Java-Auto-Update/issues/4
-        DuplicateProcessHandler.killExistingProcessIfRunning();
+        duplicateProcessHandler.killExistingProcessIfRunning();
 
         // registerClient or fetch applicationState from file
         if (configServiceClient.getApplicationState() == null) {
