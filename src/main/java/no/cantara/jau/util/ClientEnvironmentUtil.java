@@ -8,6 +8,7 @@ import java.net.InterfaceAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.util.Enumeration;
+import java.util.Properties;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
@@ -20,6 +21,7 @@ public class ClientEnvironmentUtil {
 
     public static SortedMap<String, String> getClientEnvironment() {
         SortedMap<String, String> clientEnv = new TreeMap<>();
+
         try {
             Enumeration<NetworkInterface> nics = NetworkInterface.getNetworkInterfaces();
             while (nics.hasMoreElements()) {
@@ -40,5 +42,7 @@ public class ClientEnvironmentUtil {
         }
 
         clientEnv.putAll(System.getenv());
-        return clientEnv;     }
+        log.debug("clientEnvironment: {}", clientEnv);
+        return clientEnv;
+    }
 }
