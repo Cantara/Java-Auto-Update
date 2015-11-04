@@ -119,6 +119,7 @@
             <artifactId>jcl-over-slf4j</artifactId>
             <version>1.7.12</version>
         </dependency>
+        <!-- Needed for native access for killing duplicate processes and getting process id -->
         <dependency>
             <groupId>net.java.dev.jna</groupId>
             <artifactId>jna-platform</artifactId>
