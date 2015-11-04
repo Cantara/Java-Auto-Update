@@ -14,15 +14,12 @@ import java.nio.file.Paths;
 public class DuplicateProcessHandler {
     private static final Logger log = LoggerFactory.getLogger(DuplicateProcessHandler.class);
     public static final String RUNNING_PROCESS_FILENAME = "last-running-process.txt";
-    private ProcessAdapter processAdapter;
     private LastRunningProcessFileUtil fileUtil;
-    private ProcessExecutorFetcher processExecutorFetcher;
     private ProcessExecutor processExecutor;
 
-    public DuplicateProcessHandler(ProcessAdapter processAdapter, LastRunningProcessFileUtil fileUtil) {
-        this.processAdapter = processAdapter;
+    public DuplicateProcessHandler(ProcessExecutorFetcher processExecutorFetcher, LastRunningProcessFileUtil fileUtil) {
         this.fileUtil = fileUtil;
-        processExecutor = new ProcessExecutorFetcher().getProcessExecutorBasedOnOs();
+        processExecutor = processExecutorFetcher.getProcessExecutorBasedOnOs();
     }
 
     public boolean killExistingProcessIfRunning() {

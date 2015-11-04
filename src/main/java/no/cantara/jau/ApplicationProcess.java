@@ -52,7 +52,7 @@ public class ApplicationProcess {
             log.debug("Tried to stop process, but no process was running.");
             return;
         }
-        runningProcess.destroy();
+        runningProcess.destroy();g
         try {
             runningProcess.waitFor();
             log.debug("Successfully destroyed running process");
