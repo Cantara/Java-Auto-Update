@@ -22,19 +22,30 @@ public class DuplicateProcessHandler {
         processExecutor = processExecutorFetcher.getProcessExecutorBasedOnOs();
     }
 
+    /**
+     * Returns true if process is killed or process is not running. Returns false if any error
+     */
     public boolean killExistingProcessIfRunning() {
         String pid = null;
         try {
             pid = fileUtil.getRunningProcessPidFromFile();
         } catch (IOException e) {
             log.warn("Could not read file={}.", fileUtil.getFileName());
+            //TODO: fallback to find process by name
         }
         if (pid != null) {
             if (isValidPid(pid)) {
                 if (processIsRunning(pid)) {
-                    log.info("Last recorded running managed process pid={} is running", pid);
+                    log.info("Last recorded managed process pid={} is running", pid);
                     return killRunningProcess(pid);
                 }
+                else {
+                    log.info("Last recorded managed process pid={} is not running.", pid);
+                    return true;
+                }
+            }
+            else {
+                //TODO: fallback to find process by name
             }
         }
         else {
@@ -50,7 +61,7 @@ public class DuplicateProcessHandler {
                 log.info("Last recorded managed process pid={} is running", pid);
             }
             else {
-                log.info("Last recorded managed process pid={} is running", pid);
+                log.info("Last recorded managed process pid={} is not running", pid);
             }
             return processRuns;
         } catch (IOException e) {
@@ -67,10 +78,10 @@ public class DuplicateProcessHandler {
             log.info("Successfully killed existing running managed process pid={}", pid);
             return true;
         } catch (IOException e) {
-            log.error("Exception executing kill process. Could not kill running managed process pid={}", pid);
+            log.error("Exception executing kill process. Could not kill running managed process pid={}", pid, e);
 
         } catch (InterruptedException e) {
-            log.error("Kill process was interrupted. Could not kill running managed process pid={}", pid);
+            log.error("Kill process was interrupted. Could not kill running managed process pid={}", pid, e);
         }
         return false;
     }
@@ -89,7 +100,7 @@ public class DuplicateProcessHandler {
         try {
             return processExecutor.findProcessId(managedProcess);
         } catch (ReflectiveOperationException e) {
-            log.error("Could not find pid of managed process");
+            log.error("Could not find pid of managed process", e);
         }
         return null;
     }
