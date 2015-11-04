@@ -45,7 +45,6 @@ public class ClientEnvironmentUtil {
         clientEnv.put("applicationState", String.valueOf(applicationState));
         clientEnv.put("processIsRunning", processIsRunning);
         clientEnv.put("processIsRunning timestamp", new Date().toString());
-        log.debug("clientEnvironment: {}", clientEnv);
         return clientEnv;
     }
 
