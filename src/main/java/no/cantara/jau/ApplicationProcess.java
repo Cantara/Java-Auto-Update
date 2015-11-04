@@ -36,10 +36,17 @@ public class ApplicationProcess {
         ProcessBuilder pb = new ProcessBuilder(command).inheritIO().directory(workingDirectory);
         try {
             runningProcess = pb.start();
-            duplicateProcessHandler.findRunningManagedProcessPidAndWriteToFile(runningProcess);
+            Thread.sleep(1000); // Gives the process time to fail
+            if(runningProcess.isAlive()) {
+            	duplicateProcessHandler.findRunningManagedProcessPidAndWriteToFile(runningProcess);
+            } else {
+            	log.warn("Failed to start process with command: {}, workingDirectory: {}, clientId: {}, lastChangedTimestamp: {}", command, workingDirectory, clientId, lastChangedTimestamp);
+            }
         } catch (IOException e) {
             throw new RuntimeException("IOException while trying to start process with command '" + String.join(" ", command) + "' from directory '" + workingDirectory + "'.", e);
-        }
+        } catch (InterruptedException e) {
+			log.warn("Not allowed to sleep for 1 second", e);
+		}
     }
 
     public void stopProcess() {
