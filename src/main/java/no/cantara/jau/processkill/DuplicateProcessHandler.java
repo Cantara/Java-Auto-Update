@@ -26,51 +26,44 @@ public class DuplicateProcessHandler {
      * Returns true if process is killed or process is not running. Returns false if any error
      */
     public boolean killExistingProcessIfRunning() {
-        String pid = null;
+        String pid;
         try {
             pid = fileUtil.getRunningProcessPidFromFile();
         } catch (IOException e) {
             log.warn("Could not read file={}.", fileUtil.getFileName());
             //TODO: fallback to find process by name
+            return false;
         }
         if (pid != null) {
             if (isValidPid(pid)) {
-                if (processIsRunning(pid)) {
-                    log.info("Last recorded managed process pid={} is running", pid);
-                    return killRunningProcess(pid);
+                try {
+                    if (processIsRunning(pid)) {
+                        log.info("Last recorded managed process pid={} is running", pid);
+                        return killRunningProcess(pid);
+                    } else {
+                        log.info("Last recorded managed process pid={} is not running.", pid);
+                        return true;
+                    }
+                } catch (IOException e) {
+                    log.error("Exception executing process. Could not check if process with pid={} is running", pid, e);
+                    return false;
+                } catch (InterruptedException e) {
+                    log.error("Process interrupted. Could not check if process with pid={} is running", pid, e);
+                    return false;
                 }
-                else {
-                    log.info("Last recorded managed process pid={} is not running.", pid);
-                    return true;
-                }
-            }
-            else {
+            } else {
                 //TODO: fallback to find process by name
+                return false;
             }
-        }
-        else {
+        } else {
             log.info("{} not found. Assuming no existing managed process is running.", fileUtil.getFileName());
             return true;
         }
-        return false;
     }
 
-    private boolean processIsRunning(String pid) {
-        try {
-            boolean processRuns = processExecutor.isProcessRunning(pid);
-            if (processRuns) {
-                log.info("Last recorded managed process pid={} is running", pid);
-            }
-            else {
-                log.info("Last recorded managed process pid={} is not running", pid);
-            }
-            return processRuns;
-        } catch (IOException e) {
-            log.error("Exception executing process. Could not check if process with pid={} is running", pid, e);
-        } catch (InterruptedException e) {
-            log.error("Process interrupted. Could not check if process with pid={} is running", pid, e);
-        }
-        return false;
+    private boolean processIsRunning(String pid) throws IOException, InterruptedException {
+        boolean processRuns = processExecutor.isProcessRunning(pid);
+        return processRuns;
     }
 
     private boolean killRunningProcess(String pid) {
@@ -91,8 +84,7 @@ public class DuplicateProcessHandler {
         String pid = findProcessId(managedProcess);
         if (pid != null) {
             fileUtil.writePidToFile(pid);
-        }
-        else {
+        } else {
             log.error("Did not find process id of running managed process!");
         }
     }
