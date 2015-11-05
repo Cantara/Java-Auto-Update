@@ -50,6 +50,7 @@ public class DuplicateProcessHandler {
         }
         else {
             log.info("{} not found. Assuming no existing managed process is running.", fileUtil.getFileName());
+            return true;
         }
         return false;
     }
