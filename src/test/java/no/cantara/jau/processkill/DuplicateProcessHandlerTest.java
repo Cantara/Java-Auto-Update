@@ -57,7 +57,7 @@ public class DuplicateProcessHandlerTest {
                 lastRunningProcessFileUtilMock);
         boolean result = duplicateProcessHandler.killExistingProcessIfRunning();
 
-        Assert.assertFalse(result);
+        Assert.assertTrue(result);
     }
 
 }
