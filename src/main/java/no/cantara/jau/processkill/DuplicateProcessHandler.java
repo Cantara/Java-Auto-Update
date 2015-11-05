@@ -29,7 +29,7 @@ public class DuplicateProcessHandler {
         } catch (IOException e) {
             log.warn("Could not read file={}.", fileUtil.getFileName());
             //TODO: fallback to find process by name
-            return false;g // STOPSHIP: 05/11/15  
+            return false;
         }
         if (pid != null) {
             if (isValidPid(pid)) {
