@@ -50,13 +50,6 @@ public class JavaAutoUpdater {
      *   Start new service
      */
     public void start(int updateInterval, int isRunningInterval) {
-        // https://github.com/Cantara/Java-Auto-Update/issues/4
-//        boolean processKilledOrNotRunning = duplicateProcessHandler.killExistingProcessIfRunning();
-//
-//        if (!processKilledOrNotRunning) {
-//            log.error("Problem killing running process! New managed process will not be started.");
-//        }
-
         // registerClient or fetch applicationState from file
         if (configServiceClient.getApplicationState() == null) {
             ClientConfig clientConfig = registerClient();
@@ -76,9 +69,9 @@ public class JavaAutoUpdater {
             }
 
             if (processMonitorHandle == null || processMonitorHandle.isCancelled() || processMonitorHandle.isDone()) {
-                boolean processKilledOrNotRunning = duplicateProcessHandler.killExistingProcessIfRunning();
+                boolean successKillingProcess = duplicateProcessHandler.killExistingProcessIfRunning();
 
-                if (!processKilledOrNotRunning) {
+                if (!successKillingProcess) {
                     log.error("Problem killing running process! A new managed process will not be started. " +
                             "Retrying in {} seconds", sleepTime / 1000);
                 }
