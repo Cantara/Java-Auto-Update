@@ -4,9 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 /**
  * Makes sure any running managed service is killed if JAU should restart
@@ -32,25 +29,11 @@ public class DuplicateProcessHandler {
         } catch (IOException e) {
             log.warn("Could not read file={}.", fileUtil.getFileName());
             //TODO: fallback to find process by name
-            return false;
+            return false;g // STOPSHIP: 05/11/15  
         }
         if (pid != null) {
             if (isValidPid(pid)) {
-                try {
-                    if (processIsRunning(pid)) {
-                        log.info("Last recorded managed process pid={} is running", pid);
-                        return killRunningProcess(pid);
-                    } else {
-                        log.info("Last recorded managed process pid={} is not running.", pid);
-                        return true;
-                    }
-                } catch (IOException e) {
-                    log.error("Exception executing process. Could not check if process with pid={} is running", pid, e);
-                    return false;
-                } catch (InterruptedException e) {
-                    log.error("Process interrupted. Could not check if process with pid={} is running", pid, e);
-                    return false;
-                }
+                return findRunningProcessByPIDAndKill(pid);
             } else {
                 //TODO: fallback to find process by name
                 return false;
@@ -59,6 +42,23 @@ public class DuplicateProcessHandler {
             log.info("{} not found. Assuming no existing managed process is running.", fileUtil.getFileName());
             return true;
         }
+    }
+
+    private boolean findRunningProcessByPIDAndKill(String pid) {
+        try {
+            if (processIsRunning(pid)) {
+                log.info("Last recorded managed process pid={} is running", pid);
+                return killRunningProcess(pid);
+            } else {
+                log.info("Last recorded managed process pid={} is not running.", pid);
+                return true;
+            }
+        } catch (IOException e) {
+            log.error("Exception executing process. Could not check if process with pid={} is running", pid, e);
+        } catch (InterruptedException e) {
+            log.error("Process interrupted. Could not check if process with pid={} is running", pid, e);
+        }
+        return false;
     }
 
     private boolean processIsRunning(String pid) throws IOException, InterruptedException {

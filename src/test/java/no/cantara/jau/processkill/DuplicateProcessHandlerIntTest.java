@@ -68,18 +68,6 @@ public class DuplicateProcessHandlerIntTest {
     }
 
     @Test
-    public void shouldHandleIfRunningProcessFileDoesNotExist() throws IOException {
-        String fileName = "nonExistantFileTest.txt";
-        LastRunningProcessFileUtil fileUtil = new LastRunningProcessFileUtil(fileName);
-        DuplicateProcessHandler duplicateProcessHandler = new DuplicateProcessHandler(
-                new ProcessExecutorFetcher(), fileUtil);
-
-        boolean processWasKilled = duplicateProcessHandler.killExistingProcessIfRunning();
-
-        Assert.assertFalse(processWasKilled);
-    }
-
-    @Test
     public void shouldWritePIDToFile() throws IOException, NoSuchFieldException, IllegalAccessException {
         String fileName = "shouldWritePidToFileTest.txt";
         deleteTestRunningProcessFile(fileName); //make sure any old file is removed
@@ -95,6 +83,18 @@ public class DuplicateProcessHandlerIntTest {
         Assert.assertEquals(pid, Long.toString(PID));
 
         deleteTestRunningProcessFile(fileName);
+    }
+
+    @Test
+    public void shouldReturnTrueIfRunningProcessFileDoesNotExist() throws IOException {
+        String fileName = "nonExistantFileTest.txt";
+        LastRunningProcessFileUtil fileUtil = new LastRunningProcessFileUtil(fileName);
+        DuplicateProcessHandler duplicateProcessHandler = new DuplicateProcessHandler(
+                new ProcessExecutorFetcher(), fileUtil);
+
+        boolean processWasKilled = duplicateProcessHandler.killExistingProcessIfRunning();
+
+        Assert.assertTrue(processWasKilled);
     }
 
     @Test
