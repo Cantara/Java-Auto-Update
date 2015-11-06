@@ -44,6 +44,15 @@ public class DuplicateProcessHandler {
         }
     }
 
+    public void findRunningManagedProcessPidAndWriteToFile(Process managedProcess) {
+        String pid = findProcessId(managedProcess);
+        if (pid != null) {
+            fileUtil.writePidToFile(pid);
+        } else {
+            log.error("Did not find process id of running managed process!");
+        }
+    }
+
     private boolean findRunningProcessByPIDAndKill(String pid) {
         try {
             if (processIsRunning(pid)) {
@@ -78,15 +87,6 @@ public class DuplicateProcessHandler {
             log.error("Kill process was interrupted. Could not kill running managed process pid={}", pid, e);
         }
         return false;
-    }
-
-    public void findRunningManagedProcessPidAndWriteToFile(Process managedProcess) {
-        String pid = findProcessId(managedProcess);
-        if (pid != null) {
-            fileUtil.writePidToFile(pid);
-        } else {
-            log.error("Did not find process id of running managed process!");
-        }
     }
 
     private String findProcessId(Process managedProcess) {
