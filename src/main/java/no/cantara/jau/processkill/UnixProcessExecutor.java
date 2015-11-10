@@ -18,10 +18,8 @@ public class UnixProcessExecutor extends ProcessExecutor {
 
     @Override
     public boolean killProcessByProcessName(String processName) throws IOException, InterruptedException {
-        log.info(ManagementFactory.getRuntimeMXBean().getName());
+        //TODO: Implementation. Use ps aux and grep for command to get right java-process to kill
         return false;
-        //ProcessBuilder processBuilder = new ProcessBuilder("killall", processName);
-        //return executeProcess(processBuilder);
     }
 
     @Override

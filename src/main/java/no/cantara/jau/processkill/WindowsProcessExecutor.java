@@ -21,7 +21,7 @@ public class WindowsProcessExecutor extends ProcessExecutor {
 
     @Override
     public boolean killProcessByProcessName(String processName) throws IOException, InterruptedException {
-        //TASKKILL /F /FI "PID ne 1000” /IM java.exe
+        //TODO: Implementation. Use wmic to get 'commandline' and filter for right java-process to kill
         return false;
     }
 
