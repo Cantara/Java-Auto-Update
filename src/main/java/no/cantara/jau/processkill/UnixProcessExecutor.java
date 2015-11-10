@@ -4,15 +4,24 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.lang.management.ManagementFactory;
 import java.lang.reflect.Field;
 
 public class UnixProcessExecutor extends ProcessExecutor {
     private static final Logger log = LoggerFactory.getLogger(UnixProcessExecutor.class);
 
     @Override
-    public void killProcess(String pid) throws IOException, InterruptedException {
+    public boolean killProcessByPID(String pid) throws IOException, InterruptedException {
         ProcessBuilder processBuilder = new ProcessBuilder("kill", "-9", pid);
-        executeProcess(processBuilder);
+        return executeProcess(processBuilder);
+    }
+
+    @Override
+    public boolean killProcessByProcessName(String processName) throws IOException, InterruptedException {
+        log.info(ManagementFactory.getRuntimeMXBean().getName());
+        return false;
+        //ProcessBuilder processBuilder = new ProcessBuilder("killall", processName);
+        //return executeProcess(processBuilder);
     }
 
     @Override

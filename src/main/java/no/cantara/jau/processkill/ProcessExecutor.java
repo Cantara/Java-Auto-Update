@@ -10,7 +10,9 @@ import java.io.InputStreamReader;
 public abstract class ProcessExecutor {
     private static final Logger log = LoggerFactory.getLogger(ProcessExecutor.class);
 
-    abstract public void killProcess(String pid) throws IOException, InterruptedException;
+    abstract public boolean killProcessByPID(String pid) throws IOException, InterruptedException;
+
+    public abstract boolean killProcessByProcessName(String processName) throws IOException, InterruptedException;
 
     abstract public boolean isProcessRunning(String pid) throws IOException, InterruptedException;
 

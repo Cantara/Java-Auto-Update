@@ -25,7 +25,8 @@ public class DuplicateProcessHandlerIntTest {
         int PID = getPIDFromProcess(p);
         createFileAndWriteLine(fileName, PID + "");
 
-        boolean processWasKilled = duplicateProcessHandler.killExistingProcessIfRunning();
+        String processCommand = "java -jar pharmacy-agent-0.8-SNAPSHOT.jar";
+        boolean processWasKilled = duplicateProcessHandler.killExistingProcessIfRunning(processCommand);
         boolean processIsRunning = checkIfProcessIsRunning(PID);
 
         Assert.assertEquals(processWasKilled, !processIsRunning);
@@ -44,7 +45,7 @@ public class DuplicateProcessHandlerIntTest {
                 new ProcessExecutorFetcher(), fileUtil);
         int PID = 987654;
 
-        boolean processWasKilled = duplicateProcessHandler.killExistingProcessIfRunning();
+        boolean processWasKilled = duplicateProcessHandler.killExistingProcessIfRunning(processCommand);
         boolean processIsRunning = checkIfProcessIsRunning(PID);
 
         Assert.assertEquals(processWasKilled, processIsRunning);
@@ -59,7 +60,7 @@ public class DuplicateProcessHandlerIntTest {
                 new ProcessExecutorFetcher(), fileUtil);
         createFileAndWriteLine(fileName, "notvalidpid");
 
-        boolean processWasKilled = duplicateProcessHandler.killExistingProcessIfRunning();
+        boolean processWasKilled = duplicateProcessHandler.killExistingProcessIfRunning(processCommand);
         //boolean processIsRunning = checkIfProcessIsRunning(PID);
 
         Assert.assertFalse(processWasKilled);
@@ -92,7 +93,7 @@ public class DuplicateProcessHandlerIntTest {
         DuplicateProcessHandler duplicateProcessHandler = new DuplicateProcessHandler(
                 new ProcessExecutorFetcher(), fileUtil);
 
-        boolean processWasKilled = duplicateProcessHandler.killExistingProcessIfRunning();
+        boolean processWasKilled = duplicateProcessHandler.killExistingProcessIfRunning(processCommand);
 
         Assert.assertTrue(processWasKilled);
     }

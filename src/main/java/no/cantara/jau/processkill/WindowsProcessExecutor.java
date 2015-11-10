@@ -7,15 +7,22 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.lang.management.ManagementFactory;
 import java.lang.reflect.Field;
 
 public class WindowsProcessExecutor extends ProcessExecutor {
     private static final Logger log = LoggerFactory.getLogger(WindowsProcessExecutor.class);
 
     @Override
-    public void killProcess(String pid) throws IOException, InterruptedException {
+    public boolean killProcessByPID(String pid) throws IOException, InterruptedException {
         ProcessBuilder processBuilder = new ProcessBuilder("taskkill", "/pid", pid, "/f");
-        executeProcess(processBuilder);
+        return executeProcess(processBuilder);
+    }
+
+    @Override
+    public boolean killProcessByProcessName(String processName) throws IOException, InterruptedException {
+        //TASKKILL /F /FI "PID ne 1000” /IM java.exe
+        return false;
     }
 
     @Override
