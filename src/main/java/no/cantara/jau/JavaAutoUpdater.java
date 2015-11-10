@@ -69,7 +69,8 @@ public class JavaAutoUpdater {
             }
 
             if (processMonitorHandle == null || processMonitorHandle.isCancelled() || processMonitorHandle.isDone()) {
-                boolean successKillingProcess = duplicateProcessHandler.killExistingProcessIfRunning();
+                String processCommand = configServiceClient.getApplicationState().getProperty("command");
+                boolean successKillingProcess = duplicateProcessHandler.killExistingProcessIfRunning(processCommand);
 
                 if (!successKillingProcess) {
                     log.error("Problem killing running process! A new managed process will not be started. " +

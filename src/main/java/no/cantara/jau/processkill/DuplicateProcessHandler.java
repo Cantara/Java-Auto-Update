@@ -4,6 +4,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Makes sure any running managed service is killed if JAU should restart
@@ -21,22 +23,21 @@ public class DuplicateProcessHandler {
 
     /**
      * Returns true if process is killed or process is not running. Returns false if any error
+     * @param processCommand The command used to launch the application, e.g. "java -jar example-application.jar"
      */
-    public boolean killExistingProcessIfRunning() {
+    public boolean killExistingProcessIfRunning(String processCommand) {
         String pid;
         try {
             pid = fileUtil.getRunningProcessPidFromFile();
         } catch (IOException e) {
             log.warn("Could not read file={}.", fileUtil.getFileName());
-            //TODO: fallback to find process by name
-            return false;
+            return findRunningProcessByProcessNameAndKill(processCommand);
         }
         if (pid != null) {
-            if (isValidPid(pid)) {
-                return findRunningProcessByPIDAndKill(pid);
+            if (isValidPid(pid) && findRunningProcessByPIDAndKill(pid)) {
+                return true;
             } else {
-                //TODO: fallback to find process by name
-                return false;
+                return findRunningProcessByProcessNameAndKill(processCommand);
             }
         } else {
             log.info("{} not found. Assuming no existing managed process is running.", fileUtil.getFileName());
@@ -57,7 +58,7 @@ public class DuplicateProcessHandler {
         try {
             if (processIsRunning(pid)) {
                 log.info("Last recorded managed process pid={} is running", pid);
-                return killRunningProcess(pid);
+                return killRunningProcessByPID(pid);
             } else {
                 log.info("Last recorded managed process pid={} is not running.", pid);
                 return true;
@@ -70,16 +71,56 @@ public class DuplicateProcessHandler {
         return false;
     }
 
+    private boolean findRunningProcessByProcessNameAndKill(String processCommand) {
+        String processName = extractProcessNameFromCommand(processCommand);
+
+        if (processName != null) {
+            return killRunningProcessByProcessName(processName);
+        }
+
+        return false;
+    }
+
+    private boolean killRunningProcessByProcessName(String processName) {
+        try {
+            return processExecutor.killProcessByProcessName(processName);
+        } catch (IOException e) {
+            log.error("Could not kill process by process name", e);
+        } catch (InterruptedException e) {
+            log.error("Could not kill process by process name", e);
+        }
+        return false;
+    }
+
+    public String extractProcessNameFromCommand(String processCommand) {
+        String regex = "^\\S+\\.[A-Za-z]{3}$";
+        String[] wordsInProcessCommand = processCommand.split(" ");
+        Pattern pattern = Pattern.compile(regex);
+        for (String word : wordsInProcessCommand) {
+            Matcher matcher = pattern.matcher(word);
+            if (matcher.find())
+            {
+                String fileName = matcher.group(0);
+                log.debug("Extracted name={} of old running process from command={}", fileName, processCommand);
+                return fileName;
+            }
+        }
+        log.error("No matching name of old running process found in command={} using regex={}", processCommand, regex);
+        return null;
+    }
+
     private boolean processIsRunning(String pid) throws IOException, InterruptedException {
         boolean processRuns = processExecutor.isProcessRunning(pid);
         return processRuns;
     }
 
-    private boolean killRunningProcess(String pid) {
+    private boolean killRunningProcessByPID(String pid) {
         try {
-            processExecutor.killProcess(pid);
-            log.info("Successfully killed existing running managed process pid={}", pid);
-            return true;
+            boolean processWasKilled = processExecutor.killProcessByPID(pid);
+            if (processWasKilled) {
+                log.info("Successfully killed existing running managed process pid={}", pid);
+                return true;
+            }
         } catch (IOException e) {
             log.error("Exception executing kill process. Could not kill running managed process pid={}", pid, e);
 
