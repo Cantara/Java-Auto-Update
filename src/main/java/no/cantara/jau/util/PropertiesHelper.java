@@ -13,23 +13,24 @@ public class PropertiesHelper {
     public static final String CONFIG_SERVICE_URL_KEY = "configservice.url";
     public static final String CLIENT_NAME_PROPERTY_DEFAULT_VALUE = "Default clientName";
     public static final String CONFIG_FILENAME = "config.properties";
+    public static final String VERSION_FILENAME = "version.properties";
 
     private static final String CLIENT_NAME_PROPERTY_KEY = "clientName";
     private static final String ARTIFACT_ID = "configservice.artifactid";
     private static final String CONFIG_SERVICE_USERNAME_KEY = "configservice.username";
     private static final String CONFIG_SERVICE_PASSWORD_KEY = "configservice.password";
-    private static final String VERSION_PROPERTY_KEY = "version";
+    private static final String VERSION_PROPERTY_KEY = "jau.version";
     private static final String IS_RUNNING_INTERVAL_KEY = "isrunninginterval";
     private static final String UPDATE_INTERVAL_KEY = "updateinterval";
     private static final int DEFAULT_UPDATE_INTERVAL = 60; // seconds
     private static final int DEFAULT_IS_RUNNING_INTERVAL = 40; // seconds
 
-    public static Properties getPropertiesFromConfigFile() {
+    public static Properties getPropertiesFromConfigFile(String filename) {
         Properties properties = new Properties();
         try {
-            properties.load(PropertiesHelper.class.getClassLoader().getResourceAsStream(CONFIG_FILENAME));
+            properties.load(PropertiesHelper.class.getClassLoader().getResourceAsStream(filename));
         } catch (NullPointerException | IOException e) {
-            log.debug("{} not found on classpath.", CONFIG_FILENAME);
+            log.debug("{} not found on classpath.", filename);
         }
         return properties;
     }
@@ -51,34 +52,34 @@ public class PropertiesHelper {
     }
 
     public static String getClientName() {
-        return getStringProperty(getPropertiesFromConfigFile(), CLIENT_NAME_PROPERTY_KEY, CLIENT_NAME_PROPERTY_DEFAULT_VALUE);
+        return getStringProperty(getPropertiesFromConfigFile(CONFIG_FILENAME), CLIENT_NAME_PROPERTY_KEY, CLIENT_NAME_PROPERTY_DEFAULT_VALUE);
     }
 
     public static String getArtifactId() {
-        return getStringProperty(getPropertiesFromConfigFile(), ARTIFACT_ID, null);
+        return getStringProperty(getPropertiesFromConfigFile(CONFIG_FILENAME), ARTIFACT_ID, null);
     }
 
     public static String getServiceConfigUrl() {
-        return getStringProperty(getPropertiesFromConfigFile(), CONFIG_SERVICE_URL_KEY, null);
+        return getStringProperty(getPropertiesFromConfigFile(CONFIG_FILENAME), CONFIG_SERVICE_URL_KEY, null);
     }
 
     public static String getUsername() {
-        return getStringProperty(getPropertiesFromConfigFile(), CONFIG_SERVICE_USERNAME_KEY, null);
+        return getStringProperty(getPropertiesFromConfigFile(CONFIG_FILENAME), CONFIG_SERVICE_USERNAME_KEY, null);
     }
 
     public static String getPassword() {
-        return getStringProperty(getPropertiesFromConfigFile(), CONFIG_SERVICE_PASSWORD_KEY, null);
+        return getStringProperty(getPropertiesFromConfigFile(CONFIG_FILENAME), CONFIG_SERVICE_PASSWORD_KEY, null);
     }
 
     public static int getUpdateInterval() {
-        return getIntProperty(getPropertiesFromConfigFile(), UPDATE_INTERVAL_KEY, DEFAULT_UPDATE_INTERVAL);
+        return getIntProperty(getPropertiesFromConfigFile(CONFIG_FILENAME), UPDATE_INTERVAL_KEY, DEFAULT_UPDATE_INTERVAL);
     }
 
     public static int getIsRunningInterval() {
-        return getIntProperty(getPropertiesFromConfigFile(), IS_RUNNING_INTERVAL_KEY, DEFAULT_IS_RUNNING_INTERVAL);
+        return getIntProperty(getPropertiesFromConfigFile(CONFIG_FILENAME), IS_RUNNING_INTERVAL_KEY, DEFAULT_IS_RUNNING_INTERVAL);
     }
 
     public static String getVersion() {
-        return getStringProperty(getPropertiesFromConfigFile(), VERSION_PROPERTY_KEY, null);
+        return getStringProperty(getPropertiesFromConfigFile(VERSION_FILENAME), VERSION_PROPERTY_KEY, null);
     }
 }
