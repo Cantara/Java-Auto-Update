@@ -26,9 +26,9 @@ public class UnixProcessExecutor extends ProcessExecutor {
     public String findProcessId(Process process) throws NoSuchFieldException, IllegalAccessException {
         String pid;
         Field pidField;
-            pidField = process.getClass().getDeclaredField("pid");
-            pidField.setAccessible(true);
-            pid = Long.toString(pidField.getLong(process));
+        pidField = process.getClass().getDeclaredField("pid");
+        pidField.setAccessible(true);
+        pid = Long.toString(pidField.getLong(process));
         return pid;
     }
 }

@@ -62,7 +62,7 @@
         <dependency>
             <groupId>no.cantara.jau</groupId>
             <artifactId>configservice-sdk</artifactId>
-            <version>0.5-SNAPSHOT</version>
+            <version>0.4-alpha2</version>
         </dependency>
 
         <dependency>
@@ -119,6 +119,7 @@
             <artifactId>jcl-over-slf4j</artifactId>
             <version>1.7.12</version>
         </dependency>
+        <!-- Needed for native access for killing duplicate processes and getting process id -->
         <dependency>
             <groupId>net.java.dev.jna</groupId>
             <artifactId>jna-platform</artifactId>

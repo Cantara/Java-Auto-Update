@@ -7,15 +7,15 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import static org.mockito.Mockito.mock;
-import static org.testng.Assert.assertTrue;
-import static org.testng.Assert.assertFalse;
-
 import java.io.File;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
+
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
+import static org.mockito.Mockito.mock;
+import static org.testng.Assert.assertFalse;
+import static org.testng.Assert.assertTrue;
 
 /**
  * Created by totto on 13.09.15.

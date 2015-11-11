@@ -3,7 +3,6 @@ package no.cantara.jau;
 import no.cantara.jau.coms.RegisterClientHelper;
 import no.cantara.jau.processkill.DuplicateProcessHandler;
 import no.cantara.jau.processkill.LastRunningProcessFileUtil;
-import no.cantara.jau.processkill.ProcessAdapter;
 import no.cantara.jau.processkill.ProcessExecutorFetcher;
 import no.cantara.jau.serviceconfig.client.ConfigServiceClient;
 import no.cantara.jau.util.PropertiesHelper;
@@ -44,9 +43,10 @@ public class Main {
         ConfigServiceClient configServiceClient = new ConfigServiceClient(serviceConfigUrl, username, password);
         RegisterClientHelper registerClientHelper = new RegisterClientHelper(configServiceClient, artifactId, clientName);
 
-        ProcessAdapter processAdapter = new ProcessAdapter(new ProcessExecutorFetcher());
-        LastRunningProcessFileUtil fileUtil = new LastRunningProcessFileUtil(DuplicateProcessHandler.RUNNING_PROCESS_FILENAME);
-        DuplicateProcessHandler duplicateProcessHandler = new DuplicateProcessHandler(processAdapter, fileUtil);
+        ProcessExecutorFetcher processExecutorFetcher = new ProcessExecutorFetcher();
+        LastRunningProcessFileUtil fileUtil = new LastRunningProcessFileUtil(
+                DuplicateProcessHandler.RUNNING_PROCESS_FILENAME);
+        DuplicateProcessHandler duplicateProcessHandler = new DuplicateProcessHandler(processExecutorFetcher, fileUtil);
 
         String workingDirectory = "./";
         ApplicationProcess processHolder = new ApplicationProcess(duplicateProcessHandler);
