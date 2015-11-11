@@ -41,7 +41,7 @@ public class ClientEnvironmentUtil {
 
         clientEnv.putAll(System.getenv());
         String version = PropertiesHelper.getVersion();
-        clientEnv.put("version", version);
+        clientEnv.put("jau.version", version);
         clientEnv.put("applicationState", String.valueOf(applicationState));
         clientEnv.put("processIsRunning", processIsRunning);
         clientEnv.put("processIsRunning timestamp", new Date().toString());
