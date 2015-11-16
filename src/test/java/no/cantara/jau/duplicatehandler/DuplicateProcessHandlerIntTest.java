@@ -37,7 +37,7 @@ public class DuplicateProcessHandlerIntTest {
     //Tries to kill a process with given PID, so disabled for CI tool.
     //Cannot be certain that process with PID does not exists
     @Test(enabled = false)
-    public void shouldFailToKillExistingProcessWhenExistingProcessIsNotRunning() throws IOException, InterruptedException {
+    public void shouldReturnTrueWhenTryingToKillNonRunningProcess() throws IOException, InterruptedException {
         String fileName = "shouldFailToKillExistingProcessTest.txt";
         deleteTestRunningProcessFile(fileName); //make sure any old file is removed
         LastRunningProcessFileUtil fileUtil = new LastRunningProcessFileUtil(fileName);
@@ -48,7 +48,8 @@ public class DuplicateProcessHandlerIntTest {
         boolean processWasKilled = duplicateProcessHandler.killExistingProcessIfRunning(PROCESS_COMMAND);
         boolean processIsRunning = checkIfProcessIsRunning(PID);
 
-        Assert.assertEquals(processWasKilled, processIsRunning);
+        Assert.assertTrue(processWasKilled);
+        Assert.assertFalse(processIsRunning);
     }
 
     @Test
