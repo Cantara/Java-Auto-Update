@@ -1,4 +1,4 @@
-package no.cantara.jau.processkill;
+package no.cantara.jau.duplicatehandler;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

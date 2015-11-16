@@ -1,9 +1,9 @@
 package no.cantara.jau;
 
 import no.cantara.jau.coms.RegisterClientHelper;
-import no.cantara.jau.processkill.DuplicateProcessHandler;
-import no.cantara.jau.processkill.LastRunningProcessFileUtil;
-import no.cantara.jau.processkill.ProcessExecutorFetcher;
+import no.cantara.jau.duplicatehandler.DuplicateProcessHandler;
+import no.cantara.jau.duplicatehandler.LastRunningProcessFileUtil;
+import no.cantara.jau.duplicatehandler.ProcessExecutorFetcher;
 import no.cantara.jau.serviceconfig.client.ConfigServiceClient;
 import no.cantara.jau.util.PropertiesHelper;
 import no.cantara.jau.util.ProxyFixer;

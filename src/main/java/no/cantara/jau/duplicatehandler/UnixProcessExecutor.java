@@ -1,4 +1,4 @@
-package no.cantara.jau.processkill;
+package no.cantara.jau.duplicatehandler;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,9 +10,15 @@ public class UnixProcessExecutor extends ProcessExecutor {
     private static final Logger log = LoggerFactory.getLogger(UnixProcessExecutor.class);
 
     @Override
-    public void killProcess(String pid) throws IOException, InterruptedException {
+    public boolean killProcessByPID(String pid) throws IOException, InterruptedException {
         ProcessBuilder processBuilder = new ProcessBuilder("kill", "-9", pid);
-        executeProcess(processBuilder);
+        return executeProcess(processBuilder);
+    }
+
+    @Override
+    public boolean killProcessByProcessName(String processName) throws IOException, InterruptedException {
+        //TODO: Implementation. E.g. use ps aux and grep for command to get right java-process to kill
+        return false;
     }
 
     @Override

@@ -21,6 +21,13 @@
                 <role>Developer</role>
             </roles>
         </developer>
+        <developer>
+            <name>Anders Emil Rønning</name>
+            <email>anders.roenning@gmail.com</email>
+            <roles>
+                <role>Developer</role>
+            </roles>
+        </developer>
     </developers>
 
     <parent>

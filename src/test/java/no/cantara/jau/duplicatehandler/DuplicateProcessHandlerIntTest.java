@@ -1,4 +1,4 @@
-package no.cantara.jau.processkill;
+package no.cantara.jau.duplicatehandler;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,6 +12,7 @@ import java.nio.file.Paths;
 
 public class DuplicateProcessHandlerIntTest {
     private static final Logger log = LoggerFactory.getLogger(DuplicateProcessHandlerIntTest.class);
+    private static final String PROCESS_COMMAND = "java -jar pharmacy-agent-0.8-SNAPSHOT.jar";;
 
     @Test
     public void shouldKillExistingProcessWhenExistingProcessIsRunning() throws IOException,
@@ -25,7 +26,7 @@ public class DuplicateProcessHandlerIntTest {
         int PID = getPIDFromProcess(p);
         createFileAndWriteLine(fileName, PID + "");
 
-        boolean processWasKilled = duplicateProcessHandler.killExistingProcessIfRunning();
+        boolean processWasKilled = duplicateProcessHandler.killExistingProcessIfRunning(PROCESS_COMMAND);
         boolean processIsRunning = checkIfProcessIsRunning(PID);
 
         Assert.assertEquals(processWasKilled, !processIsRunning);
@@ -36,7 +37,7 @@ public class DuplicateProcessHandlerIntTest {
     //Tries to kill a process with given PID, so disabled for CI tool.
     //Cannot be certain that process with PID does not exists
     @Test(enabled = false)
-    public void shouldFailToKillExistingProcessWhenExistingProcessIsNotRunning() throws IOException, InterruptedException {
+    public void shouldReturnTrueWhenTryingToKillNonRunningProcess() throws IOException, InterruptedException {
         String fileName = "shouldFailToKillExistingProcessTest.txt";
         deleteTestRunningProcessFile(fileName); //make sure any old file is removed
         LastRunningProcessFileUtil fileUtil = new LastRunningProcessFileUtil(fileName);
@@ -44,10 +45,11 @@ public class DuplicateProcessHandlerIntTest {
                 new ProcessExecutorFetcher(), fileUtil);
         int PID = 987654;
 
-        boolean processWasKilled = duplicateProcessHandler.killExistingProcessIfRunning();
+        boolean processWasKilled = duplicateProcessHandler.killExistingProcessIfRunning(PROCESS_COMMAND);
         boolean processIsRunning = checkIfProcessIsRunning(PID);
 
-        Assert.assertEquals(processWasKilled, processIsRunning);
+        Assert.assertTrue(processWasKilled);
+        Assert.assertFalse(processIsRunning);
     }
 
     @Test
@@ -59,7 +61,7 @@ public class DuplicateProcessHandlerIntTest {
                 new ProcessExecutorFetcher(), fileUtil);
         createFileAndWriteLine(fileName, "notvalidpid");
 
-        boolean processWasKilled = duplicateProcessHandler.killExistingProcessIfRunning();
+        boolean processWasKilled = duplicateProcessHandler.killExistingProcessIfRunning(PROCESS_COMMAND);
         //boolean processIsRunning = checkIfProcessIsRunning(PID);
 
         Assert.assertFalse(processWasKilled);
@@ -92,7 +94,7 @@ public class DuplicateProcessHandlerIntTest {
         DuplicateProcessHandler duplicateProcessHandler = new DuplicateProcessHandler(
                 new ProcessExecutorFetcher(), fileUtil);
 
-        boolean processWasKilled = duplicateProcessHandler.killExistingProcessIfRunning();
+        boolean processWasKilled = duplicateProcessHandler.killExistingProcessIfRunning(PROCESS_COMMAND);
 
         Assert.assertTrue(processWasKilled);
     }

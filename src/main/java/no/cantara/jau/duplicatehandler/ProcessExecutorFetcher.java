@@ -1,4 +1,4 @@
-package no.cantara.jau.processkill;
+package no.cantara.jau.duplicatehandler;
 
 public class ProcessExecutorFetcher {
 

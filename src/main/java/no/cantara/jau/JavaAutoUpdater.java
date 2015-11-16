@@ -2,7 +2,7 @@ package no.cantara.jau;
 
 import no.cantara.jau.coms.CheckForUpdateHelper;
 import no.cantara.jau.coms.RegisterClientHelper;
-import no.cantara.jau.processkill.DuplicateProcessHandler;
+import no.cantara.jau.duplicatehandler.DuplicateProcessHandler;
 import no.cantara.jau.serviceconfig.client.ConfigServiceClient;
 import no.cantara.jau.serviceconfig.client.ConfigurationStoreUtil;
 import no.cantara.jau.serviceconfig.client.DownloadUtil;
@@ -69,7 +69,8 @@ public class JavaAutoUpdater {
             }
 
             if (processMonitorHandle == null || processMonitorHandle.isCancelled() || processMonitorHandle.isDone()) {
-                boolean successKillingProcess = duplicateProcessHandler.killExistingProcessIfRunning();
+                String processCommand = configServiceClient.getApplicationState().getProperty("command");
+                boolean successKillingProcess = duplicateProcessHandler.killExistingProcessIfRunning(processCommand);
 
                 if (!successKillingProcess) {
                     log.error("Problem killing running process! A new managed process will not be started. " +

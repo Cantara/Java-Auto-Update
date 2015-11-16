@@ -1,4 +1,4 @@
-package no.cantara.jau.processkill;
+package no.cantara.jau.duplicatehandler;
 
 import com.sun.jna.Pointer;
 import com.sun.jna.platform.win32.Kernel32;
@@ -13,9 +13,15 @@ public class WindowsProcessExecutor extends ProcessExecutor {
     private static final Logger log = LoggerFactory.getLogger(WindowsProcessExecutor.class);
 
     @Override
-    public void killProcess(String pid) throws IOException, InterruptedException {
+    public boolean killProcessByPID(String pid) throws IOException, InterruptedException {
         ProcessBuilder processBuilder = new ProcessBuilder("taskkill", "/pid", pid, "/f");
-        executeProcess(processBuilder);
+        return executeProcess(processBuilder);
+    }
+
+    @Override
+    public boolean killProcessByProcessName(String processName) throws IOException, InterruptedException {
+        //TODO: Implementation. E.g. use wmic to get 'commandline' and filter for right java-process to kill
+        return false;
     }
 
     @Override
