@@ -1,6 +1,6 @@
 package no.cantara.jau;
 
-import no.cantara.jau.processkill.DuplicateProcessHandler;
+import no.cantara.jau.duplicatehandler.DuplicateProcessHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.annotations.AfterClass;

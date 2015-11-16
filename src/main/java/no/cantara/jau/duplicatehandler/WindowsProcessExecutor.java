@@ -1,4 +1,4 @@
-package no.cantara.jau.processkill;
+package no.cantara.jau.duplicatehandler;
 
 import com.sun.jna.Pointer;
 import com.sun.jna.platform.win32.Kernel32;
@@ -7,7 +7,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.lang.management.ManagementFactory;
 import java.lang.reflect.Field;
 
 public class WindowsProcessExecutor extends ProcessExecutor {
@@ -21,7 +20,7 @@ public class WindowsProcessExecutor extends ProcessExecutor {
 
     @Override
     public boolean killProcessByProcessName(String processName) throws IOException, InterruptedException {
-        //TODO: Implementation. Use wmic to get 'commandline' and filter for right java-process to kill
+        //TODO: Implementation. E.g. use wmic to get 'commandline' and filter for right java-process to kill
         return false;
     }
 

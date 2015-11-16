@@ -1,10 +1,9 @@
-package no.cantara.jau.processkill;
+package no.cantara.jau.duplicatehandler;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.lang.management.ManagementFactory;
 import java.lang.reflect.Field;
 
 public class UnixProcessExecutor extends ProcessExecutor {
@@ -18,7 +17,7 @@ public class UnixProcessExecutor extends ProcessExecutor {
 
     @Override
     public boolean killProcessByProcessName(String processName) throws IOException, InterruptedException {
-        //TODO: Implementation. Use ps aux and grep for command to get right java-process to kill
+        //TODO: Implementation. E.g. use ps aux and grep for command to get right java-process to kill
         return false;
     }
 
