@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>no.cantara.jau</groupId>
     <artifactId>java-auto-update</artifactId>
-    <version>0.4-SNAPSHOT</version>
+    <version>0.5-SNAPSHOT</version>
     <name>Java Auto-Update</name>
     <url>https://wiki.cantara.no/display/dev/Java+Auto-Update</url>
 
@@ -62,7 +62,7 @@
         <dependency>
             <groupId>no.cantara.jau</groupId>
             <artifactId>configservice-sdk</artifactId>
-            <version>0.5-SNAPSHOT</version>
+            <version>0.6.1</version>
         </dependency>
 
         <dependency>

@@ -20,7 +20,7 @@ public class Main {
     private static final Logger log = LoggerFactory.getLogger(Main.class);
 
     public static void main(String[] args) {
-        ProxyFixer.fixProxy(PropertiesHelper.getPropertiesFromConfigFile());
+        ProxyFixer.fixProxy(PropertiesHelper.getPropertiesFromConfigFile(PropertiesHelper.CONFIG_FILENAME));
 
         String serviceConfigUrl = PropertiesHelper.getServiceConfigUrl();
 
