@@ -2,9 +2,28 @@
 <configuration>
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+            <pattern>%d{HH:mm:ss.SSS} %X{testkey} [%thread] %-5level %logger{36} - %msg%n</pattern>
         </encoder>
     </appender>
+
+    <property file="config.properties" />
+            <appender name="FILE_EVENTS" class="ch.qos.logback.core.rolling.RollingFileAppender">
+                <File>logs/events.log</File>
+                <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                    <FileNamePattern>logs/events-%d{yyyy-MM-dd}.log</FileNamePattern>
+                    <maxHistory>5</maxHistory>
+                </rollingPolicy>
+
+                <filter class="no.cantara.jau.eventextraction.MDCEventsFilter">
+                    <mdcEvents>${events}</mdcEvents>
+                    <onMatch>ACCEPT</onMatch>
+                    <onMismatch>DENY</onMismatch>
+                </filter>
+
+                <encoder>
+                    <pattern>%X{monitor.events} %d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+                </encoder>
+            </appender>
 
     <!--Daily rolling file appender -->
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
@@ -30,5 +49,9 @@
     <root level="INFO">
         <appender-ref ref="STDOUT" />
         <appender-ref ref="FILE" />
+    </root>
+
+    <root level="TRACE">
+        <appender-ref ref="FILE_EVENTS" />
     </root>
 </configuration>
