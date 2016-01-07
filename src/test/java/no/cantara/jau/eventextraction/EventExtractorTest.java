@@ -1,7 +1,6 @@
 package no.cantara.jau.eventextraction;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.Assert;
@@ -72,9 +71,6 @@ public class EventExtractorTest {
         Assert.assertEquals(eventsExtracted.get("this-is-an-mdc-tag").get(0), mdcLogLine);
         Assert.assertEquals(eventsExtracted.get("ERROR").get(0), errorLogLine);
         Assert.assertEquals(eventsExtracted.get("Exception").get(0), exceptionLogLine);
-
-        ObjectMapper mapper = new ObjectMapper();
-        log.info(mapper.writeValueAsString(eventsExtracted));
     }
 
     @Test
