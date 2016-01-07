@@ -46,8 +46,14 @@ public class EventExtractor implements Runnable {
     @Override
     public void run() {
             if (managedProcessLogFile.lastModified() > lastModified) {
+                log.trace("File={} is modified since last extraction. Extracting...",
+                        managedProcessLogFilePath);
                 lastModified = managedProcessLogFile.lastModified();
                 checkForEvents();
+            }
+            else {
+                log.trace("File={} has not been modified since last extraction. Will not extract",
+                        managedProcessLogFilePath);
             }
     }
 
@@ -63,9 +69,18 @@ public class EventExtractor implements Runnable {
                             Matcher matcher = Pattern.compile("\\b" + mdc + "\\b")
                                     .matcher(logLine);
                             boolean isMatch = matcher.find();
-
-                            return isMatch || logLine.contains(ERROR_MESSAGE)
-                                    || logLine.contains(EXCEPTION_MESSAGE);
+                            if (isMatch) {
+                                line.setType(mdc);
+                                return true;
+                            }
+                            else if (logLine.contains(ERROR_MESSAGE)) {
+                                line.setType(ERROR_MESSAGE);
+                                return true;
+                            }
+                            else if (logLine.contains(EXCEPTION_MESSAGE)) {
+                                line.setType(EXCEPTION_MESSAGE);
+                                return true;
+                            }
                         }
                         return false;
                     })

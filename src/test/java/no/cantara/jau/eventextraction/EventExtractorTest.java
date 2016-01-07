@@ -1,5 +1,9 @@
 package no.cantara.jau.eventextraction;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -8,9 +12,12 @@ import org.testng.annotations.Test;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class EventExtractorTest {
+    private static final Logger log = LoggerFactory.getLogger(EventExtractorTest.class);
     private final static String LOG_FILE_PATH = "event-extractor-test-log-file.log";
 
     private String regularLogLine;
@@ -50,31 +57,43 @@ public class EventExtractorTest {
     }
 
     @Test
-    public void shouldExtractEventsBasedOnTags() {
-        EventRepo repo = new EventRepo();
+    public void shouldExtractEventsBasedOnTags() throws JsonProcessingException {
+        List<String> mdcs = new ArrayList<>();
+        mdcs.add("this-is-an-mdc-tag");
+        EventRepo repo = new EventRepo(mdcs);
         EventExtractor extractor = new EventExtractor(repo, "this-is-an-mdc-tag,tags",
                 LOG_FILE_PATH);
 
         extractor.run();
 
-        List<NumberedLine> eventsExtracted = repo.getEvents();
+        Map<String, List<String>> eventsExtracted = repo.getEvents();
         Assert.assertEquals(eventsExtracted.size(), 3);
 
-        String event1 = eventsExtracted.get(0).getLine();
-        String event2 = eventsExtracted.get(1).getLine();
-        String event3 = eventsExtracted.get(2).getLine();
-        boolean shouldHaveBeenExtracted =
-                (event1.equals(errorLogLine) || event1.equals(mdcLogLine) || event1.equals(exceptionLogLine)) &&
-                (event2.equals(errorLogLine) || event2.equals(mdcLogLine) || event2.equals(exceptionLogLine)) &&
-                        (event3.equals(errorLogLine) || event3.equals(mdcLogLine) || event3.equals(exceptionLogLine));
+        Assert.assertEquals(eventsExtracted.get("this-is-an-mdc-tag").get(0), mdcLogLine);
+        Assert.assertEquals(eventsExtracted.get("ERROR").get(0), errorLogLine);
+        Assert.assertEquals(eventsExtracted.get("Exception").get(0), exceptionLogLine);
 
-        Assert.assertTrue(shouldHaveBeenExtracted);
+        ObjectMapper mapper = new ObjectMapper();
+        log.info(mapper.writeValueAsString(eventsExtracted));
     }
 
-    public void shouldNotExtractEventsWhenMDCTagIsPartOfWord() {
-        EventRepo repo = new EventRepo();
-        EventExtractor extractor = new EventExtractor(repo, "this-is-an-mdc-tag", LOG_FILE_PATH);
+    @Test
+    public void shouldNotExtractEventsWhenFileIsUnmodified() throws InterruptedException {
+        List<String> mdcs = new ArrayList<>();
+        mdcs.add("this-is-an-mdc-tag");
+        EventRepo repo = new EventRepo(mdcs);
+        EventExtractor extractor = new EventExtractor(repo, "this-is-an-mdc-tag",
+                LOG_FILE_PATH);
 
         extractor.run();
+
+        Map<String, List<String>> eventsExtracted = repo.getEvents();
+        Assert.assertEquals(eventsExtracted.size(), 3);
+
+        extractor.run();
+
+        eventsExtracted = repo.getEvents();
+        Assert.assertEquals(eventsExtracted.size(), 3);
     }
+
 }

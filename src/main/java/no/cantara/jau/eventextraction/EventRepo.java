@@ -1,26 +1,30 @@
 package no.cantara.jau.eventextraction;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 public class EventRepo {
-    List<NumberedLine> events;
+    Map<String, List<String>> events;
 
-    public EventRepo() {
-        this.events = new LinkedList<>();
+    public EventRepo(List<String> mdcEvents) {
+        this.events = new HashMap<>();
+        events.put("ERROR", new LinkedList<>());
+        events.put("Exception", new LinkedList<>());
+        mdcEvents.forEach(e -> events.put(e, new LinkedList<>()));
     }
 
     public void addEvents(List<NumberedLine> eventsToAdd) {
-        events.addAll(eventsToAdd);
+        eventsToAdd.forEach(unformattedEvent -> events.get(unformattedEvent.getType())
+                .add(unformattedEvent.getLine()));
     }
 
-    public List<NumberedLine> getEvents() {
+    public Map<String, List<String>> getEvents() {
         return events;
     }
 
     public void clearEvents() {
         events.clear();
     }
-
 }
