@@ -15,6 +15,8 @@ import java.util.List;
 import java.util.Spliterator;
 import java.util.Spliterators;
 import java.util.function.Consumer;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
@@ -22,12 +24,14 @@ import java.util.stream.StreamSupport;
 public class EventExtractor implements Runnable {
     private static final Logger log = LoggerFactory.getLogger(EventExtractor.class);
 
-    private String[] mdcEvents;
-    private String managedProcessLogFilePath;
-    private File managedProcessLogFile;
-    private long lastModified;
+    private final String[] mdcEvents;
+    private final String managedProcessLogFilePath;
+    private final File managedProcessLogFile;
+    private final EventRepo eventRepo;
     private int lastLineRead;
-    private EventRepo eventRepo;
+    private static final String ERROR_MESSAGE = "ERROR";
+    private static final String EXCEPTION_MESSAGE = "Exception";
+    private long lastModified;
 
     public EventExtractor(EventRepo eventRepo, String mdcEventsUnsplit,
                           String managedProcessLogFilePath) {
@@ -55,10 +59,13 @@ public class EventExtractor implements Runnable {
                     .filter(line -> {
                         lastLineRead = line.getNumber();
                         for (String mdc : mdcEvents) {
-                            if (line.getLine().contains(mdc) ||
-                                    line.getLine().contains("ERROR")) {
-                                return true;
-                            }
+                            String logLine = line.getLine();
+                            Matcher matcher = Pattern.compile("\\b" + mdc + "\\b")
+                                    .matcher(logLine);
+                            boolean isMatch = matcher.find();
+
+                            return isMatch || logLine.contains(ERROR_MESSAGE)
+                                    || logLine.contains(EXCEPTION_MESSAGE);
                         }
                         return false;
                     })
