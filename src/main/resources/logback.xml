@@ -31,8 +31,4 @@
         <appender-ref ref="STDOUT" />
         <appender-ref ref="FILE" />
     </root>
-
-    <root level="TRACE">
-        <appender-ref ref="FILE_EVENTS" />
-    </root>
 </configuration>
