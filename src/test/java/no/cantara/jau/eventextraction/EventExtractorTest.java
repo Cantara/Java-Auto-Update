@@ -1,7 +1,5 @@
 package no.cantara.jau.eventextraction;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -13,7 +11,6 @@ import java.nio.file.Paths;
 import java.util.List;
 
 public class EventExtractorTest {
-    private static final Logger log = LoggerFactory.getLogger(EventExtractorTest.class);
     private final static String LOG_FILE_PATH = "event-extractor-test-log-file.log";
 
     private String regularLogLine;
