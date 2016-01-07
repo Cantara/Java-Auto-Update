@@ -41,18 +41,10 @@ public class EventExtractor implements Runnable {
 
     @Override
     public void run() {
-        while (true) {
             if (managedProcessLogFile.lastModified() > lastModified) {
                 lastModified = managedProcessLogFile.lastModified();
                 checkForEvents();
             }
-            try {
-                Thread.sleep(5000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-
     }
 
     private void checkForEvents() {
