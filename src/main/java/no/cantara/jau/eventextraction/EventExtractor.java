@@ -19,8 +19,8 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-public class ManagedProcessEventExtractor implements Runnable {
-    private static final Logger log = LoggerFactory.getLogger(ManagedProcessEventExtractor.class);
+public class EventExtractor implements Runnable {
+    private static final Logger log = LoggerFactory.getLogger(EventExtractor.class);
 
     private String[] mdcEvents;
     private String managedProcessLogFilePath;
@@ -29,8 +29,8 @@ public class ManagedProcessEventExtractor implements Runnable {
     private int lastLineRead;
     private EventRepo eventRepo;
 
-    public ManagedProcessEventExtractor(EventRepo eventRepo, String mdcEventsUnsplit,
-                                        String managedProcessLogFilePath) {
+    public EventExtractor(EventRepo eventRepo, String mdcEventsUnsplit,
+                          String managedProcessLogFilePath) {
         this.eventRepo = eventRepo;
         mdcEvents = mdcEventsUnsplit.split(",");
         this.managedProcessLogFilePath = managedProcessLogFilePath;
