@@ -18,7 +18,7 @@ public class NumberedLine {
     public String getType() {
         return type;
     }
-    public void setType(String type) {
+    public void setTagType(String type) {
         this.type = type;
     }
     @Override

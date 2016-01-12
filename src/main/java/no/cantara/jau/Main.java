@@ -4,6 +4,7 @@ import no.cantara.jau.coms.RegisterClientHelper;
 import no.cantara.jau.duplicatehandler.DuplicateProcessHandler;
 import no.cantara.jau.duplicatehandler.LastRunningProcessFileUtil;
 import no.cantara.jau.duplicatehandler.ProcessExecutorFetcher;
+import no.cantara.jau.eventextraction.EventRepo;
 import no.cantara.jau.serviceconfig.client.ConfigServiceClient;
 import no.cantara.jau.util.PropertiesHelper;
 import no.cantara.jau.util.ProxyFixer;
@@ -11,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.util.ArrayList;
 
 /**
  * @author <a href="mailto:erik-dev@fjas.no">Erik Drolshammer</a> 2015-07-13.
