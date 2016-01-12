@@ -12,6 +12,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.concurrent.Callable;
 import java.util.function.Consumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -19,7 +20,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-public class EventExtractor implements Runnable {
+public class EventExtractor implements Callable<String> {
     private static final Logger log = LoggerFactory.getLogger(EventExtractor.class);
 
     private final List<EventExtractionTag> extractionTags;
@@ -41,8 +42,8 @@ public class EventExtractor implements Runnable {
         lastLineRead = 0;
     }
 
-    @Override
     public void run() {
+        log.info("Is run!");
             if (managedProcessLogFile.lastModified() > lastModified) {
                 log.trace("File={} is modified since last extraction. Extracting...",
                         managedProcessLogFilePath);
@@ -117,7 +118,14 @@ public class EventExtractor implements Runnable {
             }
             catch(IOException e) {
                 throw new UncheckedIOException(e);
+
             }
         });
+    }
+
+    @Override
+    public String call() throws Exception {
+        run();
+        return null;
     }
 }
