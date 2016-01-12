@@ -1,0 +1,763 @@
+09:41:46.421 [main] INFO  n.c.j.e.EventExtractorService - {testkey=[eventExtractionTag{items='[eventExtractionItem{regex='\btest\b', filePath='path/to/log.log'}, eventExtractionItem{regex='\blalala\b', filePath='path/to/log.log'}]'}], another_key=[eventExtractionTag{items='[eventExtractionItem{regex='\lalala\b', filePath='path/to/log.log'}, eventExtractionItem{regex='\foobar\b', filePath='path/to/some/otherlog.log'}]'}]}
+09:58:32.872 [main] INFO  n.c.j.e.EventExtractorService - {testkey=[eventExtractionTag{items='[eventExtractionItem{regex='\btest\b', filePath='path/to/log.log'}, eventExtractionItem{regex='\blalala\b', filePath='path/to/log.log'}]'}], another_key=[eventExtractionTag{items='[eventExtractionItem{regex='\lalala\b', filePath='path/to/log.log'}, eventExtractionItem{regex='\foobar\b', filePath='path/to/some/otherlog.log'}]'}]}
+09:59:33.990 [main] INFO  n.c.j.e.EventExtractorService - {testkey=1, another_key=1}
+10:08:55.152 [main] INFO  n.c.j.e.EventExtractorService - {testkey=[{\btest\b=[eventExtractionItem{regex='\btest\b', filePath='path/to/log.log'}], \blalala\b=[eventExtractionItem{regex='\blalala\b', filePath='path/to/log.log'}]}], another_key=[{\lalala\b=[eventExtractionItem{regex='\lalala\b', filePath='path/to/log.log'}], \foobar\b=[eventExtractionItem{regex='\foobar\b', filePath='path/to/some/otherlog.log'}]}]}
+10:09:09.735 [main] INFO  n.c.j.e.EventExtractorService - {testkey=[{path/to/log.log=[eventExtractionItem{regex='\btest\b', filePath='path/to/log.log'}, eventExtractionItem{regex='\blalala\b', filePath='path/to/log.log'}]}], another_key=[{path/to/log.log=[eventExtractionItem{regex='\lalala\b', filePath='path/to/log.log'}], path/to/some/otherlog.log=[eventExtractionItem{regex='\foobar\b', filePath='path/to/some/otherlog.log'}]}]}
+10:16:07.242 [main] INFO  n.c.j.e.EventExtractorService - {testkey=[{path/to/log.log=[eventExtractionItem{regex='\btest\b', filePath='path/to/log.log'}, eventExtractionItem{regex='\blalala\b', filePath='path/to/log.log'}]}], another_key=[{path/to/log.log=[eventExtractionItem{regex='\lalala\b', filePath='path/to/log.log'}], path/to/some/otherlog.log=[eventExtractionItem{regex='\foobar\b', filePath='path/to/some/otherlog.log'}]}]}
+10:20:22.590 [main] INFO  n.c.j.e.EventExtractorService - {testkey=[{path/to/log.log=[eventExtractionItem{regex='\btest\b', filePath='path/to/log.log'}, eventExtractionItem{regex='\blalala\b', filePath='path/to/log.log'}]}], another_key=[{path/to/log.log=[eventExtractionItem{regex='\lalala\b', filePath='path/to/log.log'}], path/to/some/otherlog.log=[eventExtractionItem{regex='\foobar\b', filePath='path/to/some/otherlog.log'}]}]}
+10:21:03.989 [main] INFO  n.c.j.e.EventExtractorService - {{path/to/log.log=[eventExtractionItem{regex='\lalala\b', filePath='path/to/log.log'}], path/to/some/otherlog.log=[eventExtractionItem{regex='\foobar\b', filePath='path/to/some/otherlog.log'}]}=[eventExtractionTag{items='[eventExtractionItem{regex='\lalala\b', filePath='path/to/log.log'}, eventExtractionItem{regex='\foobar\b', filePath='path/to/some/otherlog.log'}]'}], {path/to/log.log=[eventExtractionItem{regex='\btest\b', filePath='path/to/log.log'}, eventExtractionItem{regex='\blalala\b', filePath='path/to/log.log'}]}=[eventExtractionTag{items='[eventExtractionItem{regex='\btest\b', filePath='path/to/log.log'}, eventExtractionItem{regex='\blalala\b', filePath='path/to/log.log'}]'}]}
+10:23:18.050 [main] INFO  n.c.j.e.EventExtractorService - [{path/to/log.log=[eventExtractionItem{regex='\btest\b', filePath='path/to/log.log'}, eventExtractionItem{regex='\blalala\b', filePath='path/to/log.log'}]}, {path/to/log.log=[eventExtractionItem{regex='\lalala\b', filePath='path/to/log.log'}], path/to/some/otherlog.log=[eventExtractionItem{regex='\foobar\b', filePath='path/to/some/otherlog.log'}]}]
+10:29:47.891 [main] INFO  n.c.j.e.EventExtractorService - {{path/to/log.log=[eventExtractionItem{regex='\lalala\b', filePath='path/to/log.log'}], path/to/some/otherlog.log=[eventExtractionItem{regex='\foobar\b', filePath='path/to/some/otherlog.log'}]}=[eventExtractionTag{items='[eventExtractionItem{regex='\lalala\b', filePath='path/to/log.log'}, eventExtractionItem{regex='\foobar\b', filePath='path/to/some/otherlog.log'}]'}], {path/to/log.log=[eventExtractionItem{regex='\btest\b', filePath='path/to/log.log'}, eventExtractionItem{regex='\blalala\b', filePath='path/to/log.log'}]}=[eventExtractionTag{items='[eventExtractionItem{regex='\btest\b', filePath='path/to/log.log'}, eventExtractionItem{regex='\blalala\b', filePath='path/to/log.log'}]'}]}
+10:31:36.316 [main] INFO  n.c.j.e.EventExtractorService - [{path/to/log.log=[eventExtractionItem{regex='\btest\b', filePath='path/to/log.log'}, eventExtractionItem{regex='\blalala\b', filePath='path/to/log.log'}]}, {path/to/log.log=[eventExtractionItem{regex='\lalala\b', filePath='path/to/log.log'}], path/to/some/otherlog.log=[eventExtractionItem{regex='\foobar\b', filePath='path/to/some/otherlog.log'}]}]
+10:33:23.063 [main] INFO  n.c.j.e.EventExtractorService - {eventExtractionTag{items='[eventExtractionItem{regex='\lalala\b', filePath='path/to/log.log'}, eventExtractionItem{regex='\foobar\b', filePath='path/to/some/otherlog.log'}]'}={path/to/log.log=[eventExtractionItem{regex='\lalala\b', filePath='path/to/log.log'}], path/to/some/otherlog.log=[eventExtractionItem{regex='\foobar\b', filePath='path/to/some/otherlog.log'}]}, eventExtractionTag{items='[eventExtractionItem{regex='\btest\b', filePath='path/to/log.log'}, eventExtractionItem{regex='\blalala\b', filePath='path/to/log.log'}]'}={path/to/log.log=[eventExtractionItem{regex='\btest\b', filePath='path/to/log.log'}, eventExtractionItem{regex='\blalala\b', filePath='path/to/log.log'}]}}
+10:40:40.537 [main] INFO  n.c.j.e.EventExtractorService - [{path/to/log.log=[eventExtractionItem{regex='\btest\b', filePath='path/to/log.log'}, eventExtractionItem{regex='\blalala\b', filePath='path/to/log.log'}]}, {path/to/log.log=[eventExtractionItem{regex='\lalala\b', filePath='path/to/log.log'}], path/to/some/otherlog.log=[eventExtractionItem{regex='\foobar\b', filePath='path/to/some/otherlog.log'}]}]
+10:45:26.059 [main] INFO  n.c.j.e.EventExtractorService - {{path/to/log.log=[eventExtractionItem{regex='\lalala\b', filePath='path/to/log.log'}], path/to/some/otherlog.log=[eventExtractionItem{regex='\foobar\b', filePath='path/to/some/otherlog.log'}]}=[eventExtractionTag{items='[eventExtractionItem{regex='\lalala\b', filePath='path/to/log.log'}, eventExtractionItem{regex='\foobar\b', filePath='path/to/some/otherlog.log'}]'}], {path/to/log.log=[eventExtractionItem{regex='\btest\b', filePath='path/to/log.log'}, eventExtractionItem{regex='\blalala\b', filePath='path/to/log.log'}]}=[eventExtractionTag{items='[eventExtractionItem{regex='\btest\b', filePath='path/to/log.log'}, eventExtractionItem{regex='\blalala\b', filePath='path/to/log.log'}]'}]}
+10:46:22.924 [main] INFO  n.c.j.e.EventExtractorService - {{path/to/log.log=[eventExtractionItem{regex='\btest\b', filePath='path/to/log.log'}, eventExtractionItem{regex='\blalala\b', filePath='path/to/log.log'}]}={testkey=[eventExtractionTag{items='[eventExtractionItem{regex='\btest\b', filePath='path/to/log.log'}, eventExtractionItem{regex='\blalala\b', filePath='path/to/log.log'}]'}]}, {path/to/log.log=[eventExtractionItem{regex='\lalala\b', filePath='path/to/log.log'}], path/to/some/otherlog.log=[eventExtractionItem{regex='\foobar\b', filePath='path/to/some/otherlog.log'}]}={another_key=[eventExtractionTag{items='[eventExtractionItem{regex='\lalala\b', filePath='path/to/log.log'}, eventExtractionItem{regex='\foobar\b', filePath='path/to/some/otherlog.log'}]'}]}}
+12:40:01.628 [main] INFO  n.c.j.e.EventExtractorService - {path/to/log.log=[eventExtractionItem{tagName='This a is a tag'regex='\btest\b', filePath='path/to/log.log'}, eventExtractionItem{tagName='Seconds tag'regex='\blalala\b', filePath='path/to/log.log'}]}
+12:40:01.638 [main] INFO  n.c.j.e.EventExtractorServiceTest - {path/to/log.log=[eventExtractionItem{tagName='This a is a tag'regex='\btest\b', filePath='path/to/log.log'}, eventExtractionItem{tagName='Seconds tag'regex='\blalala\b', filePath='path/to/log.log'}]}
+13:02:37.885 [pool-1-thread-1] INFO  n.cantara.jau.ApplicationProcessTest - Process is not running - restarting... clientId=null, lastChanged=null, command=[sleep, 4]
+13:02:40.876 [main] DEBUG no.cantara.jau.ApplicationProcess - Destroying running process
+13:02:40.877 [main] DEBUG no.cantara.jau.ApplicationProcess - Successfully destroyed running process
+13:02:40.883 [pool-1-thread-1] INFO  n.cantara.jau.ApplicationProcessTest - Process is not running - restarting... clientId=null, lastChanged=null, command=[sleep, 4]
+13:02:42.214 [main] DEBUG no.cantara.jau.ApplicationProcess - Destroying running process
+13:02:42.215 [main] DEBUG no.cantara.jau.ApplicationProcess - Successfully destroyed running process
+13:02:42.220 [pool-1-thread-1] INFO  n.cantara.jau.ApplicationProcessTest - Process is not running - restarting... clientId=null, lastChanged=null, command=[sleep, 4]
+13:02:45.443 [main] DEBUG no.cantara.jau.ApplicationProcess - Destroying running process
+13:02:45.443 [main] DEBUG no.cantara.jau.ApplicationProcess - Successfully destroyed running process
+13:02:45.447 [pool-1-thread-1] INFO  n.cantara.jau.ApplicationProcessTest - Process is not running - restarting... clientId=null, lastChanged=null, command=[sleep, 4]
+13:02:45.488 [main] DEBUG n.c.jau.coms.CheckForUpdateHelper - Checking for updates. Inside lambda.
+13:02:45.493 [main] DEBUG n.c.jau.coms.CheckForUpdateHelper - No updated config.
+13:02:45.502 [main] DEBUG n.c.jau.coms.CheckForUpdateHelper - Checking for updates. Inside lambda.
+13:02:45.504 [main] DEBUG n.c.jau.coms.CheckForUpdateHelper - Illegal state - reregister client
+13:02:45.504 [main] WARN  n.c.jau.coms.CheckForUpdateHelper - null
+13:02:45.505 [main] DEBUG n.c.jau.coms.CheckForUpdateHelper - We got changes - stopping process and downloading new files.
+13:02:45.511 [main] WARN  n.c.jau.coms.CheckForUpdateHelper - Error thrown from scheduled lambda.
+java.lang.NullPointerException: null
+	at no.cantara.jau.coms.CheckForUpdateHelper.lambda$getCheckForUpdateRunnable$0(CheckForUpdateHelper.java:72) ~[classes/:na]
+	at no.cantara.jau.coms.CheckForUpdateHelper$$Lambda$9/1647766367.run(Unknown Source) [classes/:na]
+	at no.cantara.jau.coms.CheckForUpdateHelperTest.testPreconditionFailed(CheckForUpdateHelperTest.java:35) [test-classes/:na]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.8.0_45]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[na:1.8.0_45]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.8.0_45]
+	at java.lang.reflect.Method.invoke(Method.java:497) ~[na:1.8.0_45]
+	at org.testng.internal.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:85) [testng-6.9.4.jar:na]
+	at org.testng.internal.Invoker.invokeMethod(Invoker.java:659) [testng-6.9.4.jar:na]
+	at org.testng.internal.Invoker.invokeTestMethod(Invoker.java:845) [testng-6.9.4.jar:na]
+	at org.testng.internal.Invoker.invokeTestMethods(Invoker.java:1153) [testng-6.9.4.jar:na]
+	at org.testng.internal.TestMethodWorker.invokeTestMethods(TestMethodWorker.java:125) [testng-6.9.4.jar:na]
+	at org.testng.internal.TestMethodWorker.run(TestMethodWorker.java:108) [testng-6.9.4.jar:na]
+	at org.testng.TestRunner.privateRun(TestRunner.java:771) [testng-6.9.4.jar:na]
+	at org.testng.TestRunner.run(TestRunner.java:621) [testng-6.9.4.jar:na]
+	at org.testng.SuiteRunner.runTest(SuiteRunner.java:357) [testng-6.9.4.jar:na]
+	at org.testng.SuiteRunner.runSequentially(SuiteRunner.java:352) [testng-6.9.4.jar:na]
+	at org.testng.SuiteRunner.privateRun(SuiteRunner.java:310) [testng-6.9.4.jar:na]
+	at org.testng.SuiteRunner.run(SuiteRunner.java:259) [testng-6.9.4.jar:na]
+	at org.testng.SuiteRunnerWorker.runSuite(SuiteRunnerWorker.java:52) [testng-6.9.4.jar:na]
+	at org.testng.SuiteRunnerWorker.run(SuiteRunnerWorker.java:86) [testng-6.9.4.jar:na]
+	at org.testng.TestNG.runSuitesSequentially(TestNG.java:1199) [testng-6.9.4.jar:na]
+	at org.testng.TestNG.runSuitesLocally(TestNG.java:1124) [testng-6.9.4.jar:na]
+	at org.testng.TestNG.run(TestNG.java:1032) [testng-6.9.4.jar:na]
+	at org.apache.maven.surefire.testng.TestNGExecutor.run(TestNGExecutor.java:115) [surefire-testng-2.18.1.jar:2.18.1]
+	at org.apache.maven.surefire.testng.TestNGDirectoryTestSuite.executeMulti(TestNGDirectoryTestSuite.java:205) [surefire-testng-2.18.1.jar:2.18.1]
+	at org.apache.maven.surefire.testng.TestNGDirectoryTestSuite.execute(TestNGDirectoryTestSuite.java:108) [surefire-testng-2.18.1.jar:2.18.1]
+	at org.apache.maven.surefire.testng.TestNGProvider.invoke(TestNGProvider.java:111) [surefire-testng-2.18.1.jar:2.18.1]
+	at org.apache.maven.surefire.booter.ForkedBooter.invokeProviderInSameClassLoader(ForkedBooter.java:203) [surefire-booter-2.18.1.jar:2.18.1]
+	at org.apache.maven.surefire.booter.ForkedBooter.runSuitesInProcess(ForkedBooter.java:155) [surefire-booter-2.18.1.jar:2.18.1]
+	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:103) [surefire-booter-2.18.1.jar:2.18.1]
+13:02:45.519 [main] DEBUG n.c.jau.coms.CheckForUpdateHelper - Checking for updates. Inside lambda.
+13:02:45.530 [main] WARN  n.c.jau.coms.CheckForUpdateHelper - Got InternalServerErrorException:
+javax.ws.rs.InternalServerErrorException: null
+13:02:45.598 [main] INFO  c.n.c.sources.URLConfigurationSource - URLs to be used as dynamic configuration source: [file:/Users/andeero/Capra/Prosjekter/NMD/Java-Auto-Update/target/classes/config.properties]
+13:02:45.606 [main] INFO  c.n.config.DynamicPropertyFactory - DynamicPropertyFactory is initialized with configuration sources: com.netflix.config.ConcurrentCompositeConfiguration@1af2d44a
+13:02:45.815 [main] DEBUG n.c.jau.coms.RegisterClientHelper - Exception registering client, exception getMessage=null
+13:02:45.815 [main] DEBUG n.c.jau.coms.RegisterClientHelper - Exception registering client, cause getMessage=null
+13:02:45.815 [main] DEBUG n.c.jau.coms.RegisterClientHelper - Connection refused to ConfigService url=
+13:02:45.816 [main] DEBUG no.cantara.jau.util.SleepUtil - retrying in 1 milliseconds
+13:02:46.032 [main] DEBUG n.c.jau.coms.RegisterClientHelper - Exception registering client, exception getMessage=null
+13:02:46.032 [main] DEBUG n.c.jau.coms.RegisterClientHelper - Exception registering client, cause getMessage=HTTP 500 Internal Server Error
+13:02:46.032 [main] DEBUG n.c.jau.coms.RegisterClientHelper - Internal server error in ConfigService url=
+13:02:46.032 [main] DEBUG no.cantara.jau.util.SleepUtil - retrying in 1 milliseconds
+13:02:46.035 [main] DEBUG n.c.jau.coms.RegisterClientHelper - Exception registering client, exception getMessage=null
+13:02:46.036 [main] DEBUG n.c.jau.coms.RegisterClientHelper - Exception registering client, cause getMessage=HTTP 404 Not Found
+13:02:46.036 [main] DEBUG n.c.jau.coms.RegisterClientHelper - 404 not found to ConfigService url=
+13:02:46.036 [main] DEBUG no.cantara.jau.util.SleepUtil - retrying in 1 milliseconds
+13:02:46.039 [main] DEBUG n.c.jau.coms.RegisterClientHelper - Exception registering client, exception getMessage=null
+13:02:46.040 [main] DEBUG n.c.jau.coms.RegisterClientHelper - Exception registering client, cause getMessage=null
+13:02:46.040 [main] DEBUG n.c.jau.coms.RegisterClientHelper - CommandRegisterClient timed out.
+13:02:46.040 [main] DEBUG no.cantara.jau.util.SleepUtil - retrying in 1 milliseconds
+13:02:46.050 [main] DEBUG n.c.j.d.DuplicateProcessHandlerIntTest - Deleted test file (if existed) killExistingProcessWhenRunningTest.txt
+13:02:46.060 [main] DEBUG n.c.j.d.DuplicateProcessHandlerIntTest - Created test file killExistingProcessWhenRunningTest.txt
+13:02:46.073 [main] INFO  n.c.j.d.DuplicateProcessHandler - Last recorded managed process pid=37388 is running
+13:02:46.081 [main] INFO  n.c.j.d.DuplicateProcessHandler - Successfully killed existing running managed process pid=37388
+13:02:46.087 [main] DEBUG n.c.j.d.DuplicateProcessHandlerIntTest - Deleted test file (if existed) killExistingProcessWhenRunningTest.txt
+13:02:46.089 [main] DEBUG n.c.j.d.DuplicateProcessHandlerIntTest - Deleted test file (if existed) pidNotValidTest.txt
+13:02:46.090 [main] DEBUG n.c.j.d.DuplicateProcessHandlerIntTest - Created test file pidNotValidTest.txt
+13:02:46.093 [main] WARN  n.c.j.d.DuplicateProcessHandler - PID is not valid number. Got: 'notvalidpid' {}
+java.lang.NumberFormatException: For input string: "notvalidpid"
+	at java.lang.NumberFormatException.forInputString(NumberFormatException.java:65) ~[na:1.8.0_45]
+	at java.lang.Long.parseLong(Long.java:589) ~[na:1.8.0_45]
+	at java.lang.Long.parseLong(Long.java:631) ~[na:1.8.0_45]
+	at no.cantara.jau.duplicatehandler.DuplicateProcessHandler.isValidPid(DuplicateProcessHandler.java:145) [classes/:na]
+	at no.cantara.jau.duplicatehandler.DuplicateProcessHandler.killExistingProcessIfRunning(DuplicateProcessHandler.java:37) [classes/:na]
+	at no.cantara.jau.duplicatehandler.DuplicateProcessHandlerIntTest.shouldNotKillProcessWhenPidIsNotValid(DuplicateProcessHandlerIntTest.java:64) [test-classes/:na]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.8.0_45]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[na:1.8.0_45]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.8.0_45]
+	at java.lang.reflect.Method.invoke(Method.java:497) ~[na:1.8.0_45]
+	at org.testng.internal.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:85) [testng-6.9.4.jar:na]
+	at org.testng.internal.Invoker.invokeMethod(Invoker.java:659) [testng-6.9.4.jar:na]
+	at org.testng.internal.Invoker.invokeTestMethod(Invoker.java:845) [testng-6.9.4.jar:na]
+	at org.testng.internal.Invoker.invokeTestMethods(Invoker.java:1153) [testng-6.9.4.jar:na]
+	at org.testng.internal.TestMethodWorker.invokeTestMethods(TestMethodWorker.java:125) [testng-6.9.4.jar:na]
+	at org.testng.internal.TestMethodWorker.run(TestMethodWorker.java:108) [testng-6.9.4.jar:na]
+	at org.testng.TestRunner.privateRun(TestRunner.java:771) [testng-6.9.4.jar:na]
+	at org.testng.TestRunner.run(TestRunner.java:621) [testng-6.9.4.jar:na]
+	at org.testng.SuiteRunner.runTest(SuiteRunner.java:357) [testng-6.9.4.jar:na]
+	at org.testng.SuiteRunner.runSequentially(SuiteRunner.java:352) [testng-6.9.4.jar:na]
+	at org.testng.SuiteRunner.privateRun(SuiteRunner.java:310) [testng-6.9.4.jar:na]
+	at org.testng.SuiteRunner.run(SuiteRunner.java:259) [testng-6.9.4.jar:na]
+	at org.testng.SuiteRunnerWorker.runSuite(SuiteRunnerWorker.java:52) [testng-6.9.4.jar:na]
+	at org.testng.SuiteRunnerWorker.run(SuiteRunnerWorker.java:86) [testng-6.9.4.jar:na]
+	at org.testng.TestNG.runSuitesSequentially(TestNG.java:1199) [testng-6.9.4.jar:na]
+	at org.testng.TestNG.runSuitesLocally(TestNG.java:1124) [testng-6.9.4.jar:na]
+	at org.testng.TestNG.run(TestNG.java:1032) [testng-6.9.4.jar:na]
+	at org.apache.maven.surefire.testng.TestNGExecutor.run(TestNGExecutor.java:115) [surefire-testng-2.18.1.jar:2.18.1]
+	at org.apache.maven.surefire.testng.TestNGDirectoryTestSuite.executeMulti(TestNGDirectoryTestSuite.java:205) [surefire-testng-2.18.1.jar:2.18.1]
+	at org.apache.maven.surefire.testng.TestNGDirectoryTestSuite.execute(TestNGDirectoryTestSuite.java:108) [surefire-testng-2.18.1.jar:2.18.1]
+	at org.apache.maven.surefire.testng.TestNGProvider.invoke(TestNGProvider.java:111) [surefire-testng-2.18.1.jar:2.18.1]
+	at org.apache.maven.surefire.booter.ForkedBooter.invokeProviderInSameClassLoader(ForkedBooter.java:203) [surefire-booter-2.18.1.jar:2.18.1]
+	at org.apache.maven.surefire.booter.ForkedBooter.runSuitesInProcess(ForkedBooter.java:155) [surefire-booter-2.18.1.jar:2.18.1]
+	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:103) [surefire-booter-2.18.1.jar:2.18.1]
+13:02:46.096 [main] DEBUG n.c.j.d.DuplicateProcessHandler - Extracted name=pharmacy-agent-0.8-SNAPSHOT.jar of old running process from command=java -jar pharmacy-agent-0.8-SNAPSHOT.jar
+13:02:46.097 [main] DEBUG n.c.j.d.DuplicateProcessHandlerIntTest - Deleted test file (if existed) pidNotValidTest.txt
+13:02:46.099 [main] DEBUG n.c.j.d.DuplicateProcessHandlerIntTest - Deleted test file (if existed) shouldOverwriteFileTest.txt
+13:02:46.120 [main] DEBUG n.c.j.d.LastRunningProcessFileUtil - Wrote pid=37393 to file=shouldOverwriteFileTest.txt
+13:02:46.121 [main] DEBUG n.c.j.d.DuplicateProcessHandlerIntTest - Deleted test file (if existed) shouldOverwriteFileTest.txt
+13:02:46.123 [main] INFO  n.c.j.d.DuplicateProcessHandler - nonExistantFileTest.txt not found. Assuming no existing managed process is running.
+13:02:46.124 [main] DEBUG n.c.j.d.DuplicateProcessHandlerIntTest - Deleted test file (if existed) shouldWritePidToFileTest.txt
+13:02:46.128 [main] DEBUG n.c.j.d.LastRunningProcessFileUtil - Wrote pid=37394 to file=shouldWritePidToFileTest.txt
+13:02:46.129 [main] DEBUG n.c.j.d.DuplicateProcessHandlerIntTest - Deleted test file (if existed) shouldWritePidToFileTest.txt
+13:02:46.184 [main] DEBUG n.c.j.d.DuplicateProcessHandler - Extracted name=pharmacy-agent-0.8-SNAPSHOT.jar of old running process from command=java -jar pharmacy-agent-0.8-SNAPSHOT.jar
+13:02:46.189 [main] WARN  n.c.j.d.DuplicateProcessHandler - Could not read file=null.
+13:02:46.191 [main] DEBUG n.c.j.d.DuplicateProcessHandler - Extracted name=java_application-123.alpha-2.jar of old running process from command=java -jar java_application-123.alpha-2.jar
+13:02:46.197 [main] ERROR n.c.j.d.DuplicateProcessHandler - Exception executing process. Could not check if process with pid=13245 is running
+java.io.IOException: null
+	at no.cantara.jau.duplicatehandler.DuplicateProcessHandler.processIsRunning(DuplicateProcessHandler.java:113) [classes/:na]
+	at no.cantara.jau.duplicatehandler.DuplicateProcessHandler.findRunningProcessByPIDAndKill(DuplicateProcessHandler.java:59) [classes/:na]
+	at no.cantara.jau.duplicatehandler.DuplicateProcessHandler.killExistingProcessIfRunning(DuplicateProcessHandler.java:37) [classes/:na]
+	at no.cantara.jau.duplicatehandler.DuplicateProcessHandlerTest.shouldReturnFalseWhenCannotDetectIfProcessIsRunning(DuplicateProcessHandlerTest.java:164) [test-classes/:na]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.8.0_45]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[na:1.8.0_45]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.8.0_45]
+	at java.lang.reflect.Method.invoke(Method.java:497) ~[na:1.8.0_45]
+	at org.testng.internal.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:85) [testng-6.9.4.jar:na]
+	at org.testng.internal.Invoker.invokeMethod(Invoker.java:659) [testng-6.9.4.jar:na]
+	at org.testng.internal.Invoker.invokeTestMethod(Invoker.java:845) [testng-6.9.4.jar:na]
+	at org.testng.internal.Invoker.invokeTestMethods(Invoker.java:1153) [testng-6.9.4.jar:na]
+	at org.testng.internal.TestMethodWorker.invokeTestMethods(TestMethodWorker.java:125) [testng-6.9.4.jar:na]
+	at org.testng.internal.TestMethodWorker.run(TestMethodWorker.java:108) [testng-6.9.4.jar:na]
+	at org.testng.TestRunner.privateRun(TestRunner.java:771) [testng-6.9.4.jar:na]
+	at org.testng.TestRunner.run(TestRunner.java:621) [testng-6.9.4.jar:na]
+	at org.testng.SuiteRunner.runTest(SuiteRunner.java:357) [testng-6.9.4.jar:na]
+	at org.testng.SuiteRunner.runSequentially(SuiteRunner.java:352) [testng-6.9.4.jar:na]
+	at org.testng.SuiteRunner.privateRun(SuiteRunner.java:310) [testng-6.9.4.jar:na]
+	at org.testng.SuiteRunner.run(SuiteRunner.java:259) [testng-6.9.4.jar:na]
+	at org.testng.SuiteRunnerWorker.runSuite(SuiteRunnerWorker.java:52) [testng-6.9.4.jar:na]
+	at org.testng.SuiteRunnerWorker.run(SuiteRunnerWorker.java:86) [testng-6.9.4.jar:na]
+	at org.testng.TestNG.runSuitesSequentially(TestNG.java:1199) [testng-6.9.4.jar:na]
+	at org.testng.TestNG.runSuitesLocally(TestNG.java:1124) [testng-6.9.4.jar:na]
+	at org.testng.TestNG.run(TestNG.java:1032) [testng-6.9.4.jar:na]
+	at org.apache.maven.surefire.testng.TestNGExecutor.run(TestNGExecutor.java:115) [surefire-testng-2.18.1.jar:2.18.1]
+	at org.apache.maven.surefire.testng.TestNGDirectoryTestSuite.executeMulti(TestNGDirectoryTestSuite.java:205) [surefire-testng-2.18.1.jar:2.18.1]
+	at org.apache.maven.surefire.testng.TestNGDirectoryTestSuite.execute(TestNGDirectoryTestSuite.java:108) [surefire-testng-2.18.1.jar:2.18.1]
+	at org.apache.maven.surefire.testng.TestNGProvider.invoke(TestNGProvider.java:111) [surefire-testng-2.18.1.jar:2.18.1]
+	at org.apache.maven.surefire.booter.ForkedBooter.invokeProviderInSameClassLoader(ForkedBooter.java:203) [surefire-booter-2.18.1.jar:2.18.1]
+	at org.apache.maven.surefire.booter.ForkedBooter.runSuitesInProcess(ForkedBooter.java:155) [surefire-booter-2.18.1.jar:2.18.1]
+	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:103) [surefire-booter-2.18.1.jar:2.18.1]
+13:02:46.198 [main] ERROR n.c.j.d.DuplicateProcessHandler - No matching name of old running process found in command=processCommand using regex=^\S+\.[A-Za-z]{3}$
+13:02:46.200 [main] INFO  n.c.j.d.DuplicateProcessHandler - Last recorded managed process pid=12345 is running
+13:02:46.201 [main] DEBUG n.c.j.d.DuplicateProcessHandler - Extracted name=java_application-123.alpha-2.jar of old running process from command=java -jar java_application-123.alpha-2.jar
+13:02:46.203 [main] WARN  n.c.j.d.DuplicateProcessHandler - PID is not valid number. Got: 'blablainvalid' {}
+java.lang.NumberFormatException: For input string: "blablainvalid"
+	at java.lang.NumberFormatException.forInputString(NumberFormatException.java:65) ~[na:1.8.0_45]
+	at java.lang.Long.parseLong(Long.java:589) ~[na:1.8.0_45]
+	at java.lang.Long.parseLong(Long.java:631) ~[na:1.8.0_45]
+	at no.cantara.jau.duplicatehandler.DuplicateProcessHandler.isValidPid(DuplicateProcessHandler.java:145) [classes/:na]
+	at no.cantara.jau.duplicatehandler.DuplicateProcessHandler.killExistingProcessIfRunning(DuplicateProcessHandler.java:37) [classes/:na]
+	at no.cantara.jau.duplicatehandler.DuplicateProcessHandlerTest.shouldReturnFalseWhenPIDIsInvalid(DuplicateProcessHandlerTest.java:147) [test-classes/:na]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.8.0_45]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[na:1.8.0_45]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.8.0_45]
+	at java.lang.reflect.Method.invoke(Method.java:497) ~[na:1.8.0_45]
+	at org.testng.internal.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:85) [testng-6.9.4.jar:na]
+	at org.testng.internal.Invoker.invokeMethod(Invoker.java:659) [testng-6.9.4.jar:na]
+	at org.testng.internal.Invoker.invokeTestMethod(Invoker.java:845) [testng-6.9.4.jar:na]
+	at org.testng.internal.Invoker.invokeTestMethods(Invoker.java:1153) [testng-6.9.4.jar:na]
+	at org.testng.internal.TestMethodWorker.invokeTestMethods(TestMethodWorker.java:125) [testng-6.9.4.jar:na]
+	at org.testng.internal.TestMethodWorker.run(TestMethodWorker.java:108) [testng-6.9.4.jar:na]
+	at org.testng.TestRunner.privateRun(TestRunner.java:771) [testng-6.9.4.jar:na]
+	at org.testng.TestRunner.run(TestRunner.java:621) [testng-6.9.4.jar:na]
+	at org.testng.SuiteRunner.runTest(SuiteRunner.java:357) [testng-6.9.4.jar:na]
+	at org.testng.SuiteRunner.runSequentially(SuiteRunner.java:352) [testng-6.9.4.jar:na]
+	at org.testng.SuiteRunner.privateRun(SuiteRunner.java:310) [testng-6.9.4.jar:na]
+	at org.testng.SuiteRunner.run(SuiteRunner.java:259) [testng-6.9.4.jar:na]
+	at org.testng.SuiteRunnerWorker.runSuite(SuiteRunnerWorker.java:52) [testng-6.9.4.jar:na]
+	at org.testng.SuiteRunnerWorker.run(SuiteRunnerWorker.java:86) [testng-6.9.4.jar:na]
+	at org.testng.TestNG.runSuitesSequentially(TestNG.java:1199) [testng-6.9.4.jar:na]
+	at org.testng.TestNG.runSuitesLocally(TestNG.java:1124) [testng-6.9.4.jar:na]
+	at org.testng.TestNG.run(TestNG.java:1032) [testng-6.9.4.jar:na]
+	at org.apache.maven.surefire.testng.TestNGExecutor.run(TestNGExecutor.java:115) [surefire-testng-2.18.1.jar:2.18.1]
+	at org.apache.maven.surefire.testng.TestNGDirectoryTestSuite.executeMulti(TestNGDirectoryTestSuite.java:205) [surefire-testng-2.18.1.jar:2.18.1]
+	at org.apache.maven.surefire.testng.TestNGDirectoryTestSuite.execute(TestNGDirectoryTestSuite.java:108) [surefire-testng-2.18.1.jar:2.18.1]
+	at org.apache.maven.surefire.testng.TestNGProvider.invoke(TestNGProvider.java:111) [surefire-testng-2.18.1.jar:2.18.1]
+	at org.apache.maven.surefire.booter.ForkedBooter.invokeProviderInSameClassLoader(ForkedBooter.java:203) [surefire-booter-2.18.1.jar:2.18.1]
+	at org.apache.maven.surefire.booter.ForkedBooter.runSuitesInProcess(ForkedBooter.java:155) [surefire-booter-2.18.1.jar:2.18.1]
+	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:103) [surefire-booter-2.18.1.jar:2.18.1]
+13:02:46.204 [main] ERROR n.c.j.d.DuplicateProcessHandler - No matching name of old running process found in command=processCommand using regex=^\S+\.[A-Za-z]{3}$
+13:02:46.206 [main] INFO  n.c.j.d.DuplicateProcessHandler - Last recorded managed process pid=13245 is running
+13:02:46.207 [main] ERROR n.c.j.d.DuplicateProcessHandler - Exception executing kill process. Could not kill running managed process pid=13245
+java.io.IOException: null
+	at no.cantara.jau.duplicatehandler.DuplicateProcessHandler.killRunningProcessByPID(DuplicateProcessHandler.java:119) [classes/:na]
+	at no.cantara.jau.duplicatehandler.DuplicateProcessHandler.findRunningProcessByPIDAndKill(DuplicateProcessHandler.java:61) [classes/:na]
+	at no.cantara.jau.duplicatehandler.DuplicateProcessHandler.killExistingProcessIfRunning(DuplicateProcessHandler.java:37) [classes/:na]
+	at no.cantara.jau.duplicatehandler.DuplicateProcessHandlerTest.shouldReturnFalseWhenProcessCannotBeKilledByPidOrName(DuplicateProcessHandlerTest.java:182) [test-classes/:na]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.8.0_45]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[na:1.8.0_45]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.8.0_45]
+	at java.lang.reflect.Method.invoke(Method.java:497) ~[na:1.8.0_45]
+	at org.testng.internal.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:85) [testng-6.9.4.jar:na]
+	at org.testng.internal.Invoker.invokeMethod(Invoker.java:659) [testng-6.9.4.jar:na]
+	at org.testng.internal.Invoker.invokeTestMethod(Invoker.java:845) [testng-6.9.4.jar:na]
+	at org.testng.internal.Invoker.invokeTestMethods(Invoker.java:1153) [testng-6.9.4.jar:na]
+	at org.testng.internal.TestMethodWorker.invokeTestMethods(TestMethodWorker.java:125) [testng-6.9.4.jar:na]
+	at org.testng.internal.TestMethodWorker.run(TestMethodWorker.java:108) [testng-6.9.4.jar:na]
+	at org.testng.TestRunner.privateRun(TestRunner.java:771) [testng-6.9.4.jar:na]
+	at org.testng.TestRunner.run(TestRunner.java:621) [testng-6.9.4.jar:na]
+	at org.testng.SuiteRunner.runTest(SuiteRunner.java:357) [testng-6.9.4.jar:na]
+	at org.testng.SuiteRunner.runSequentially(SuiteRunner.java:352) [testng-6.9.4.jar:na]
+	at org.testng.SuiteRunner.privateRun(SuiteRunner.java:310) [testng-6.9.4.jar:na]
+	at org.testng.SuiteRunner.run(SuiteRunner.java:259) [testng-6.9.4.jar:na]
+	at org.testng.SuiteRunnerWorker.runSuite(SuiteRunnerWorker.java:52) [testng-6.9.4.jar:na]
+	at org.testng.SuiteRunnerWorker.run(SuiteRunnerWorker.java:86) [testng-6.9.4.jar:na]
+	at org.testng.TestNG.runSuitesSequentially(TestNG.java:1199) [testng-6.9.4.jar:na]
+	at org.testng.TestNG.runSuitesLocally(TestNG.java:1124) [testng-6.9.4.jar:na]
+	at org.testng.TestNG.run(TestNG.java:1032) [testng-6.9.4.jar:na]
+	at org.apache.maven.surefire.testng.TestNGExecutor.run(TestNGExecutor.java:115) [surefire-testng-2.18.1.jar:2.18.1]
+	at org.apache.maven.surefire.testng.TestNGDirectoryTestSuite.executeMulti(TestNGDirectoryTestSuite.java:205) [surefire-testng-2.18.1.jar:2.18.1]
+	at org.apache.maven.surefire.testng.TestNGDirectoryTestSuite.execute(TestNGDirectoryTestSuite.java:108) [surefire-testng-2.18.1.jar:2.18.1]
+	at org.apache.maven.surefire.testng.TestNGProvider.invoke(TestNGProvider.java:111) [surefire-testng-2.18.1.jar:2.18.1]
+	at org.apache.maven.surefire.booter.ForkedBooter.invokeProviderInSameClassLoader(ForkedBooter.java:203) [surefire-booter-2.18.1.jar:2.18.1]
+	at org.apache.maven.surefire.booter.ForkedBooter.runSuitesInProcess(ForkedBooter.java:155) [surefire-booter-2.18.1.jar:2.18.1]
+	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:103) [surefire-booter-2.18.1.jar:2.18.1]
+13:02:46.209 [main] ERROR n.c.j.d.DuplicateProcessHandler - No matching name of old running process found in command=processCommand using regex=^\S+\.[A-Za-z]{3}$
+13:02:46.211 [main] WARN  n.c.j.d.DuplicateProcessHandler - Could not read file=null.
+13:02:46.212 [main] ERROR n.c.j.d.DuplicateProcessHandler - No matching name of old running process found in command=processCommand using regex=^\S+\.[A-Za-z]{3}$
+13:02:46.216 [main] INFO  n.c.j.d.DuplicateProcessHandler - null not found. Assuming no existing managed process is running.
+13:02:46.219 [main] INFO  n.c.j.d.DuplicateProcessHandler - Last recorded managed process pid=12345 is running
+13:02:46.220 [main] INFO  n.c.j.d.DuplicateProcessHandler - Successfully killed existing running managed process pid=12345
+13:02:46.224 [main] INFO  n.c.j.d.DuplicateProcessHandler - Last recorded managed process pid=12345 is not running.
+13:07:15.495 [main] INFO  n.c.j.e.EventExtractorService - {path/to/log.log=[eventExtractionTag{tagName='This a is a tag'regex='\btest\b', filePath='path/to/log.log'}, eventExtractionTag{tagName='Seconds tag'regex='\blalala\b', filePath='path/to/log.log'}]}
+13:07:15.520 [main] INFO  n.c.j.e.EventExtractorServiceTest - {path/to/log.log=[eventExtractionTag{tagName='This a is a tag'regex='\btest\b', filePath='path/to/log.log'}, eventExtractionTag{tagName='Seconds tag'regex='\blalala\b', filePath='path/to/log.log'}]}
+13:11:45.054 [pool-2-thread-1] INFO  n.cantara.jau.ApplicationProcessTest - Process is not running - restarting... clientId=null, lastChanged=null, command=[sleep, 4]
+13:11:48.007 [main] DEBUG no.cantara.jau.ApplicationProcess - Destroying running process
+13:11:48.007 [main] DEBUG no.cantara.jau.ApplicationProcess - Successfully destroyed running process
+13:11:48.011 [pool-2-thread-1] INFO  n.cantara.jau.ApplicationProcessTest - Process is not running - restarting... clientId=null, lastChanged=null, command=[sleep, 4]
+13:11:49.343 [main] DEBUG no.cantara.jau.ApplicationProcess - Destroying running process
+13:11:49.343 [main] DEBUG no.cantara.jau.ApplicationProcess - Successfully destroyed running process
+13:11:49.349 [pool-2-thread-1] INFO  n.cantara.jau.ApplicationProcessTest - Process is not running - restarting... clientId=null, lastChanged=null, command=[sleep, 4]
+13:11:52.573 [main] DEBUG no.cantara.jau.ApplicationProcess - Destroying running process
+13:11:52.574 [main] DEBUG no.cantara.jau.ApplicationProcess - Successfully destroyed running process
+13:11:52.576 [pool-2-thread-1] INFO  n.cantara.jau.ApplicationProcessTest - Process is not running - restarting... clientId=null, lastChanged=null, command=[sleep, 4]
+13:11:52.618 [main] DEBUG n.c.jau.coms.CheckForUpdateHelper - Checking for updates. Inside lambda.
+13:11:52.623 [main] DEBUG n.c.jau.coms.CheckForUpdateHelper - No updated config.
+13:11:52.628 [main] DEBUG n.c.jau.coms.CheckForUpdateHelper - Checking for updates. Inside lambda.
+13:11:52.630 [main] DEBUG n.c.jau.coms.CheckForUpdateHelper - Illegal state - reregister client
+13:11:52.630 [main] WARN  n.c.jau.coms.CheckForUpdateHelper - null
+13:11:52.631 [main] DEBUG n.c.jau.coms.CheckForUpdateHelper - We got changes - stopping process and downloading new files.
+13:11:52.635 [main] WARN  n.c.jau.coms.CheckForUpdateHelper - Error thrown from scheduled lambda.
+java.lang.NullPointerException: null
+	at no.cantara.jau.coms.CheckForUpdateHelper.lambda$getCheckForUpdateRunnable$0(CheckForUpdateHelper.java:72) ~[classes/:na]
+	at no.cantara.jau.coms.CheckForUpdateHelper$$Lambda$9/262366552.run(Unknown Source) [classes/:na]
+	at no.cantara.jau.coms.CheckForUpdateHelperTest.testPreconditionFailed(CheckForUpdateHelperTest.java:35) [test-classes/:na]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.8.0_45]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[na:1.8.0_45]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.8.0_45]
+	at java.lang.reflect.Method.invoke(Method.java:497) ~[na:1.8.0_45]
+	at org.testng.internal.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:85) [testng-6.9.4.jar:na]
+	at org.testng.internal.Invoker.invokeMethod(Invoker.java:659) [testng-6.9.4.jar:na]
+	at org.testng.internal.Invoker.invokeTestMethod(Invoker.java:845) [testng-6.9.4.jar:na]
+	at org.testng.internal.Invoker.invokeTestMethods(Invoker.java:1153) [testng-6.9.4.jar:na]
+	at org.testng.internal.TestMethodWorker.invokeTestMethods(TestMethodWorker.java:125) [testng-6.9.4.jar:na]
+	at org.testng.internal.TestMethodWorker.run(TestMethodWorker.java:108) [testng-6.9.4.jar:na]
+	at org.testng.TestRunner.privateRun(TestRunner.java:771) [testng-6.9.4.jar:na]
+	at org.testng.TestRunner.run(TestRunner.java:621) [testng-6.9.4.jar:na]
+	at org.testng.SuiteRunner.runTest(SuiteRunner.java:357) [testng-6.9.4.jar:na]
+	at org.testng.SuiteRunner.runSequentially(SuiteRunner.java:352) [testng-6.9.4.jar:na]
+	at org.testng.SuiteRunner.privateRun(SuiteRunner.java:310) [testng-6.9.4.jar:na]
+	at org.testng.SuiteRunner.run(SuiteRunner.java:259) [testng-6.9.4.jar:na]
+	at org.testng.SuiteRunnerWorker.runSuite(SuiteRunnerWorker.java:52) [testng-6.9.4.jar:na]
+	at org.testng.SuiteRunnerWorker.run(SuiteRunnerWorker.java:86) [testng-6.9.4.jar:na]
+	at org.testng.TestNG.runSuitesSequentially(TestNG.java:1199) [testng-6.9.4.jar:na]
+	at org.testng.TestNG.runSuitesLocally(TestNG.java:1124) [testng-6.9.4.jar:na]
+	at org.testng.TestNG.run(TestNG.java:1032) [testng-6.9.4.jar:na]
+	at org.apache.maven.surefire.testng.TestNGExecutor.run(TestNGExecutor.java:115) [surefire-testng-2.18.1.jar:2.18.1]
+	at org.apache.maven.surefire.testng.TestNGDirectoryTestSuite.executeMulti(TestNGDirectoryTestSuite.java:205) [surefire-testng-2.18.1.jar:2.18.1]
+	at org.apache.maven.surefire.testng.TestNGDirectoryTestSuite.execute(TestNGDirectoryTestSuite.java:108) [surefire-testng-2.18.1.jar:2.18.1]
+	at org.apache.maven.surefire.testng.TestNGProvider.invoke(TestNGProvider.java:111) [surefire-testng-2.18.1.jar:2.18.1]
+	at org.apache.maven.surefire.booter.ForkedBooter.invokeProviderInSameClassLoader(ForkedBooter.java:203) [surefire-booter-2.18.1.jar:2.18.1]
+	at org.apache.maven.surefire.booter.ForkedBooter.runSuitesInProcess(ForkedBooter.java:155) [surefire-booter-2.18.1.jar:2.18.1]
+	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:103) [surefire-booter-2.18.1.jar:2.18.1]
+13:11:52.639 [main] DEBUG n.c.jau.coms.CheckForUpdateHelper - Checking for updates. Inside lambda.
+13:11:52.643 [main] WARN  n.c.jau.coms.CheckForUpdateHelper - Got InternalServerErrorException:
+javax.ws.rs.InternalServerErrorException: null
+13:11:52.711 [main] INFO  c.n.c.sources.URLConfigurationSource - URLs to be used as dynamic configuration source: [file:/Users/andeero/Capra/Prosjekter/NMD/Java-Auto-Update/target/classes/config.properties]
+13:11:52.721 [main] INFO  c.n.config.DynamicPropertyFactory - DynamicPropertyFactory is initialized with configuration sources: com.netflix.config.ConcurrentCompositeConfiguration@618425b5
+13:11:52.897 [main] DEBUG n.c.jau.coms.RegisterClientHelper - Exception registering client, exception getMessage=null
+13:11:52.898 [main] DEBUG n.c.jau.coms.RegisterClientHelper - Exception registering client, cause getMessage=null
+13:11:52.898 [main] DEBUG n.c.jau.coms.RegisterClientHelper - Connection refused to ConfigService url=
+13:11:52.899 [main] DEBUG no.cantara.jau.util.SleepUtil - retrying in 1 milliseconds
+13:11:53.075 [main] DEBUG n.c.jau.coms.RegisterClientHelper - Exception registering client, exception getMessage=null
+13:11:53.075 [main] DEBUG n.c.jau.coms.RegisterClientHelper - Exception registering client, cause getMessage=HTTP 500 Internal Server Error
+13:11:53.075 [main] DEBUG n.c.jau.coms.RegisterClientHelper - Internal server error in ConfigService url=
+13:11:53.076 [main] DEBUG no.cantara.jau.util.SleepUtil - retrying in 1 milliseconds
+13:11:53.079 [main] DEBUG n.c.jau.coms.RegisterClientHelper - Exception registering client, exception getMessage=null
+13:11:53.080 [main] DEBUG n.c.jau.coms.RegisterClientHelper - Exception registering client, cause getMessage=HTTP 404 Not Found
+13:11:53.080 [main] DEBUG n.c.jau.coms.RegisterClientHelper - 404 not found to ConfigService url=
+13:11:53.081 [main] DEBUG no.cantara.jau.util.SleepUtil - retrying in 1 milliseconds
+13:11:53.084 [main] DEBUG n.c.jau.coms.RegisterClientHelper - Exception registering client, exception getMessage=null
+13:11:53.084 [main] DEBUG n.c.jau.coms.RegisterClientHelper - Exception registering client, cause getMessage=null
+13:11:53.085 [main] DEBUG n.c.jau.coms.RegisterClientHelper - CommandRegisterClient timed out.
+13:11:53.086 [main] DEBUG no.cantara.jau.util.SleepUtil - retrying in 1 milliseconds
+13:11:53.095 [main] DEBUG n.c.j.d.DuplicateProcessHandlerIntTest - Deleted test file (if existed) killExistingProcessWhenRunningTest.txt
+13:11:53.108 [main] DEBUG n.c.j.d.DuplicateProcessHandlerIntTest - Created test file killExistingProcessWhenRunningTest.txt
+13:11:53.123 [main] INFO  n.c.j.d.DuplicateProcessHandler - Last recorded managed process pid=37829 is running
+13:11:53.128 [main] INFO  n.c.j.d.DuplicateProcessHandler - Successfully killed existing running managed process pid=37829
+13:11:53.133 [main] DEBUG n.c.j.d.DuplicateProcessHandlerIntTest - Deleted test file (if existed) killExistingProcessWhenRunningTest.txt
+13:11:53.134 [main] DEBUG n.c.j.d.DuplicateProcessHandlerIntTest - Deleted test file (if existed) pidNotValidTest.txt
+13:11:53.135 [main] DEBUG n.c.j.d.DuplicateProcessHandlerIntTest - Created test file pidNotValidTest.txt
+13:11:53.136 [main] WARN  n.c.j.d.DuplicateProcessHandler - PID is not valid number. Got: 'notvalidpid' {}
+java.lang.NumberFormatException: For input string: "notvalidpid"
+	at java.lang.NumberFormatException.forInputString(NumberFormatException.java:65) ~[na:1.8.0_45]
+	at java.lang.Long.parseLong(Long.java:589) ~[na:1.8.0_45]
+	at java.lang.Long.parseLong(Long.java:631) ~[na:1.8.0_45]
+	at no.cantara.jau.duplicatehandler.DuplicateProcessHandler.isValidPid(DuplicateProcessHandler.java:145) [classes/:na]
+	at no.cantara.jau.duplicatehandler.DuplicateProcessHandler.killExistingProcessIfRunning(DuplicateProcessHandler.java:37) [classes/:na]
+	at no.cantara.jau.duplicatehandler.DuplicateProcessHandlerIntTest.shouldNotKillProcessWhenPidIsNotValid(DuplicateProcessHandlerIntTest.java:64) [test-classes/:na]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.8.0_45]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[na:1.8.0_45]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.8.0_45]
+	at java.lang.reflect.Method.invoke(Method.java:497) ~[na:1.8.0_45]
+	at org.testng.internal.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:85) [testng-6.9.4.jar:na]
+	at org.testng.internal.Invoker.invokeMethod(Invoker.java:659) [testng-6.9.4.jar:na]
+	at org.testng.internal.Invoker.invokeTestMethod(Invoker.java:845) [testng-6.9.4.jar:na]
+	at org.testng.internal.Invoker.invokeTestMethods(Invoker.java:1153) [testng-6.9.4.jar:na]
+	at org.testng.internal.TestMethodWorker.invokeTestMethods(TestMethodWorker.java:125) [testng-6.9.4.jar:na]
+	at org.testng.internal.TestMethodWorker.run(TestMethodWorker.java:108) [testng-6.9.4.jar:na]
+	at org.testng.TestRunner.privateRun(TestRunner.java:771) [testng-6.9.4.jar:na]
+	at org.testng.TestRunner.run(TestRunner.java:621) [testng-6.9.4.jar:na]
+	at org.testng.SuiteRunner.runTest(SuiteRunner.java:357) [testng-6.9.4.jar:na]
+	at org.testng.SuiteRunner.runSequentially(SuiteRunner.java:352) [testng-6.9.4.jar:na]
+	at org.testng.SuiteRunner.privateRun(SuiteRunner.java:310) [testng-6.9.4.jar:na]
+	at org.testng.SuiteRunner.run(SuiteRunner.java:259) [testng-6.9.4.jar:na]
+	at org.testng.SuiteRunnerWorker.runSuite(SuiteRunnerWorker.java:52) [testng-6.9.4.jar:na]
+	at org.testng.SuiteRunnerWorker.run(SuiteRunnerWorker.java:86) [testng-6.9.4.jar:na]
+	at org.testng.TestNG.runSuitesSequentially(TestNG.java:1199) [testng-6.9.4.jar:na]
+	at org.testng.TestNG.runSuitesLocally(TestNG.java:1124) [testng-6.9.4.jar:na]
+	at org.testng.TestNG.run(TestNG.java:1032) [testng-6.9.4.jar:na]
+	at org.apache.maven.surefire.testng.TestNGExecutor.run(TestNGExecutor.java:115) [surefire-testng-2.18.1.jar:2.18.1]
+	at org.apache.maven.surefire.testng.TestNGDirectoryTestSuite.executeMulti(TestNGDirectoryTestSuite.java:205) [surefire-testng-2.18.1.jar:2.18.1]
+	at org.apache.maven.surefire.testng.TestNGDirectoryTestSuite.execute(TestNGDirectoryTestSuite.java:108) [surefire-testng-2.18.1.jar:2.18.1]
+	at org.apache.maven.surefire.testng.TestNGProvider.invoke(TestNGProvider.java:111) [surefire-testng-2.18.1.jar:2.18.1]
+	at org.apache.maven.surefire.booter.ForkedBooter.invokeProviderInSameClassLoader(ForkedBooter.java:203) [surefire-booter-2.18.1.jar:2.18.1]
+	at org.apache.maven.surefire.booter.ForkedBooter.runSuitesInProcess(ForkedBooter.java:155) [surefire-booter-2.18.1.jar:2.18.1]
+	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:103) [surefire-booter-2.18.1.jar:2.18.1]
+13:11:53.139 [main] DEBUG n.c.j.d.DuplicateProcessHandler - Extracted name=pharmacy-agent-0.8-SNAPSHOT.jar of old running process from command=java -jar pharmacy-agent-0.8-SNAPSHOT.jar
+13:11:53.140 [main] DEBUG n.c.j.d.DuplicateProcessHandlerIntTest - Deleted test file (if existed) pidNotValidTest.txt
+13:11:53.141 [main] DEBUG n.c.j.d.DuplicateProcessHandlerIntTest - Deleted test file (if existed) shouldOverwriteFileTest.txt
+13:11:53.154 [main] DEBUG n.c.j.d.LastRunningProcessFileUtil - Wrote pid=37834 to file=shouldOverwriteFileTest.txt
+13:11:53.156 [main] DEBUG n.c.j.d.DuplicateProcessHandlerIntTest - Deleted test file (if existed) shouldOverwriteFileTest.txt
+13:11:53.158 [main] INFO  n.c.j.d.DuplicateProcessHandler - nonExistantFileTest.txt not found. Assuming no existing managed process is running.
+13:11:53.160 [main] DEBUG n.c.j.d.DuplicateProcessHandlerIntTest - Deleted test file (if existed) shouldWritePidToFileTest.txt
+13:11:53.169 [main] DEBUG n.c.j.d.LastRunningProcessFileUtil - Wrote pid=37835 to file=shouldWritePidToFileTest.txt
+13:11:53.171 [main] DEBUG n.c.j.d.DuplicateProcessHandlerIntTest - Deleted test file (if existed) shouldWritePidToFileTest.txt
+13:11:53.198 [main] DEBUG n.c.j.d.DuplicateProcessHandler - Extracted name=pharmacy-agent-0.8-SNAPSHOT.jar of old running process from command=java -jar pharmacy-agent-0.8-SNAPSHOT.jar
+13:11:53.200 [main] WARN  n.c.j.d.DuplicateProcessHandler - Could not read file=null.
+13:11:53.200 [main] DEBUG n.c.j.d.DuplicateProcessHandler - Extracted name=java_application-123.alpha-2.jar of old running process from command=java -jar java_application-123.alpha-2.jar
+13:11:53.204 [main] ERROR n.c.j.d.DuplicateProcessHandler - Exception executing process. Could not check if process with pid=13245 is running
+java.io.IOException: null
+	at no.cantara.jau.duplicatehandler.DuplicateProcessHandler.processIsRunning(DuplicateProcessHandler.java:113) [classes/:na]
+	at no.cantara.jau.duplicatehandler.DuplicateProcessHandler.findRunningProcessByPIDAndKill(DuplicateProcessHandler.java:59) [classes/:na]
+	at no.cantara.jau.duplicatehandler.DuplicateProcessHandler.killExistingProcessIfRunning(DuplicateProcessHandler.java:37) [classes/:na]
+	at no.cantara.jau.duplicatehandler.DuplicateProcessHandlerTest.shouldReturnFalseWhenCannotDetectIfProcessIsRunning(DuplicateProcessHandlerTest.java:164) [test-classes/:na]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.8.0_45]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[na:1.8.0_45]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.8.0_45]
+	at java.lang.reflect.Method.invoke(Method.java:497) ~[na:1.8.0_45]
+	at org.testng.internal.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:85) [testng-6.9.4.jar:na]
+	at org.testng.internal.Invoker.invokeMethod(Invoker.java:659) [testng-6.9.4.jar:na]
+	at org.testng.internal.Invoker.invokeTestMethod(Invoker.java:845) [testng-6.9.4.jar:na]
+	at org.testng.internal.Invoker.invokeTestMethods(Invoker.java:1153) [testng-6.9.4.jar:na]
+	at org.testng.internal.TestMethodWorker.invokeTestMethods(TestMethodWorker.java:125) [testng-6.9.4.jar:na]
+	at org.testng.internal.TestMethodWorker.run(TestMethodWorker.java:108) [testng-6.9.4.jar:na]
+	at org.testng.TestRunner.privateRun(TestRunner.java:771) [testng-6.9.4.jar:na]
+	at org.testng.TestRunner.run(TestRunner.java:621) [testng-6.9.4.jar:na]
+	at org.testng.SuiteRunner.runTest(SuiteRunner.java:357) [testng-6.9.4.jar:na]
+	at org.testng.SuiteRunner.runSequentially(SuiteRunner.java:352) [testng-6.9.4.jar:na]
+	at org.testng.SuiteRunner.privateRun(SuiteRunner.java:310) [testng-6.9.4.jar:na]
+	at org.testng.SuiteRunner.run(SuiteRunner.java:259) [testng-6.9.4.jar:na]
+	at org.testng.SuiteRunnerWorker.runSuite(SuiteRunnerWorker.java:52) [testng-6.9.4.jar:na]
+	at org.testng.SuiteRunnerWorker.run(SuiteRunnerWorker.java:86) [testng-6.9.4.jar:na]
+	at org.testng.TestNG.runSuitesSequentially(TestNG.java:1199) [testng-6.9.4.jar:na]
+	at org.testng.TestNG.runSuitesLocally(TestNG.java:1124) [testng-6.9.4.jar:na]
+	at org.testng.TestNG.run(TestNG.java:1032) [testng-6.9.4.jar:na]
+	at org.apache.maven.surefire.testng.TestNGExecutor.run(TestNGExecutor.java:115) [surefire-testng-2.18.1.jar:2.18.1]
+	at org.apache.maven.surefire.testng.TestNGDirectoryTestSuite.executeMulti(TestNGDirectoryTestSuite.java:205) [surefire-testng-2.18.1.jar:2.18.1]
+	at org.apache.maven.surefire.testng.TestNGDirectoryTestSuite.execute(TestNGDirectoryTestSuite.java:108) [surefire-testng-2.18.1.jar:2.18.1]
+	at org.apache.maven.surefire.testng.TestNGProvider.invoke(TestNGProvider.java:111) [surefire-testng-2.18.1.jar:2.18.1]
+	at org.apache.maven.surefire.booter.ForkedBooter.invokeProviderInSameClassLoader(ForkedBooter.java:203) [surefire-booter-2.18.1.jar:2.18.1]
+	at org.apache.maven.surefire.booter.ForkedBooter.runSuitesInProcess(ForkedBooter.java:155) [surefire-booter-2.18.1.jar:2.18.1]
+	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:103) [surefire-booter-2.18.1.jar:2.18.1]
+13:11:53.205 [main] ERROR n.c.j.d.DuplicateProcessHandler - No matching name of old running process found in command=processCommand using regex=^\S+\.[A-Za-z]{3}$
+13:11:53.206 [main] INFO  n.c.j.d.DuplicateProcessHandler - Last recorded managed process pid=12345 is running
+13:11:53.207 [main] DEBUG n.c.j.d.DuplicateProcessHandler - Extracted name=java_application-123.alpha-2.jar of old running process from command=java -jar java_application-123.alpha-2.jar
+13:11:53.209 [main] WARN  n.c.j.d.DuplicateProcessHandler - PID is not valid number. Got: 'blablainvalid' {}
+java.lang.NumberFormatException: For input string: "blablainvalid"
+	at java.lang.NumberFormatException.forInputString(NumberFormatException.java:65) ~[na:1.8.0_45]
+	at java.lang.Long.parseLong(Long.java:589) ~[na:1.8.0_45]
+	at java.lang.Long.parseLong(Long.java:631) ~[na:1.8.0_45]
+	at no.cantara.jau.duplicatehandler.DuplicateProcessHandler.isValidPid(DuplicateProcessHandler.java:145) [classes/:na]
+	at no.cantara.jau.duplicatehandler.DuplicateProcessHandler.killExistingProcessIfRunning(DuplicateProcessHandler.java:37) [classes/:na]
+	at no.cantara.jau.duplicatehandler.DuplicateProcessHandlerTest.shouldReturnFalseWhenPIDIsInvalid(DuplicateProcessHandlerTest.java:147) [test-classes/:na]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.8.0_45]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[na:1.8.0_45]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.8.0_45]
+	at java.lang.reflect.Method.invoke(Method.java:497) ~[na:1.8.0_45]
+	at org.testng.internal.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:85) [testng-6.9.4.jar:na]
+	at org.testng.internal.Invoker.invokeMethod(Invoker.java:659) [testng-6.9.4.jar:na]
+	at org.testng.internal.Invoker.invokeTestMethod(Invoker.java:845) [testng-6.9.4.jar:na]
+	at org.testng.internal.Invoker.invokeTestMethods(Invoker.java:1153) [testng-6.9.4.jar:na]
+	at org.testng.internal.TestMethodWorker.invokeTestMethods(TestMethodWorker.java:125) [testng-6.9.4.jar:na]
+	at org.testng.internal.TestMethodWorker.run(TestMethodWorker.java:108) [testng-6.9.4.jar:na]
+	at org.testng.TestRunner.privateRun(TestRunner.java:771) [testng-6.9.4.jar:na]
+	at org.testng.TestRunner.run(TestRunner.java:621) [testng-6.9.4.jar:na]
+	at org.testng.SuiteRunner.runTest(SuiteRunner.java:357) [testng-6.9.4.jar:na]
+	at org.testng.SuiteRunner.runSequentially(SuiteRunner.java:352) [testng-6.9.4.jar:na]
+	at org.testng.SuiteRunner.privateRun(SuiteRunner.java:310) [testng-6.9.4.jar:na]
+	at org.testng.SuiteRunner.run(SuiteRunner.java:259) [testng-6.9.4.jar:na]
+	at org.testng.SuiteRunnerWorker.runSuite(SuiteRunnerWorker.java:52) [testng-6.9.4.jar:na]
+	at org.testng.SuiteRunnerWorker.run(SuiteRunnerWorker.java:86) [testng-6.9.4.jar:na]
+	at org.testng.TestNG.runSuitesSequentially(TestNG.java:1199) [testng-6.9.4.jar:na]
+	at org.testng.TestNG.runSuitesLocally(TestNG.java:1124) [testng-6.9.4.jar:na]
+	at org.testng.TestNG.run(TestNG.java:1032) [testng-6.9.4.jar:na]
+	at org.apache.maven.surefire.testng.TestNGExecutor.run(TestNGExecutor.java:115) [surefire-testng-2.18.1.jar:2.18.1]
+	at org.apache.maven.surefire.testng.TestNGDirectoryTestSuite.executeMulti(TestNGDirectoryTestSuite.java:205) [surefire-testng-2.18.1.jar:2.18.1]
+	at org.apache.maven.surefire.testng.TestNGDirectoryTestSuite.execute(TestNGDirectoryTestSuite.java:108) [surefire-testng-2.18.1.jar:2.18.1]
+	at org.apache.maven.surefire.testng.TestNGProvider.invoke(TestNGProvider.java:111) [surefire-testng-2.18.1.jar:2.18.1]
+	at org.apache.maven.surefire.booter.ForkedBooter.invokeProviderInSameClassLoader(ForkedBooter.java:203) [surefire-booter-2.18.1.jar:2.18.1]
+	at org.apache.maven.surefire.booter.ForkedBooter.runSuitesInProcess(ForkedBooter.java:155) [surefire-booter-2.18.1.jar:2.18.1]
+	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:103) [surefire-booter-2.18.1.jar:2.18.1]
+13:11:53.210 [main] ERROR n.c.j.d.DuplicateProcessHandler - No matching name of old running process found in command=processCommand using regex=^\S+\.[A-Za-z]{3}$
+13:11:53.211 [main] INFO  n.c.j.d.DuplicateProcessHandler - Last recorded managed process pid=13245 is running
+13:11:53.211 [main] ERROR n.c.j.d.DuplicateProcessHandler - Exception executing kill process. Could not kill running managed process pid=13245
+java.io.IOException: null
+	at no.cantara.jau.duplicatehandler.DuplicateProcessHandler.killRunningProcessByPID(DuplicateProcessHandler.java:119) [classes/:na]
+	at no.cantara.jau.duplicatehandler.DuplicateProcessHandler.findRunningProcessByPIDAndKill(DuplicateProcessHandler.java:61) [classes/:na]
+	at no.cantara.jau.duplicatehandler.DuplicateProcessHandler.killExistingProcessIfRunning(DuplicateProcessHandler.java:37) [classes/:na]
+	at no.cantara.jau.duplicatehandler.DuplicateProcessHandlerTest.shouldReturnFalseWhenProcessCannotBeKilledByPidOrName(DuplicateProcessHandlerTest.java:182) [test-classes/:na]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.8.0_45]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[na:1.8.0_45]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.8.0_45]
+	at java.lang.reflect.Method.invoke(Method.java:497) ~[na:1.8.0_45]
+	at org.testng.internal.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:85) [testng-6.9.4.jar:na]
+	at org.testng.internal.Invoker.invokeMethod(Invoker.java:659) [testng-6.9.4.jar:na]
+	at org.testng.internal.Invoker.invokeTestMethod(Invoker.java:845) [testng-6.9.4.jar:na]
+	at org.testng.internal.Invoker.invokeTestMethods(Invoker.java:1153) [testng-6.9.4.jar:na]
+	at org.testng.internal.TestMethodWorker.invokeTestMethods(TestMethodWorker.java:125) [testng-6.9.4.jar:na]
+	at org.testng.internal.TestMethodWorker.run(TestMethodWorker.java:108) [testng-6.9.4.jar:na]
+	at org.testng.TestRunner.privateRun(TestRunner.java:771) [testng-6.9.4.jar:na]
+	at org.testng.TestRunner.run(TestRunner.java:621) [testng-6.9.4.jar:na]
+	at org.testng.SuiteRunner.runTest(SuiteRunner.java:357) [testng-6.9.4.jar:na]
+	at org.testng.SuiteRunner.runSequentially(SuiteRunner.java:352) [testng-6.9.4.jar:na]
+	at org.testng.SuiteRunner.privateRun(SuiteRunner.java:310) [testng-6.9.4.jar:na]
+	at org.testng.SuiteRunner.run(SuiteRunner.java:259) [testng-6.9.4.jar:na]
+	at org.testng.SuiteRunnerWorker.runSuite(SuiteRunnerWorker.java:52) [testng-6.9.4.jar:na]
+	at org.testng.SuiteRunnerWorker.run(SuiteRunnerWorker.java:86) [testng-6.9.4.jar:na]
+	at org.testng.TestNG.runSuitesSequentially(TestNG.java:1199) [testng-6.9.4.jar:na]
+	at org.testng.TestNG.runSuitesLocally(TestNG.java:1124) [testng-6.9.4.jar:na]
+	at org.testng.TestNG.run(TestNG.java:1032) [testng-6.9.4.jar:na]
+	at org.apache.maven.surefire.testng.TestNGExecutor.run(TestNGExecutor.java:115) [surefire-testng-2.18.1.jar:2.18.1]
+	at org.apache.maven.surefire.testng.TestNGDirectoryTestSuite.executeMulti(TestNGDirectoryTestSuite.java:205) [surefire-testng-2.18.1.jar:2.18.1]
+	at org.apache.maven.surefire.testng.TestNGDirectoryTestSuite.execute(TestNGDirectoryTestSuite.java:108) [surefire-testng-2.18.1.jar:2.18.1]
+	at org.apache.maven.surefire.testng.TestNGProvider.invoke(TestNGProvider.java:111) [surefire-testng-2.18.1.jar:2.18.1]
+	at org.apache.maven.surefire.booter.ForkedBooter.invokeProviderInSameClassLoader(ForkedBooter.java:203) [surefire-booter-2.18.1.jar:2.18.1]
+	at org.apache.maven.surefire.booter.ForkedBooter.runSuitesInProcess(ForkedBooter.java:155) [surefire-booter-2.18.1.jar:2.18.1]
+	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:103) [surefire-booter-2.18.1.jar:2.18.1]
+13:11:53.212 [main] ERROR n.c.j.d.DuplicateProcessHandler - No matching name of old running process found in command=processCommand using regex=^\S+\.[A-Za-z]{3}$
+13:11:53.213 [main] WARN  n.c.j.d.DuplicateProcessHandler - Could not read file=null.
+13:11:53.214 [main] ERROR n.c.j.d.DuplicateProcessHandler - No matching name of old running process found in command=processCommand using regex=^\S+\.[A-Za-z]{3}$
+13:11:53.215 [main] INFO  n.c.j.d.DuplicateProcessHandler - null not found. Assuming no existing managed process is running.
+13:11:53.216 [main] INFO  n.c.j.d.DuplicateProcessHandler - Last recorded managed process pid=12345 is running
+13:11:53.217 [main] INFO  n.c.j.d.DuplicateProcessHandler - Successfully killed existing running managed process pid=12345
+13:11:53.218 [main] INFO  n.c.j.d.DuplicateProcessHandler - Last recorded managed process pid=12345 is not running.
+14:47:42.254 [main] TRACE n.c.j.eventextraction.EventExtractor - File=event-extractor-test-log-file.log is modified since last extraction. Extracting...
+14:47:42.259 [main] TRACE n.c.j.eventextraction.EventExtractor - Reading from line 0
+14:47:42.274 [main] TRACE n.c.j.eventextraction.EventExtractor - Line 5 was the last line read
+14:47:42.275 [main] TRACE n.c.j.eventextraction.EventExtractor - Matching lines: 3 [ERROR 2:	12:34:45.035 [pool-1-thread-1] ERROR n.c.jau.coms.CheckForUpdateHelper - checkForUpdate failed, do nothing. Retrying in 60 seconds., this-is-an-mdc-tag 3:	13:28:13.343 this-is-an-mdc-tag [pool-1-thread-1] DEBUG no.cantara.jau.JavaAutoUpdater - Checking if process is running..., Exception 5:	17:18:11.666 [main] DEBUG n.n.p.config.PharmacyIdService - Exception cause getMessage=Could not get JDBC Connection; nested exception is java.sql.SQLException: Network error IOException: Connection refused]
+14:47:42.283 [main] TRACE n.c.j.eventextraction.EventExtractor - File=event-extractor-test-log-file.log is modified since last extraction. Extracting...
+14:47:42.283 [main] TRACE n.c.j.eventextraction.EventExtractor - Reading from line 0
+14:47:42.284 [main] TRACE n.c.j.eventextraction.EventExtractor - Line 5 was the last line read
+14:47:42.284 [main] TRACE n.c.j.eventextraction.EventExtractor - Matching lines: 3 [ERROR 2:	12:34:45.035 [pool-1-thread-1] ERROR n.c.jau.coms.CheckForUpdateHelper - checkForUpdate failed, do nothing. Retrying in 60 seconds., this-is-an-mdc-tag 3:	13:28:13.343 this-is-an-mdc-tag [pool-1-thread-1] DEBUG no.cantara.jau.JavaAutoUpdater - Checking if process is running..., Exception 5:	17:18:11.666 [main] DEBUG n.n.p.config.PharmacyIdService - Exception cause getMessage=Could not get JDBC Connection; nested exception is java.sql.SQLException: Network error IOException: Connection refused]
+14:47:42.285 [main] TRACE n.c.j.eventextraction.EventExtractor - File=event-extractor-test-log-file.log has not been modified since last extraction. Will not extract
+14:47:42.727 [main] INFO  n.c.j.e.EventExtractorTest - {"ERROR":["12:34:45.035 [pool-1-thread-1] ERROR n.c.jau.coms.CheckForUpdateHelper - checkForUpdate failed, do nothing. Retrying in 60 seconds."],"this-is-an-mdc-tag":["13:28:13.343 this-is-an-mdc-tag [pool-1-thread-1] DEBUG no.cantara.jau.JavaAutoUpdater - Checking if process is running..."],"Exception":["17:18:11.666 [main] DEBUG n.n.p.config.PharmacyIdService - Exception cause getMessage=Could not get JDBC Connection; nested exception is java.sql.SQLException: Network error IOException: Connection refused"]}
+15:00:19.990 [pool-2-thread-1] INFO  n.cantara.jau.ApplicationProcessTest - Process is not running - restarting... clientId=null, lastChanged=null, command=[sleep, 4]
+15:00:22.967 [main] DEBUG no.cantara.jau.ApplicationProcess - Destroying running process
+15:00:22.968 [main] DEBUG no.cantara.jau.ApplicationProcess - Successfully destroyed running process
+15:00:22.969 [pool-2-thread-1] INFO  n.cantara.jau.ApplicationProcessTest - Process is not running - restarting... clientId=null, lastChanged=null, command=[sleep, 4]
+15:00:24.303 [main] DEBUG no.cantara.jau.ApplicationProcess - Destroying running process
+15:00:24.303 [main] DEBUG no.cantara.jau.ApplicationProcess - Successfully destroyed running process
+15:00:24.307 [pool-2-thread-1] INFO  n.cantara.jau.ApplicationProcessTest - Process is not running - restarting... clientId=null, lastChanged=null, command=[sleep, 4]
+15:00:27.531 [main] DEBUG no.cantara.jau.ApplicationProcess - Destroying running process
+15:00:27.531 [main] DEBUG no.cantara.jau.ApplicationProcess - Successfully destroyed running process
+15:00:27.533 [pool-2-thread-1] INFO  n.cantara.jau.ApplicationProcessTest - Process is not running - restarting... clientId=null, lastChanged=null, command=[sleep, 4]
+15:00:27.586 [main] DEBUG n.c.jau.coms.CheckForUpdateHelper - Checking for updates. Inside lambda.
+15:00:27.591 [main] DEBUG n.c.jau.coms.CheckForUpdateHelper - No updated config.
+15:00:27.596 [main] DEBUG n.c.jau.coms.CheckForUpdateHelper - Checking for updates. Inside lambda.
+15:00:27.597 [main] DEBUG n.c.jau.coms.CheckForUpdateHelper - Illegal state - reregister client
+15:00:27.598 [main] WARN  n.c.jau.coms.CheckForUpdateHelper - null
+15:00:27.598 [main] DEBUG n.c.jau.coms.CheckForUpdateHelper - We got changes - stopping process and downloading new files.
+15:00:27.605 [main] WARN  n.c.jau.coms.CheckForUpdateHelper - Error thrown from scheduled lambda.
+java.lang.NullPointerException: null
+	at no.cantara.jau.coms.CheckForUpdateHelper.lambda$getCheckForUpdateRunnable$3(CheckForUpdateHelper.java:71) ~[classes/:na]
+	at no.cantara.jau.coms.CheckForUpdateHelper$$Lambda$9/262366552.run(Unknown Source) [classes/:na]
+	at no.cantara.jau.coms.CheckForUpdateHelperTest.testPreconditionFailed(CheckForUpdateHelperTest.java:35) [test-classes/:na]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.8.0_45]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[na:1.8.0_45]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.8.0_45]
+	at java.lang.reflect.Method.invoke(Method.java:497) ~[na:1.8.0_45]
+	at org.testng.internal.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:85) [testng-6.9.4.jar:na]
+	at org.testng.internal.Invoker.invokeMethod(Invoker.java:659) [testng-6.9.4.jar:na]
+	at org.testng.internal.Invoker.invokeTestMethod(Invoker.java:845) [testng-6.9.4.jar:na]
+	at org.testng.internal.Invoker.invokeTestMethods(Invoker.java:1153) [testng-6.9.4.jar:na]
+	at org.testng.internal.TestMethodWorker.invokeTestMethods(TestMethodWorker.java:125) [testng-6.9.4.jar:na]
+	at org.testng.internal.TestMethodWorker.run(TestMethodWorker.java:108) [testng-6.9.4.jar:na]
+	at org.testng.TestRunner.privateRun(TestRunner.java:771) [testng-6.9.4.jar:na]
+	at org.testng.TestRunner.run(TestRunner.java:621) [testng-6.9.4.jar:na]
+	at org.testng.SuiteRunner.runTest(SuiteRunner.java:357) [testng-6.9.4.jar:na]
+	at org.testng.SuiteRunner.runSequentially(SuiteRunner.java:352) [testng-6.9.4.jar:na]
+	at org.testng.SuiteRunner.privateRun(SuiteRunner.java:310) [testng-6.9.4.jar:na]
+	at org.testng.SuiteRunner.run(SuiteRunner.java:259) [testng-6.9.4.jar:na]
+	at org.testng.SuiteRunnerWorker.runSuite(SuiteRunnerWorker.java:52) [testng-6.9.4.jar:na]
+	at org.testng.SuiteRunnerWorker.run(SuiteRunnerWorker.java:86) [testng-6.9.4.jar:na]
+	at org.testng.TestNG.runSuitesSequentially(TestNG.java:1199) [testng-6.9.4.jar:na]
+	at org.testng.TestNG.runSuitesLocally(TestNG.java:1124) [testng-6.9.4.jar:na]
+	at org.testng.TestNG.run(TestNG.java:1032) [testng-6.9.4.jar:na]
+	at org.apache.maven.surefire.testng.TestNGExecutor.run(TestNGExecutor.java:115) [surefire-testng-2.18.1.jar:2.18.1]
+	at org.apache.maven.surefire.testng.TestNGDirectoryTestSuite.executeMulti(TestNGDirectoryTestSuite.java:205) [surefire-testng-2.18.1.jar:2.18.1]
+	at org.apache.maven.surefire.testng.TestNGDirectoryTestSuite.execute(TestNGDirectoryTestSuite.java:108) [surefire-testng-2.18.1.jar:2.18.1]
+	at org.apache.maven.surefire.testng.TestNGProvider.invoke(TestNGProvider.java:111) [surefire-testng-2.18.1.jar:2.18.1]
+	at org.apache.maven.surefire.booter.ForkedBooter.invokeProviderInSameClassLoader(ForkedBooter.java:203) [surefire-booter-2.18.1.jar:2.18.1]
+	at org.apache.maven.surefire.booter.ForkedBooter.runSuitesInProcess(ForkedBooter.java:155) [surefire-booter-2.18.1.jar:2.18.1]
+	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:103) [surefire-booter-2.18.1.jar:2.18.1]
+15:00:27.614 [main] DEBUG n.c.jau.coms.CheckForUpdateHelper - Checking for updates. Inside lambda.
+15:00:27.617 [main] WARN  n.c.jau.coms.CheckForUpdateHelper - Got InternalServerErrorException:
+javax.ws.rs.InternalServerErrorException: null
+15:00:27.665 [main] INFO  c.n.c.sources.URLConfigurationSource - URLs to be used as dynamic configuration source: [file:/Users/andeero/Capra/Prosjekter/NMD/Java-Auto-Update/target/classes/config.properties]
+15:00:27.672 [main] INFO  c.n.config.DynamicPropertyFactory - DynamicPropertyFactory is initialized with configuration sources: com.netflix.config.ConcurrentCompositeConfiguration@618425b5
+15:00:27.829 [main] DEBUG n.c.jau.coms.RegisterClientHelper - Exception registering client, exception getMessage=null
+15:00:27.830 [main] DEBUG n.c.jau.coms.RegisterClientHelper - Exception registering client, cause getMessage=null
+15:00:27.831 [main] DEBUG n.c.jau.coms.RegisterClientHelper - Connection refused to ConfigService url=
+15:00:27.833 [main] DEBUG no.cantara.jau.util.SleepUtil - retrying in 1 milliseconds
+15:00:28.026 [main] DEBUG n.c.jau.coms.RegisterClientHelper - Exception registering client, exception getMessage=null
+15:00:28.027 [main] DEBUG n.c.jau.coms.RegisterClientHelper - Exception registering client, cause getMessage=HTTP 500 Internal Server Error
+15:00:28.027 [main] DEBUG n.c.jau.coms.RegisterClientHelper - Internal server error in ConfigService url=
+15:00:28.027 [main] DEBUG no.cantara.jau.util.SleepUtil - retrying in 1 milliseconds
+15:00:28.030 [main] DEBUG n.c.jau.coms.RegisterClientHelper - Exception registering client, exception getMessage=null
+15:00:28.030 [main] DEBUG n.c.jau.coms.RegisterClientHelper - Exception registering client, cause getMessage=HTTP 404 Not Found
+15:00:28.030 [main] DEBUG n.c.jau.coms.RegisterClientHelper - 404 not found to ConfigService url=
+15:00:28.031 [main] DEBUG no.cantara.jau.util.SleepUtil - retrying in 1 milliseconds
+15:00:28.034 [main] DEBUG n.c.jau.coms.RegisterClientHelper - Exception registering client, exception getMessage=null
+15:00:28.034 [main] DEBUG n.c.jau.coms.RegisterClientHelper - Exception registering client, cause getMessage=null
+15:00:28.034 [main] DEBUG n.c.jau.coms.RegisterClientHelper - CommandRegisterClient timed out.
+15:00:28.035 [main] DEBUG no.cantara.jau.util.SleepUtil - retrying in 1 milliseconds
+15:00:28.042 [main] DEBUG n.c.j.d.DuplicateProcessHandlerIntTest - Deleted test file (if existed) killExistingProcessWhenRunningTest.txt
+15:00:28.055 [main] DEBUG n.c.j.d.DuplicateProcessHandlerIntTest - Created test file killExistingProcessWhenRunningTest.txt
+15:00:28.071 [main] INFO  n.c.j.d.DuplicateProcessHandler - Last recorded managed process pid=42499 is running
+15:00:28.079 [main] INFO  n.c.j.d.DuplicateProcessHandler - Successfully killed existing running managed process pid=42499
+15:00:28.087 [main] DEBUG n.c.j.d.DuplicateProcessHandlerIntTest - Deleted test file (if existed) killExistingProcessWhenRunningTest.txt
+15:00:28.089 [main] DEBUG n.c.j.d.DuplicateProcessHandlerIntTest - Deleted test file (if existed) pidNotValidTest.txt
+15:00:28.091 [main] DEBUG n.c.j.d.DuplicateProcessHandlerIntTest - Created test file pidNotValidTest.txt
+15:00:28.093 [main] WARN  n.c.j.d.DuplicateProcessHandler - PID is not valid number. Got: 'notvalidpid' {}
+java.lang.NumberFormatException: For input string: "notvalidpid"
+	at java.lang.NumberFormatException.forInputString(NumberFormatException.java:65) ~[na:1.8.0_45]
+	at java.lang.Long.parseLong(Long.java:589) ~[na:1.8.0_45]
+	at java.lang.Long.parseLong(Long.java:631) ~[na:1.8.0_45]
+	at no.cantara.jau.duplicatehandler.DuplicateProcessHandler.isValidPid(DuplicateProcessHandler.java:145) [classes/:na]
+	at no.cantara.jau.duplicatehandler.DuplicateProcessHandler.killExistingProcessIfRunning(DuplicateProcessHandler.java:37) [classes/:na]
+	at no.cantara.jau.duplicatehandler.DuplicateProcessHandlerIntTest.shouldNotKillProcessWhenPidIsNotValid(DuplicateProcessHandlerIntTest.java:64) [test-classes/:na]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.8.0_45]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[na:1.8.0_45]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.8.0_45]
+	at java.lang.reflect.Method.invoke(Method.java:497) ~[na:1.8.0_45]
+	at org.testng.internal.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:85) [testng-6.9.4.jar:na]
+	at org.testng.internal.Invoker.invokeMethod(Invoker.java:659) [testng-6.9.4.jar:na]
+	at org.testng.internal.Invoker.invokeTestMethod(Invoker.java:845) [testng-6.9.4.jar:na]
+	at org.testng.internal.Invoker.invokeTestMethods(Invoker.java:1153) [testng-6.9.4.jar:na]
+	at org.testng.internal.TestMethodWorker.invokeTestMethods(TestMethodWorker.java:125) [testng-6.9.4.jar:na]
+	at org.testng.internal.TestMethodWorker.run(TestMethodWorker.java:108) [testng-6.9.4.jar:na]
+	at org.testng.TestRunner.privateRun(TestRunner.java:771) [testng-6.9.4.jar:na]
+	at org.testng.TestRunner.run(TestRunner.java:621) [testng-6.9.4.jar:na]
+	at org.testng.SuiteRunner.runTest(SuiteRunner.java:357) [testng-6.9.4.jar:na]
+	at org.testng.SuiteRunner.runSequentially(SuiteRunner.java:352) [testng-6.9.4.jar:na]
+	at org.testng.SuiteRunner.privateRun(SuiteRunner.java:310) [testng-6.9.4.jar:na]
+	at org.testng.SuiteRunner.run(SuiteRunner.java:259) [testng-6.9.4.jar:na]
+	at org.testng.SuiteRunnerWorker.runSuite(SuiteRunnerWorker.java:52) [testng-6.9.4.jar:na]
+	at org.testng.SuiteRunnerWorker.run(SuiteRunnerWorker.java:86) [testng-6.9.4.jar:na]
+	at org.testng.TestNG.runSuitesSequentially(TestNG.java:1199) [testng-6.9.4.jar:na]
+	at org.testng.TestNG.runSuitesLocally(TestNG.java:1124) [testng-6.9.4.jar:na]
+	at org.testng.TestNG.run(TestNG.java:1032) [testng-6.9.4.jar:na]
+	at org.apache.maven.surefire.testng.TestNGExecutor.run(TestNGExecutor.java:115) [surefire-testng-2.18.1.jar:2.18.1]
+	at org.apache.maven.surefire.testng.TestNGDirectoryTestSuite.executeMulti(TestNGDirectoryTestSuite.java:205) [surefire-testng-2.18.1.jar:2.18.1]
+	at org.apache.maven.surefire.testng.TestNGDirectoryTestSuite.execute(TestNGDirectoryTestSuite.java:108) [surefire-testng-2.18.1.jar:2.18.1]
+	at org.apache.maven.surefire.testng.TestNGProvider.invoke(TestNGProvider.java:111) [surefire-testng-2.18.1.jar:2.18.1]
+	at org.apache.maven.surefire.booter.ForkedBooter.invokeProviderInSameClassLoader(ForkedBooter.java:203) [surefire-booter-2.18.1.jar:2.18.1]
+	at org.apache.maven.surefire.booter.ForkedBooter.runSuitesInProcess(ForkedBooter.java:155) [surefire-booter-2.18.1.jar:2.18.1]
+	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:103) [surefire-booter-2.18.1.jar:2.18.1]
+15:00:28.094 [main] DEBUG n.c.j.d.DuplicateProcessHandler - Extracted name=pharmacy-agent-0.8-SNAPSHOT.jar of old running process from command=java -jar pharmacy-agent-0.8-SNAPSHOT.jar
+15:00:28.095 [main] DEBUG n.c.j.d.DuplicateProcessHandlerIntTest - Deleted test file (if existed) pidNotValidTest.txt
+15:00:28.095 [main] DEBUG n.c.j.d.DuplicateProcessHandlerIntTest - Deleted test file (if existed) shouldOverwriteFileTest.txt
+15:00:28.109 [main] DEBUG n.c.j.d.LastRunningProcessFileUtil - Wrote pid=42504 to file=shouldOverwriteFileTest.txt
+15:00:28.113 [main] DEBUG n.c.j.d.DuplicateProcessHandlerIntTest - Deleted test file (if existed) shouldOverwriteFileTest.txt
+15:00:28.115 [main] INFO  n.c.j.d.DuplicateProcessHandler - nonExistantFileTest.txt not found. Assuming no existing managed process is running.
+15:00:28.118 [main] DEBUG n.c.j.d.DuplicateProcessHandlerIntTest - Deleted test file (if existed) shouldWritePidToFileTest.txt
+15:00:28.122 [main] DEBUG n.c.j.d.LastRunningProcessFileUtil - Wrote pid=42505 to file=shouldWritePidToFileTest.txt
+15:00:28.123 [main] DEBUG n.c.j.d.DuplicateProcessHandlerIntTest - Deleted test file (if existed) shouldWritePidToFileTest.txt
+15:00:28.144 [main] DEBUG n.c.j.d.DuplicateProcessHandler - Extracted name=pharmacy-agent-0.8-SNAPSHOT.jar of old running process from command=java -jar pharmacy-agent-0.8-SNAPSHOT.jar
+15:00:28.147 [main] WARN  n.c.j.d.DuplicateProcessHandler - Could not read file=null.
+15:00:28.148 [main] DEBUG n.c.j.d.DuplicateProcessHandler - Extracted name=java_application-123.alpha-2.jar of old running process from command=java -jar java_application-123.alpha-2.jar
+15:00:28.151 [main] ERROR n.c.j.d.DuplicateProcessHandler - Exception executing process. Could not check if process with pid=13245 is running
+java.io.IOException: null
+	at no.cantara.jau.duplicatehandler.DuplicateProcessHandler.processIsRunning(DuplicateProcessHandler.java:113) [classes/:na]
+	at no.cantara.jau.duplicatehandler.DuplicateProcessHandler.findRunningProcessByPIDAndKill(DuplicateProcessHandler.java:59) [classes/:na]
+	at no.cantara.jau.duplicatehandler.DuplicateProcessHandler.killExistingProcessIfRunning(DuplicateProcessHandler.java:37) [classes/:na]
+	at no.cantara.jau.duplicatehandler.DuplicateProcessHandlerTest.shouldReturnFalseWhenCannotDetectIfProcessIsRunning(DuplicateProcessHandlerTest.java:164) [test-classes/:na]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.8.0_45]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[na:1.8.0_45]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.8.0_45]
+	at java.lang.reflect.Method.invoke(Method.java:497) ~[na:1.8.0_45]
+	at org.testng.internal.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:85) [testng-6.9.4.jar:na]
+	at org.testng.internal.Invoker.invokeMethod(Invoker.java:659) [testng-6.9.4.jar:na]
+	at org.testng.internal.Invoker.invokeTestMethod(Invoker.java:845) [testng-6.9.4.jar:na]
+	at org.testng.internal.Invoker.invokeTestMethods(Invoker.java:1153) [testng-6.9.4.jar:na]
+	at org.testng.internal.TestMethodWorker.invokeTestMethods(TestMethodWorker.java:125) [testng-6.9.4.jar:na]
+	at org.testng.internal.TestMethodWorker.run(TestMethodWorker.java:108) [testng-6.9.4.jar:na]
+	at org.testng.TestRunner.privateRun(TestRunner.java:771) [testng-6.9.4.jar:na]
+	at org.testng.TestRunner.run(TestRunner.java:621) [testng-6.9.4.jar:na]
+	at org.testng.SuiteRunner.runTest(SuiteRunner.java:357) [testng-6.9.4.jar:na]
+	at org.testng.SuiteRunner.runSequentially(SuiteRunner.java:352) [testng-6.9.4.jar:na]
+	at org.testng.SuiteRunner.privateRun(SuiteRunner.java:310) [testng-6.9.4.jar:na]
+	at org.testng.SuiteRunner.run(SuiteRunner.java:259) [testng-6.9.4.jar:na]
+	at org.testng.SuiteRunnerWorker.runSuite(SuiteRunnerWorker.java:52) [testng-6.9.4.jar:na]
+	at org.testng.SuiteRunnerWorker.run(SuiteRunnerWorker.java:86) [testng-6.9.4.jar:na]
+	at org.testng.TestNG.runSuitesSequentially(TestNG.java:1199) [testng-6.9.4.jar:na]
+	at org.testng.TestNG.runSuitesLocally(TestNG.java:1124) [testng-6.9.4.jar:na]
+	at org.testng.TestNG.run(TestNG.java:1032) [testng-6.9.4.jar:na]
+	at org.apache.maven.surefire.testng.TestNGExecutor.run(TestNGExecutor.java:115) [surefire-testng-2.18.1.jar:2.18.1]
+	at org.apache.maven.surefire.testng.TestNGDirectoryTestSuite.executeMulti(TestNGDirectoryTestSuite.java:205) [surefire-testng-2.18.1.jar:2.18.1]
+	at org.apache.maven.surefire.testng.TestNGDirectoryTestSuite.execute(TestNGDirectoryTestSuite.java:108) [surefire-testng-2.18.1.jar:2.18.1]
+	at org.apache.maven.surefire.testng.TestNGProvider.invoke(TestNGProvider.java:111) [surefire-testng-2.18.1.jar:2.18.1]
+	at org.apache.maven.surefire.booter.ForkedBooter.invokeProviderInSameClassLoader(ForkedBooter.java:203) [surefire-booter-2.18.1.jar:2.18.1]
+	at org.apache.maven.surefire.booter.ForkedBooter.runSuitesInProcess(ForkedBooter.java:155) [surefire-booter-2.18.1.jar:2.18.1]
+	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:103) [surefire-booter-2.18.1.jar:2.18.1]
+15:00:28.153 [main] ERROR n.c.j.d.DuplicateProcessHandler - No matching name of old running process found in command=processCommand using regex=^\S+\.[A-Za-z]{3}$
+15:00:28.154 [main] INFO  n.c.j.d.DuplicateProcessHandler - Last recorded managed process pid=12345 is running
+15:00:28.155 [main] DEBUG n.c.j.d.DuplicateProcessHandler - Extracted name=java_application-123.alpha-2.jar of old running process from command=java -jar java_application-123.alpha-2.jar
+15:00:28.156 [main] WARN  n.c.j.d.DuplicateProcessHandler - PID is not valid number. Got: 'blablainvalid' {}
+java.lang.NumberFormatException: For input string: "blablainvalid"
+	at java.lang.NumberFormatException.forInputString(NumberFormatException.java:65) ~[na:1.8.0_45]
+	at java.lang.Long.parseLong(Long.java:589) ~[na:1.8.0_45]
+	at java.lang.Long.parseLong(Long.java:631) ~[na:1.8.0_45]
+	at no.cantara.jau.duplicatehandler.DuplicateProcessHandler.isValidPid(DuplicateProcessHandler.java:145) [classes/:na]
+	at no.cantara.jau.duplicatehandler.DuplicateProcessHandler.killExistingProcessIfRunning(DuplicateProcessHandler.java:37) [classes/:na]
+	at no.cantara.jau.duplicatehandler.DuplicateProcessHandlerTest.shouldReturnFalseWhenPIDIsInvalid(DuplicateProcessHandlerTest.java:147) [test-classes/:na]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.8.0_45]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[na:1.8.0_45]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.8.0_45]
+	at java.lang.reflect.Method.invoke(Method.java:497) ~[na:1.8.0_45]
+	at org.testng.internal.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:85) [testng-6.9.4.jar:na]
+	at org.testng.internal.Invoker.invokeMethod(Invoker.java:659) [testng-6.9.4.jar:na]
+	at org.testng.internal.Invoker.invokeTestMethod(Invoker.java:845) [testng-6.9.4.jar:na]
+	at org.testng.internal.Invoker.invokeTestMethods(Invoker.java:1153) [testng-6.9.4.jar:na]
+	at org.testng.internal.TestMethodWorker.invokeTestMethods(TestMethodWorker.java:125) [testng-6.9.4.jar:na]
+	at org.testng.internal.TestMethodWorker.run(TestMethodWorker.java:108) [testng-6.9.4.jar:na]
+	at org.testng.TestRunner.privateRun(TestRunner.java:771) [testng-6.9.4.jar:na]
+	at org.testng.TestRunner.run(TestRunner.java:621) [testng-6.9.4.jar:na]
+	at org.testng.SuiteRunner.runTest(SuiteRunner.java:357) [testng-6.9.4.jar:na]
+	at org.testng.SuiteRunner.runSequentially(SuiteRunner.java:352) [testng-6.9.4.jar:na]
+	at org.testng.SuiteRunner.privateRun(SuiteRunner.java:310) [testng-6.9.4.jar:na]
+	at org.testng.SuiteRunner.run(SuiteRunner.java:259) [testng-6.9.4.jar:na]
+	at org.testng.SuiteRunnerWorker.runSuite(SuiteRunnerWorker.java:52) [testng-6.9.4.jar:na]
+	at org.testng.SuiteRunnerWorker.run(SuiteRunnerWorker.java:86) [testng-6.9.4.jar:na]
+	at org.testng.TestNG.runSuitesSequentially(TestNG.java:1199) [testng-6.9.4.jar:na]
+	at org.testng.TestNG.runSuitesLocally(TestNG.java:1124) [testng-6.9.4.jar:na]
+	at org.testng.TestNG.run(TestNG.java:1032) [testng-6.9.4.jar:na]
+	at org.apache.maven.surefire.testng.TestNGExecutor.run(TestNGExecutor.java:115) [surefire-testng-2.18.1.jar:2.18.1]
+	at org.apache.maven.surefire.testng.TestNGDirectoryTestSuite.executeMulti(TestNGDirectoryTestSuite.java:205) [surefire-testng-2.18.1.jar:2.18.1]
+	at org.apache.maven.surefire.testng.TestNGDirectoryTestSuite.execute(TestNGDirectoryTestSuite.java:108) [surefire-testng-2.18.1.jar:2.18.1]
+	at org.apache.maven.surefire.testng.TestNGProvider.invoke(TestNGProvider.java:111) [surefire-testng-2.18.1.jar:2.18.1]
+	at org.apache.maven.surefire.booter.ForkedBooter.invokeProviderInSameClassLoader(ForkedBooter.java:203) [surefire-booter-2.18.1.jar:2.18.1]
+	at org.apache.maven.surefire.booter.ForkedBooter.runSuitesInProcess(ForkedBooter.java:155) [surefire-booter-2.18.1.jar:2.18.1]
+	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:103) [surefire-booter-2.18.1.jar:2.18.1]
+15:00:28.157 [main] ERROR n.c.j.d.DuplicateProcessHandler - No matching name of old running process found in command=processCommand using regex=^\S+\.[A-Za-z]{3}$
+15:00:28.158 [main] INFO  n.c.j.d.DuplicateProcessHandler - Last recorded managed process pid=13245 is running
+15:00:28.159 [main] ERROR n.c.j.d.DuplicateProcessHandler - Exception executing kill process. Could not kill running managed process pid=13245
+java.io.IOException: null
+	at no.cantara.jau.duplicatehandler.DuplicateProcessHandler.killRunningProcessByPID(DuplicateProcessHandler.java:119) [classes/:na]
+	at no.cantara.jau.duplicatehandler.DuplicateProcessHandler.findRunningProcessByPIDAndKill(DuplicateProcessHandler.java:61) [classes/:na]
+	at no.cantara.jau.duplicatehandler.DuplicateProcessHandler.killExistingProcessIfRunning(DuplicateProcessHandler.java:37) [classes/:na]
+	at no.cantara.jau.duplicatehandler.DuplicateProcessHandlerTest.shouldReturnFalseWhenProcessCannotBeKilledByPidOrName(DuplicateProcessHandlerTest.java:182) [test-classes/:na]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.8.0_45]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[na:1.8.0_45]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.8.0_45]
+	at java.lang.reflect.Method.invoke(Method.java:497) ~[na:1.8.0_45]
+	at org.testng.internal.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:85) [testng-6.9.4.jar:na]
+	at org.testng.internal.Invoker.invokeMethod(Invoker.java:659) [testng-6.9.4.jar:na]
+	at org.testng.internal.Invoker.invokeTestMethod(Invoker.java:845) [testng-6.9.4.jar:na]
+	at org.testng.internal.Invoker.invokeTestMethods(Invoker.java:1153) [testng-6.9.4.jar:na]
+	at org.testng.internal.TestMethodWorker.invokeTestMethods(TestMethodWorker.java:125) [testng-6.9.4.jar:na]
+	at org.testng.internal.TestMethodWorker.run(TestMethodWorker.java:108) [testng-6.9.4.jar:na]
+	at org.testng.TestRunner.privateRun(TestRunner.java:771) [testng-6.9.4.jar:na]
+	at org.testng.TestRunner.run(TestRunner.java:621) [testng-6.9.4.jar:na]
+	at org.testng.SuiteRunner.runTest(SuiteRunner.java:357) [testng-6.9.4.jar:na]
+	at org.testng.SuiteRunner.runSequentially(SuiteRunner.java:352) [testng-6.9.4.jar:na]
+	at org.testng.SuiteRunner.privateRun(SuiteRunner.java:310) [testng-6.9.4.jar:na]
+	at org.testng.SuiteRunner.run(SuiteRunner.java:259) [testng-6.9.4.jar:na]
+	at org.testng.SuiteRunnerWorker.runSuite(SuiteRunnerWorker.java:52) [testng-6.9.4.jar:na]
+	at org.testng.SuiteRunnerWorker.run(SuiteRunnerWorker.java:86) [testng-6.9.4.jar:na]
+	at org.testng.TestNG.runSuitesSequentially(TestNG.java:1199) [testng-6.9.4.jar:na]
+	at org.testng.TestNG.runSuitesLocally(TestNG.java:1124) [testng-6.9.4.jar:na]
+	at org.testng.TestNG.run(TestNG.java:1032) [testng-6.9.4.jar:na]
+	at org.apache.maven.surefire.testng.TestNGExecutor.run(TestNGExecutor.java:115) [surefire-testng-2.18.1.jar:2.18.1]
+	at org.apache.maven.surefire.testng.TestNGDirectoryTestSuite.executeMulti(TestNGDirectoryTestSuite.java:205) [surefire-testng-2.18.1.jar:2.18.1]
+	at org.apache.maven.surefire.testng.TestNGDirectoryTestSuite.execute(TestNGDirectoryTestSuite.java:108) [surefire-testng-2.18.1.jar:2.18.1]
+	at org.apache.maven.surefire.testng.TestNGProvider.invoke(TestNGProvider.java:111) [surefire-testng-2.18.1.jar:2.18.1]
+	at org.apache.maven.surefire.booter.ForkedBooter.invokeProviderInSameClassLoader(ForkedBooter.java:203) [surefire-booter-2.18.1.jar:2.18.1]
+	at org.apache.maven.surefire.booter.ForkedBooter.runSuitesInProcess(ForkedBooter.java:155) [surefire-booter-2.18.1.jar:2.18.1]
+	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:103) [surefire-booter-2.18.1.jar:2.18.1]
+15:00:28.160 [main] ERROR n.c.j.d.DuplicateProcessHandler - No matching name of old running process found in command=processCommand using regex=^\S+\.[A-Za-z]{3}$
+15:00:28.161 [main] WARN  n.c.j.d.DuplicateProcessHandler - Could not read file=null.
+15:00:28.161 [main] ERROR n.c.j.d.DuplicateProcessHandler - No matching name of old running process found in command=processCommand using regex=^\S+\.[A-Za-z]{3}$
+15:00:28.162 [main] INFO  n.c.j.d.DuplicateProcessHandler - null not found. Assuming no existing managed process is running.
+15:00:28.163 [main] INFO  n.c.j.d.DuplicateProcessHandler - Last recorded managed process pid=12345 is running
+15:00:28.164 [main] INFO  n.c.j.d.DuplicateProcessHandler - Successfully killed existing running managed process pid=12345
+15:00:28.165 [main] INFO  n.c.j.d.DuplicateProcessHandler - Last recorded managed process pid=12345 is not running.
+15:00:28.188 [main] TRACE n.c.j.eventextraction.EventExtractor - File=event-extractor-test-log-file.log is modified since last extraction. Extracting...
+15:00:28.188 [main] TRACE n.c.j.eventextraction.EventExtractor - Reading from line 0
+15:00:28.192 [main] TRACE n.c.j.eventextraction.EventExtractor - Line 5 was the last line read
+15:00:28.192 [main] TRACE n.c.j.eventextraction.EventExtractor - Matching lines: 3 [ERROR 2:	12:34:45.035 [pool-1-thread-1] ERROR n.c.jau.coms.CheckForUpdateHelper - checkForUpdate failed, do nothing. Retrying in 60 seconds., this-is-an-mdc-tag 3:	13:28:13.343 this-is-an-mdc-tag [pool-1-thread-1] DEBUG no.cantara.jau.JavaAutoUpdater - Checking if process is running..., Exception 5:	17:18:11.666 [main] DEBUG n.n.p.config.PharmacyIdService - Exception cause getMessage=Could not get JDBC Connection; nested exception is java.sql.SQLException: Network error IOException: Connection refused]
+15:00:28.194 [main] TRACE n.c.j.eventextraction.EventExtractor - File=event-extractor-test-log-file.log is modified since last extraction. Extracting...
+15:00:28.194 [main] TRACE n.c.j.eventextraction.EventExtractor - Reading from line 0
+15:00:28.195 [main] TRACE n.c.j.eventextraction.EventExtractor - Line 5 was the last line read
+15:00:28.195 [main] TRACE n.c.j.eventextraction.EventExtractor - Matching lines: 3 [ERROR 2:	12:34:45.035 [pool-1-thread-1] ERROR n.c.jau.coms.CheckForUpdateHelper - checkForUpdate failed, do nothing. Retrying in 60 seconds., this-is-an-mdc-tag 3:	13:28:13.343 this-is-an-mdc-tag [pool-1-thread-1] DEBUG no.cantara.jau.JavaAutoUpdater - Checking if process is running..., Exception 5:	17:18:11.666 [main] DEBUG n.n.p.config.PharmacyIdService - Exception cause getMessage=Could not get JDBC Connection; nested exception is java.sql.SQLException: Network error IOException: Connection refused]
+15:00:28.195 [main] TRACE n.c.j.eventextraction.EventExtractor - File=event-extractor-test-log-file.log has not been modified since last extraction. Will not extract
+15:00:28.209 [main] INFO  n.c.j.e.EventExtractorTest - {"ERROR":["12:34:45.035 [pool-1-thread-1] ERROR n.c.jau.coms.CheckForUpdateHelper - checkForUpdate failed, do nothing. Retrying in 60 seconds."],"this-is-an-mdc-tag":["13:28:13.343 this-is-an-mdc-tag [pool-1-thread-1] DEBUG no.cantara.jau.JavaAutoUpdater - Checking if process is running..."],"Exception":["17:18:11.666 [main] DEBUG n.n.p.config.PharmacyIdService - Exception cause getMessage=Could not get JDBC Connection; nested exception is java.sql.SQLException: Network error IOException: Connection refused"]}
+15:31:09.832 [main] INFO  n.c.j.e.EventExtractorService - {path/to/log.log=[eventExtractionTag{tagName='This a is a tag'regex='\btest\b', filePath='path/to/log.log'}, eventExtractionTag{tagName='Seconds tag'regex='\blalala\b', filePath='path/to/log.log'}]}
