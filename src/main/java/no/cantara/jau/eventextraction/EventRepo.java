@@ -1,23 +1,35 @@
 package no.cantara.jau.eventextraction;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 public class EventRepo {
-    Map<String, List<String>> events;
+    private static final Logger log = LoggerFactory.getLogger(EventRepo.class);
+    ConcurrentMap<String, List<String>> events;
 
-    public EventRepo(List<String> mdcEvents) {
-        this.events = new HashMap<>();
+    public EventRepo() {
+        this.events = new ConcurrentHashMap<>();
         events.put("ERROR", new LinkedList<>());
         events.put("Exception", new LinkedList<>());
-        mdcEvents.forEach(e -> events.put(e, new LinkedList<>()));
     }
 
     public void addEvents(List<NumberedLine> eventsToAdd) {
-        eventsToAdd.forEach(unformattedEvent -> events.get(unformattedEvent.getType())
-                .add(unformattedEvent.getLine()));
+        eventsToAdd.forEach(unformattedEvent -> {
+            List<String> eventsByType = events.get(unformattedEvent.getType());
+            if (eventsByType == null) {
+                eventsByType = new LinkedList<>();
+                events.put(unformattedEvent.getType(), eventsByType);
+            }
+            eventsByType.add(unformattedEvent.getLine());
+        });
+        log.info("Events in repo now: {}", events);
     }
 
     public Map<String, List<String>> getEvents() {

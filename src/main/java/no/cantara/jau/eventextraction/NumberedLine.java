@@ -23,6 +23,6 @@ public class NumberedLine {
     }
     @Override
     public String toString() {
-        return type + " " + number + ":\t" + line;
+        return type + "={" + number + ":\t" + line + "}";
     }
 }

@@ -6,6 +6,7 @@ import no.cantara.jau.serviceconfig.dto.EventExtractionTag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
@@ -23,10 +24,24 @@ public class EventExtractorService {
     public EventExtractorService(EventRepo repo, ConfigServiceClient client) {
         this.repo = repo;
         this.client = client;
-        this.executor = Executors.newScheduledThreadPool(3);
+        this.executor = Executors.newCachedThreadPool();
+    }
+
+    public void updateConfigs(List<EventExtractionConfig> configs) {
+        createEventExtractors(configs);
+        runEventExtractors();
+    }
+
+    public void runEventExtractors() {
+        try {
+            executor.invokeAll(eventExtractors);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     private void createEventExtractors(List<EventExtractionConfig> configs) {
+        eventExtractors = new ArrayList<>();
         for (EventExtractionConfig config : configs) {
             Map<String, List<EventExtractionTag>> tagsByFile = groupExtractionConfigsByFile(config);
 
@@ -38,11 +53,6 @@ public class EventExtractorService {
             }
         }
         log.info("Created {} EventExtractors", eventExtractors);
-        try {
-            executor.invokeAll(eventExtractors);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
     }
 
     /**
