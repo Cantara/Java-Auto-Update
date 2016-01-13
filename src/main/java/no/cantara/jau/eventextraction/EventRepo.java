@@ -29,7 +29,7 @@ public class EventRepo {
             }
             eventsByType.add(unformattedEvent.getLine());
         });
-        log.info("Events in repo now: {}", events);
+        log.trace("New events added. Number of events in repo now: '{}'", events.size());
     }
 
     public Map<String, List<String>> getEvents() {

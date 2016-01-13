@@ -43,7 +43,6 @@ public class EventExtractor implements Callable<String> {
     }
 
     public void run() {
-        log.info("Is run!");
             if (managedProcessLogFile.lastModified() > lastModified) {
                 log.trace("File={} is modified since last extraction. Extracting...",
                         managedProcessLogFilePath);
@@ -57,7 +56,7 @@ public class EventExtractor implements Callable<String> {
     }
 
     private void checkForEvents() {
-        log.trace("Reading from line {}", lastLineRead);
+        log.trace("Start reading from line {}", lastLineRead);
         List<NumberedLine> events = new ArrayList<>();
         try(Stream<NumberedLine> lines = lines(Paths.get(managedProcessLogFilePath))) {
             events = lines.skip(lastLineRead)
