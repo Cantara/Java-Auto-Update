@@ -91,5 +91,4 @@ public class EventExtractorTest {
         eventsExtracted = repo.getEvents();
         Assert.assertEquals(eventsExtracted.size(), 3);
     }
-
 }

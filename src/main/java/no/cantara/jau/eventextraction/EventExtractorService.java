@@ -36,7 +36,7 @@ public class EventExtractorService {
         try {
             executor.invokeAll(eventExtractors);
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            log.error("Execution of EventExtractor was interrupted!", e);
         }
     }
 
