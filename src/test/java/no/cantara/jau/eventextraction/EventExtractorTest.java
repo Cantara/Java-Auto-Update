@@ -90,9 +90,6 @@ public class EventExtractorTest {
 
         eventsExtracted = repo.getEvents();
         Assert.assertEquals(eventsExtracted.size(), 3);
-
-        ObjectMapper mapper = new ObjectMapper();
-        log.info(mapper.writeValueAsString(eventsExtracted));
     }
 
 }
