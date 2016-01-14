@@ -28,14 +28,16 @@ public class EventExtractor implements Callable<String> {
     private final String managedProcessLogFilePath;
     private final File managedProcessLogFile;
     private final EventRepo eventRepo;
+    private final String groupName;
     private int lastLineRead;
     private static final String ERROR_MESSAGE = "ERROR";
     private static final String EXCEPTION_MESSAGE = "Exception";
     private long lastModified;
 
     public EventExtractor(EventRepo eventRepo, List<EventExtractionTag> extractionTags,
-                          String managedProcessLogFilePath) {
+                          String managedProcessLogFilePath, String groupName) {
         this.eventRepo = eventRepo;
+        this.groupName = groupName;
         this.extractionTags = extractionTags;
         this.managedProcessLogFilePath = managedProcessLogFilePath;
         managedProcessLogFile = new File(managedProcessLogFilePath);
@@ -59,7 +61,7 @@ public class EventExtractor implements Callable<String> {
     private void checkForEvents() {
         try {
             lastLineRead = new CommandExtractEventsFromFile(eventRepo, lastLineRead,
-                    managedProcessLogFilePath, extractionTags).run();
+                    managedProcessLogFilePath, groupName, extractionTags).run();
         } catch (Exception e) {
             log.error("Failed extraction events from file!", e);
         }
