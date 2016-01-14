@@ -3,7 +3,7 @@ package no.cantara.jau.eventextraction;
 public class EventLine {
     final int number;
     final String line;
-    private String type;
+    private String tag;
 
     EventLine(int number, String line) {
         this.number = number;
@@ -15,14 +15,14 @@ public class EventLine {
     public String getLine() {
         return line;
     }
-    public String getType() {
-        return type;
+    public String getTag() {
+        return tag;
     }
     public void setTagName(String type) {
-        this.type = type;
+        this.tag = type;
     }
     @Override
     public String toString() {
-        return type + "={" + number + ":\t" + line + "}";
+        return tag + "={" + number + ":\t" + line + "}";
     }
 }
