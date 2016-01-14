@@ -1,11 +1,11 @@
 package no.cantara.jau.eventextraction;
 
-public class NumberedLine {
+public class EventLine {
     final int number;
     final String line;
     private String type;
 
-    NumberedLine(int number, String line) {
+    EventLine(int number, String line) {
         this.number = number;
         this.line = line;
     }
