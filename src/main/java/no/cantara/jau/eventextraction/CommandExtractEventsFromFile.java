@@ -29,6 +29,8 @@ public class CommandExtractEventsFromFile extends HystrixCommand<Integer> {
     private static final Logger log = LoggerFactory.getLogger(CommandExtractEventsFromFile.class);
     private static final String GROUP_KEY = "EXTRACT_EVENTS";
     private static final int COMMAND_TIMEOUT = 10000;
+    public static final String ERROR_WORD = "ERROR";
+    public static final String EXCEPTION_WORD = "Exception";
     private final EventRepo repo;
     private int lastLineRead;
     private final String filePath;
@@ -74,12 +76,12 @@ public class CommandExtractEventsFromFile extends HystrixCommand<Integer> {
                                 line.setTag(tag.tagName);
                                 return true;
                             }
-                            else if (logLine.contains("ERROR")) {
-                                line.setTag("Error");
+                            else if (logLine.contains(ERROR_WORD)) {
+                                line.setTag(ERROR_WORD);
                                 return true;
                             }
-                            else if (logLine.contains("Exception")) {
-                                line.setTag("Exception");
+                            else if (logLine.contains(EXCEPTION_WORD)) {
+                                line.setTag(EXCEPTION_WORD);
                                 isException = true;
                                 return true;
                             }
