@@ -30,30 +30,32 @@ public class EventExtractor implements Callable<String> {
         lastLineRead = 0;
     }
 
-    public void run() {
-    }
-
     private void checkForEvents() {
-        try {
-            lastLineRead = new CommandExtractEventsFromFile(eventRepo, lastLineRead,
-                    managedProcessLogFilePath, groupName, extractionTags).run();
-        } catch (Exception e) {
-            log.error("Failed extraction events from file!", e);
+        if (fileHasBeenModified()) {
+            try {
+                lastLineRead = new CommandExtractEventsFromFile(eventRepo, lastLineRead,
+                        managedProcessLogFilePath, groupName, extractionTags).run();
+            } catch (Exception e) {
+                log.error("Failed extraction events from file!", e);
+            }
         }
     }
 
-    @Override
-    public String call() throws Exception {
+    private boolean fileHasBeenModified() {
         if (managedProcessLogFile.lastModified() > lastModified) {
             log.trace("File={} is modified since last extraction. Extracting...",
                     managedProcessLogFilePath);
             lastModified = managedProcessLogFile.lastModified();
-            checkForEvents();
+            return true;
         }
-        else {
-            log.trace("File={} has not been modified since last extraction. Will not extract",
+        log.trace("File={} has not been modified since last extraction. Will not extract",
                     managedProcessLogFilePath);
-        }
+        return false;
+    }
+
+    @Override
+    public String call() throws Exception {
+        checkForEvents();
         return null;
     }
 }
