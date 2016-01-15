@@ -1,7 +1,7 @@
 package no.cantara.jau.eventextraction;
 
 import no.cantara.jau.eventextraction.dto.Event;
-import no.cantara.jau.eventextraction.dto.ExtractedEvents;
+import no.cantara.jau.eventextraction.dto.ExtractedEventsStore;
 import no.cantara.jau.serviceconfig.dto.EventExtractionConfig;
 import no.cantara.jau.serviceconfig.dto.EventExtractionTag;
 import org.slf4j.Logger;
@@ -76,8 +76,8 @@ public class EventExtractorService {
     /**
      * Can probably be moved to configservice-sdk
      */
-    public static ExtractedEvents mapToExtractedEvents(List<Event> events) {
-        ExtractedEvents mappedEvents = new ExtractedEvents();
+    public static ExtractedEventsStore mapToExtractedEvents(List<Event> events) {
+        ExtractedEventsStore mappedEvents = new ExtractedEventsStore();
         mappedEvents.addEvents(events);
         return mappedEvents;
     }

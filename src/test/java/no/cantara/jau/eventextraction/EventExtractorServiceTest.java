@@ -4,14 +4,13 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import no.cantara.jau.eventextraction.dto.Event;
 import no.cantara.jau.eventextraction.dto.EventTag;
-import no.cantara.jau.eventextraction.dto.ExtractedEvents;
+import no.cantara.jau.eventextraction.dto.ExtractedEventsStore;
 import no.cantara.jau.serviceconfig.dto.EventExtractionConfig;
 import no.cantara.jau.serviceconfig.dto.EventExtractionTag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.Assert;
 import org.testng.annotations.Test;
-import org.testng.reporters.Files;
 
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -54,7 +53,7 @@ public class EventExtractorServiceTest {
 
         Assert.assertNotEquals(events.size(), 0);
 
-        ExtractedEvents mappedEvents = EventExtractorService.mapToExtractedEvents(events);
+        ExtractedEventsStore mappedEvents = EventExtractorService.mapToExtractedEvents(events);
         ObjectMapper mapper = new ObjectMapper();
         log.info(mapper.writeValueAsString(mappedEvents));
 
