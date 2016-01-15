@@ -61,7 +61,7 @@ public class CommandExtractEventsFromFile extends HystrixCommand<Integer> {
                     .filter(line -> {
                         lastLineRead = line.getNumber();
                         for (EventExtractionTag tag : extractionTags) {
-                            if (extractLine(line, tag)) {
+                            if (matchLineToTag(line, tag)) {
                                 return true;
                             }
                         }
@@ -78,7 +78,7 @@ public class CommandExtractEventsFromFile extends HystrixCommand<Integer> {
         return lastLineRead;
     }
 
-    private boolean extractLine(Event line, EventExtractionTag tag) {
+    private boolean matchLineToTag(Event line, EventExtractionTag tag) {
         line.setGroupName(groupName);
         line.setFileName(filePath);
         String logLine = line.getLine();
