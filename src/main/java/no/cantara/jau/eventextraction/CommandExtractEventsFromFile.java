@@ -3,8 +3,8 @@ package no.cantara.jau.eventextraction;
 import com.netflix.hystrix.HystrixCommand;
 import com.netflix.hystrix.HystrixCommandGroupKey;
 import com.netflix.hystrix.HystrixCommandProperties;
-import no.cantara.jau.eventextraction.dto.Event;
-import no.cantara.jau.serviceconfig.dto.EventExtractionTag;
+import no.cantara.jau.serviceconfig.dto.event.Event;
+import no.cantara.jau.serviceconfig.dto.event.EventExtractionTag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

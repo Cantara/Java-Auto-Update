@@ -1,9 +1,9 @@
 package no.cantara.jau.eventextraction;
 
-import no.cantara.jau.eventextraction.dto.Event;
-import no.cantara.jau.eventextraction.dto.ExtractedEventsStore;
-import no.cantara.jau.serviceconfig.dto.EventExtractionConfig;
-import no.cantara.jau.serviceconfig.dto.EventExtractionTag;
+import no.cantara.jau.serviceconfig.client.EventExtractionUtil;
+import no.cantara.jau.serviceconfig.dto.event.Event;
+import no.cantara.jau.serviceconfig.dto.event.EventExtractionConfig;
+import no.cantara.jau.serviceconfig.dto.event.EventExtractionTag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,7 +45,8 @@ public class EventExtractorService {
     private void createEventExtractors(List<EventExtractionConfig> configs) {
         eventExtractors = new ArrayList<>();
         for (EventExtractionConfig config : configs) {
-            Map<String, List<EventExtractionTag>> tagsByFile = groupExtractionConfigsByFile(config);
+            Map<String, List<EventExtractionTag>> tagsByFile = EventExtractionUtil
+                    .groupExtractionConfigsByFile(config);
 
             for (String filePath : tagsByFile.keySet()) {
                 List<EventExtractionTag> eventExtractionTags = tagsByFile.get(filePath);
@@ -60,25 +61,5 @@ public class EventExtractorService {
     public List<Event> extractEvents() {
         runEventExtractors();
         return repo.getEvents();
-    }
-
-    /**
-     * Can probably be moved to configservice-sdk
-     */
-    public Map<String, List<EventExtractionTag>> groupExtractionConfigsByFile(
-            EventExtractionConfig config) {
-        Map<String, List<EventExtractionTag>> collect = config.tags.stream()
-                .collect(groupingBy(item -> item.filePath));
-        log.info(collect.toString());
-        return collect;
-    }
-
-    /**
-     * Can probably be moved to configservice-sdk
-     */
-    public static ExtractedEventsStore mapToExtractedEvents(List<Event> events) {
-        ExtractedEventsStore mappedEvents = new ExtractedEventsStore();
-        mappedEvents.addEvents(events);
-        return mappedEvents;
     }
 }

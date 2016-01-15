@@ -2,11 +2,8 @@ package no.cantara.jau.eventextraction;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import no.cantara.jau.eventextraction.dto.Event;
-import no.cantara.jau.eventextraction.dto.EventTag;
-import no.cantara.jau.eventextraction.dto.ExtractedEventsStore;
-import no.cantara.jau.serviceconfig.dto.EventExtractionConfig;
-import no.cantara.jau.serviceconfig.dto.EventExtractionTag;
+import no.cantara.jau.serviceconfig.client.EventExtractionUtil;
+import no.cantara.jau.serviceconfig.dto.event.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.Assert;
@@ -29,7 +26,7 @@ public class EventExtractorServiceTest {
         config.addEventExtractionTag(new EventExtractionTag("This a is a tag", "\\btest\\b", "path/to/log.log"));
         config.addEventExtractionTag(new EventExtractionTag("Seconds tag", "\\blalala\\b", "path/to/log.log"));
 
-        Map<String, List<EventExtractionTag>> mapped = service.groupExtractionConfigsByFile(config);
+        Map<String, List<EventExtractionTag>> mapped = EventExtractionUtil.groupExtractionConfigsByFile(config);
 
         Assert.assertEquals(mapped.size(), 1);
         Assert.assertNotNull(mapped.get("path/to/log.log"));
@@ -53,7 +50,7 @@ public class EventExtractorServiceTest {
 
         Assert.assertNotEquals(events.size(), 0);
 
-        ExtractedEventsStore mappedEvents = EventExtractorService.mapToExtractedEvents(events);
+        ExtractedEventsStore mappedEvents = EventExtractionUtil.mapToExtractedEvents(events);
         ObjectMapper mapper = new ObjectMapper();
         log.info(mapper.writeValueAsString(mappedEvents));
 
