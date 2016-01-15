@@ -4,22 +4,9 @@ import no.cantara.jau.serviceconfig.dto.EventExtractionTag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.IOException;
-import java.io.UncheckedIOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.*;
+import java.util.List;
 import java.util.concurrent.Callable;
-import java.util.concurrent.Future;
-import java.util.function.Consumer;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 
 public class EventExtractor implements Callable<String> {
     private static final Logger log = LoggerFactory.getLogger(EventExtractor.class);
@@ -30,8 +17,6 @@ public class EventExtractor implements Callable<String> {
     private final EventRepo eventRepo;
     private final String groupName;
     private int lastLineRead;
-    private static final String ERROR_MESSAGE = "ERROR";
-    private static final String EXCEPTION_MESSAGE = "Exception";
     private long lastModified;
 
     public EventExtractor(EventRepo eventRepo, List<EventExtractionTag> extractionTags,
@@ -46,16 +31,6 @@ public class EventExtractor implements Callable<String> {
     }
 
     public void run() {
-            if (managedProcessLogFile.lastModified() > lastModified) {
-                log.trace("File={} is modified since last extraction. Extracting...",
-                        managedProcessLogFilePath);
-                lastModified = managedProcessLogFile.lastModified();
-                checkForEvents();
-            }
-            else {
-                log.trace("File={} has not been modified since last extraction. Will not extract",
-                        managedProcessLogFilePath);
-            }
     }
 
     private void checkForEvents() {
@@ -69,7 +44,16 @@ public class EventExtractor implements Callable<String> {
 
     @Override
     public String call() throws Exception {
-        run();
+        if (managedProcessLogFile.lastModified() > lastModified) {
+            log.trace("File={} is modified since last extraction. Extracting...",
+                    managedProcessLogFilePath);
+            lastModified = managedProcessLogFile.lastModified();
+            checkForEvents();
+        }
+        else {
+            log.trace("File={} has not been modified since last extraction. Will not extract",
+                    managedProcessLogFilePath);
+        }
         return null;
     }
 }
