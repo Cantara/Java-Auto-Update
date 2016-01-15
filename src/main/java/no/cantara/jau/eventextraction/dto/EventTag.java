@@ -1,7 +1,5 @@
 package no.cantara.jau.eventextraction.dto;
 
-import no.cantara.jau.eventextraction.EventLine;
-
 import java.util.LinkedList;
 import java.util.List;
 
@@ -16,7 +14,7 @@ public class EventTag {
         return logEvent;
     }
 
-    public void addEvents(List<EventLine> events) {
+    public void addEvents(List<Event> events) {
         events.stream().forEach(event -> logEvent.add(event.getLine()));
     }
 

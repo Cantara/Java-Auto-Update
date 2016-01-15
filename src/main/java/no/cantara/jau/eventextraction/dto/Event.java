@@ -1,16 +1,16 @@
-package no.cantara.jau.eventextraction;
+package no.cantara.jau.eventextraction.dto;
 
 import com.fasterxml.jackson.annotation.JsonFilter;
 
 @JsonFilter("line")
-public class EventLine {
-    final int number;
-    final String line;
+public class Event {
+    public final int number;
+    public final String line;
     private String tag;
     private String groupName;
     private String fileName;
 
-    EventLine(int number, String line) {
+    public Event(int number, String line) {
         this.number = number;
         this.line = line;
     }

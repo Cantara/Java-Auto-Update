@@ -1,7 +1,5 @@
 package no.cantara.jau.eventextraction.dto;
 
-import no.cantara.jau.eventextraction.EventLine;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,15 +12,15 @@ public class ExtractedEvents {
         eventGroups = new HashMap<>();
     }
 
-    public void addEvents(List<EventLine> eventsToAdd) {
-        Map<String, List<EventLine>> eventsGroupedByGroup = eventsToAdd.stream()
+    public void addEvents(List<Event> eventsToAdd) {
+        Map<String, List<Event>> eventsGroupedByGroup = eventsToAdd.stream()
                 .collect(Collectors.groupingBy(
-                        EventLine::getGroupName
+                        Event::getGroupName
                 ));
 
         eventsGroupedByGroup.keySet().stream()
                 .forEach(groupName -> {
-                    List<EventLine> eventFilesToAdd = eventsGroupedByGroup.get(groupName);
+                    List<Event> eventFilesToAdd = eventsGroupedByGroup.get(groupName);
                     eventGroups.putIfAbsent(groupName, new EventGroup());
                     EventGroup eventGroup = eventGroups.get(groupName);
                     eventGroup.addEvents(eventFilesToAdd);

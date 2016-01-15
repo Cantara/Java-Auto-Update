@@ -3,6 +3,7 @@ package no.cantara.jau.eventextraction;
 import com.netflix.hystrix.HystrixCommand;
 import com.netflix.hystrix.HystrixCommandGroupKey;
 import com.netflix.hystrix.HystrixCommandProperties;
+import no.cantara.jau.eventextraction.dto.Event;
 import no.cantara.jau.serviceconfig.dto.EventExtractionTag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,8 +52,8 @@ public class CommandExtractEventsFromFile extends HystrixCommand<Integer> {
     @Override
     protected Integer run() throws Exception {
         log.trace("Start reading from line {}", lastLineRead);
-        List<EventLine> events = new ArrayList<>();
-        try(Stream<EventLine> lines = lines(Paths.get(filePath))) {
+        List<Event> events = new ArrayList<>();
+        try(Stream<Event> lines = lines(Paths.get(filePath))) {
             events = lines.skip(lastLineRead)
                     .filter(line -> {
                         lastLineRead = line.getNumber();
@@ -90,12 +91,12 @@ public class CommandExtractEventsFromFile extends HystrixCommand<Integer> {
         return lastLineRead;
     }
 
-    public static Stream<EventLine> lines(Path p) throws IOException {
+    public static Stream<Event> lines(Path p) throws IOException {
         BufferedReader bufferedReader = Files.newBufferedReader(p);
-        Spliterator<EventLine> spliterator = new Spliterators.AbstractSpliterator<EventLine>(
+        Spliterator<Event> spliterator = new Spliterators.AbstractSpliterator<Event>(
                 Long.MAX_VALUE, Spliterator.ORDERED|Spliterator.NONNULL) {
             int lineNumber;
-            public boolean tryAdvance(Consumer<? super EventLine> action) {
+            public boolean tryAdvance(Consumer<? super Event> action) {
                 String line;
                 try {
                     line = bufferedReader.readLine();
@@ -106,7 +107,7 @@ public class CommandExtractEventsFromFile extends HystrixCommand<Integer> {
                 if (line == null) {
                     return false;
                 }
-                action.accept(new EventLine(++lineNumber, line));
+                action.accept(new Event(++lineNumber, line));
                 return true;
             }
         };
