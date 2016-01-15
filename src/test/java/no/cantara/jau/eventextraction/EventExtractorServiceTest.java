@@ -21,7 +21,7 @@ public class EventExtractorServiceTest {
 
     @Test
     public void shouldGroupTagsByFileName() {
-        EventExtractorService service = new EventExtractorService(null, null);
+        EventExtractorService service = new EventExtractorService(null);
 
         EventExtractionConfig config = new EventExtractionConfig("jau");
         config.addEventExtractionTag(new EventExtractionTag("This a is a tag", "\\btest\\b", "path/to/log.log"));
@@ -36,7 +36,7 @@ public class EventExtractorServiceTest {
     @Test
     public void shouldReadTagsFromFiles() throws InterruptedException {
         EventRepo repo = new EventRepo();
-        EventExtractorService service = new EventExtractorService(repo, null);
+        EventExtractorService service = new EventExtractorService(repo);
         EventExtractionConfig config = new EventExtractionConfig("jau");
         config.addEventExtractionTag(new EventExtractionTag("This a is a tag", "\\btest\\b",
                 "external_testdata/jau-test-log.logg"));

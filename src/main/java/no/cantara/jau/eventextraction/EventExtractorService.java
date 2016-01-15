@@ -20,13 +20,11 @@ import static java.util.stream.Collectors.groupingBy;
 public class EventExtractorService {
     private static final Logger log = LoggerFactory.getLogger(EventExtractorService.class);
     private final EventRepo repo;
-    private final ConfigServiceClient client;
     private List<EventExtractor> eventExtractors;
     private final ExecutorService executor;
 
-    public EventExtractorService(EventRepo repo, ConfigServiceClient client) {
+    public EventExtractorService(EventRepo repo) {
         this.repo = repo;
-        this.client = client;
         this.executor = Executors.newCachedThreadPool();
     }
 
