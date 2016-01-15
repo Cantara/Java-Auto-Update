@@ -2,9 +2,13 @@ package no.cantara.jau.coms;
 
 import no.cantara.jau.ApplicationProcess;
 import no.cantara.jau.JavaAutoUpdater;
+import no.cantara.jau.eventextraction.EventExtractorService;
 import no.cantara.jau.serviceconfig.client.ConfigServiceClient;
+import no.cantara.jau.serviceconfig.client.EventExtractionUtil;
 import no.cantara.jau.serviceconfig.dto.CheckForUpdateRequest;
 import no.cantara.jau.serviceconfig.dto.ClientConfig;
+import no.cantara.jau.serviceconfig.dto.event.Event;
+import no.cantara.jau.serviceconfig.dto.event.ExtractedEventsStore;
 import no.cantara.jau.util.ClientEnvironmentUtil;
 import no.cantara.jau.util.PropertiesHelper;
 import org.slf4j.Logger;
@@ -14,6 +18,7 @@ import javax.ws.rs.BadRequestException;
 import javax.ws.rs.InternalServerErrorException;
 import javax.ws.rs.core.NoContentException;
 import java.io.IOException;
+import java.util.List;
 import java.util.Properties;
 import java.util.SortedMap;
 import java.util.concurrent.ScheduledFuture;
@@ -28,7 +33,9 @@ public class CheckForUpdateHelper {
     public static Runnable getCheckForUpdateRunnable(long interval, ConfigServiceClient configServiceClient,
                                                      ApplicationProcess processHolder,
                                                      ScheduledFuture<?> processMonitorHandle,
-                                                     JavaAutoUpdater jau) {
+                                                     EventExtractorService extractorService,
+                                                     JavaAutoUpdater jau
+                                                     ) {
         return () -> {
             ClientConfig newClientConfig = null;
             try {
@@ -38,8 +45,12 @@ public class CheckForUpdateHelper {
                 String lastChanged = PropertiesHelper.getStringProperty(applicationState, ConfigServiceClient.LAST_CHANGED, null);
                 SortedMap<String, String> clientEnvironment = ClientEnvironmentUtil.getClientEnvironment(applicationState,
                         String.valueOf(processHolder.processIsRunning()));
+
+                List<Event> events = extractorService.extractEvents();
+                ExtractedEventsStore eventsStore = EventExtractionUtil.mapToExtractedEvents(events);
+
                 CheckForUpdateRequest checkForUpdateRequest = new CheckForUpdateRequest(lastChanged, clientEnvironment,
-                        PropertiesHelper.getClientName());
+                        PropertiesHelper.getClientName(), eventsStore);
                 newClientConfig = configServiceClient.checkForUpdate(clientId, checkForUpdateRequest);
             } catch (IllegalStateException e) {
                 log.debug("Illegal state - reregister client");

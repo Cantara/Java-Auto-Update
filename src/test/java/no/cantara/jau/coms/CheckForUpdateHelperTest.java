@@ -2,6 +2,7 @@ package no.cantara.jau.coms;
 
 import no.cantara.jau.ApplicationProcess;
 import no.cantara.jau.JavaAutoUpdater;
+import no.cantara.jau.eventextraction.EventExtractorService;
 import no.cantara.jau.serviceconfig.client.ConfigServiceClient;
 import no.cantara.jau.serviceconfig.dto.CheckForUpdateRequest;
 import org.testng.annotations.Test;
@@ -30,8 +31,11 @@ public class CheckForUpdateHelperTest {
         ApplicationProcess processHolder = mock(ApplicationProcess.class);
         ScheduledFuture processMonitorHandle = mock(ScheduledFuture.class);
         JavaAutoUpdater jau = mock(JavaAutoUpdater.class);
+        EventExtractorService extractorService = mock(EventExtractorService.class);
 
-        Runnable checkForUpdateRunnable = CheckForUpdateHelper.getCheckForUpdateRunnable(1, configServiceClient, processHolder, processMonitorHandle, jau);
+        Runnable checkForUpdateRunnable = CheckForUpdateHelper.getCheckForUpdateRunnable(1, configServiceClient,
+                processHolder, processMonitorHandle, extractorService, jau
+                );
         checkForUpdateRunnable.run();
 
         verify(jau).registerClient();
@@ -47,8 +51,10 @@ public class CheckForUpdateHelperTest {
         ApplicationProcess processHolder = mock(ApplicationProcess.class);
         ScheduledFuture processMonitorHandle = mock(ScheduledFuture.class);
         JavaAutoUpdater jau = mock(JavaAutoUpdater.class);
+        EventExtractorService extractorService = mock(EventExtractorService.class);
 
-        Runnable checkForUpdateRunnable = CheckForUpdateHelper.getCheckForUpdateRunnable(1, configServiceClient, processHolder, processMonitorHandle, jau);
+        Runnable checkForUpdateRunnable = CheckForUpdateHelper.getCheckForUpdateRunnable(1, configServiceClient,
+                processHolder, processMonitorHandle, extractorService, jau);
         checkForUpdateRunnable.run();
 
         verify(processHolder, never()).stopProcess();
@@ -63,8 +69,10 @@ public class CheckForUpdateHelperTest {
         ApplicationProcess processHolder = mock(ApplicationProcess.class);
         ScheduledFuture processMonitorHandle = mock(ScheduledFuture.class);
         JavaAutoUpdater jau = mock(JavaAutoUpdater.class);
+        EventExtractorService extractorService = mock(EventExtractorService.class);
 
-        Runnable checkForUpdateRunnable = CheckForUpdateHelper.getCheckForUpdateRunnable(1, configServiceClient, processHolder, processMonitorHandle, jau);
+        Runnable checkForUpdateRunnable = CheckForUpdateHelper.getCheckForUpdateRunnable(1, configServiceClient,
+                processHolder, processMonitorHandle, extractorService, jau);
         checkForUpdateRunnable.run();
 
         verify(processHolder, never()).stopProcess();

@@ -3,6 +3,7 @@ package no.cantara.jau;
 import no.cantara.jau.coms.CheckForUpdateHelper;
 import no.cantara.jau.coms.RegisterClientHelper;
 import no.cantara.jau.duplicatehandler.DuplicateProcessHandler;
+import no.cantara.jau.eventextraction.EventExtractorService;
 import no.cantara.jau.serviceconfig.client.ConfigServiceClient;
 import no.cantara.jau.serviceconfig.client.ConfigurationStoreUtil;
 import no.cantara.jau.serviceconfig.client.DownloadUtil;
@@ -11,6 +12,7 @@ import no.cantara.jau.serviceconfig.dto.ServiceConfig;
 import no.cantara.jau.util.PropertiesHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 
 import java.util.Properties;
 import java.util.concurrent.Executors;
@@ -30,15 +32,18 @@ public class JavaAutoUpdater {
     private final ConfigServiceClient configServiceClient;
     private final ApplicationProcess processHolder;
     private final DuplicateProcessHandler duplicateProcessHandler;
+    private final EventExtractorService extractorService;
 
     private RegisterClientHelper registerClientHelper;
 
     public JavaAutoUpdater(ConfigServiceClient configServiceClient, RegisterClientHelper registerClientHelper,
-                           ApplicationProcess applicationProcess, DuplicateProcessHandler duplicateProcessHandler) {
+                           ApplicationProcess applicationProcess, DuplicateProcessHandler duplicateProcessHandler,
+                           EventExtractorService extractorService) {
         this.configServiceClient = configServiceClient;
         this.registerClientHelper = registerClientHelper;
         this.processHolder = applicationProcess;
         this.duplicateProcessHandler = duplicateProcessHandler;
+        this.extractorService = extractorService;
     }
 
     /**
@@ -111,7 +116,8 @@ public class JavaAutoUpdater {
     private ScheduledFuture<?> startUpdaterThread(long interval) {
         log.debug("Starting update scheduler with an update interval of {} seconds.", interval);
         return scheduler.scheduleAtFixedRate(
-                CheckForUpdateHelper.getCheckForUpdateRunnable(interval, configServiceClient, processHolder, processMonitorHandle, this),
+                CheckForUpdateHelper.getCheckForUpdateRunnable(interval, configServiceClient, processHolder,
+                        processMonitorHandle, extractorService, this),
                 1, interval, SECONDS
         );
     }
