@@ -1,5 +1,7 @@
 package no.cantara.jau.eventextraction;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import no.cantara.jau.eventextraction.dto.Event;
 import no.cantara.jau.eventextraction.dto.EventTag;
 import no.cantara.jau.eventextraction.dto.ExtractedEvents;
@@ -9,7 +11,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+import org.testng.reporters.Files;
 
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -33,27 +37,29 @@ public class EventExtractorServiceTest {
     }
 
     @Test
-    public void shouldExtractEventsFromFiles() throws InterruptedException {
+    public void shouldExtractEventsFromFiles() throws InterruptedException, JsonProcessingException, URISyntaxException {
         EventRepo repo = new EventRepo();
         EventExtractorService service = new EventExtractorService(repo);
         EventExtractionConfig config = new EventExtractionConfig("jau");
+        String filePath1 = ClassLoader.getSystemResource("jau-test-log.logg").toURI().getPath();
+        String filePath2 = ClassLoader.getSystemResource("pa-test-log.logg").toURI().getPath();
         config.addEventExtractionTag(new EventExtractionTag("This a is a tag", "\\btest\\b",
-                "external_testdata/jau-test-log.logg"));
+                filePath1));
         config.addEventExtractionTag(new EventExtractionTag("MDC tag test", "\\bmdc-tag-test\\b",
-                "external_testdata/pa-test-log.logg"));
+                filePath2));
         List<EventExtractionConfig> configs = new ArrayList<>();
         configs.add(config);
         service.updateConfigs(configs);
+        List<Event> events = service.extractEvents();
 
-        service.runEventExtractors();
-
-        List<Event> events = repo.getEvents();
         Assert.assertNotEquals(events.size(), 0);
 
         ExtractedEvents mappedEvents = EventExtractorService.mapToExtractedEvents(events);
-        EventTag tag = mappedEvents.getEventGroup("jau").getEventFile("external_testdata/jau-test-log.logg")
-                .getEventTag("This a is a tag");
+        ObjectMapper mapper = new ObjectMapper();
+        log.info(mapper.writeValueAsString(mappedEvents));
 
+        EventTag tag = mappedEvents.getEventGroup("jau").getEventFile(filePath1)
+                .getEventTag("This a is a tag");
         List<Event> manuallyCollected = events.stream()
                 .filter(e -> e.getTag().equals("This a is a tag"))
                 .collect(Collectors.toList());
@@ -62,21 +68,22 @@ public class EventExtractorServiceTest {
     }
 
     @Test
-    public void shouldExtractEventsFromMultipleLargeFiles() {
+    public void shouldExtractEventsFromMultipleLargeFiles() throws URISyntaxException {
         EventRepo repo = new EventRepo();
         EventExtractorService service = new EventExtractorService(repo);
         EventExtractionConfig config = new EventExtractionConfig("jau");
+        String filePath1 = ClassLoader.getSystemResource("pharmacyagent-2016-01-07.logg").toURI().getPath();
+        String filePath2 = ClassLoader.getSystemResource("jau-2016-01-10.logg").toURI().getPath();
         config.addEventExtractionTag(new EventExtractionTag("This a is a tag", "\\b200\\b",
-                "external_testdata/pharmacyagent-2016-01-07.logg"));
+                filePath1));
         config.addEventExtractionTag(new EventExtractionTag("MDC tag test", "\\bmdc-tag-test\\b",
-                "external_testdata/pharmacyagent-2016-01-07.logg"));
+                filePath2));
         List<EventExtractionConfig> configs = new ArrayList<>();
         configs.add(config);
         service.updateConfigs(configs);
 
-        service.runEventExtractors();
+        List<Event> events = service.extractEvents();
 
-        List<Event> events = repo.getEvents();
         Assert.assertNotEquals(events.size(), 0);
     }
 
