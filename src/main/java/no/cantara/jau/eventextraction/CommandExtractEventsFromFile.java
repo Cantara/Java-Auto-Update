@@ -31,6 +31,7 @@ public class CommandExtractEventsFromFile extends HystrixCommand<Integer> {
     private static final int COMMAND_TIMEOUT = 10000;
     public static final String ERROR_WORD = "ERROR";
     public static final String EXCEPTION_WORD = "Exception";
+    public static final String STACK_TRACE_PREFIX = "\tat";
     private final EventRepo repo;
     private int lastLineRead;
     private final String filePath;
@@ -83,8 +84,8 @@ public class CommandExtractEventsFromFile extends HystrixCommand<Integer> {
         String logLine = line.getLine();
 
         if (isException) {
-            if (logLine.startsWith("\tat")) {
-                line.setTag("Exception");
+            if (logLine.startsWith(STACK_TRACE_PREFIX)) {
+                line.setTag(EXCEPTION_WORD);
                 return true;
             }
             isException = false;
