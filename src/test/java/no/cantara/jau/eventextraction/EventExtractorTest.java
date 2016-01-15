@@ -1,7 +1,7 @@
 package no.cantara.jau.eventextraction;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import no.cantara.jau.eventextraction.dto.Event;
 import no.cantara.jau.serviceconfig.dto.EventExtractionTag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,7 +15,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class EventExtractorTest {
     private static final Logger log = LoggerFactory.getLogger(EventExtractorTest.class);
@@ -66,7 +65,7 @@ public class EventExtractorTest {
 
         extractor.run();
 
-        List<EventLine> eventsExtracted = repo.getEvents();
+        List<Event> eventsExtracted = repo.getEvents();
 
         Assert.assertNotEquals(eventsExtracted.size(), 0);
     }
@@ -80,7 +79,7 @@ public class EventExtractorTest {
 
         extractor.run();
 
-        List<EventLine> eventsExtracted = repo.getEvents();
+        List<Event> eventsExtracted = repo.getEvents();
         Assert.assertEquals(eventsExtracted.size(), 3);
 
         extractor.run();

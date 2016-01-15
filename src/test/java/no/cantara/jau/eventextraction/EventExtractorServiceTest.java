@@ -1,7 +1,6 @@
 package no.cantara.jau.eventextraction;
 
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import no.cantara.jau.eventextraction.dto.EventGroup;
+import no.cantara.jau.eventextraction.dto.Event;
 import no.cantara.jau.eventextraction.dto.EventTag;
 import no.cantara.jau.eventextraction.dto.ExtractedEvents;
 import no.cantara.jau.serviceconfig.dto.EventExtractionConfig;
@@ -50,14 +49,14 @@ public class EventExtractorServiceTest {
 
         Thread.sleep(500);
 
-        List<EventLine> events = repo.getEvents();
+        List<Event> events = repo.getEvents();
         Assert.assertNotEquals(events.size(), 0);
 
         ExtractedEvents mappedEvents = EventExtractorService.mapToExtractedEvents(events);
         EventTag tag = mappedEvents.getEventGroup("jau").getEventFile("external_testdata/jau-test-log.logg")
                 .getEventTag("This a is a tag");
 
-        List<EventLine> manuallyCollected = events.stream()
+        List<Event> manuallyCollected = events.stream()
                 .filter(e -> e.getTag().equals("This a is a tag"))
                 .collect(Collectors.toList());
 
