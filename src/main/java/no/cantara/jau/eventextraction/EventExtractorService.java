@@ -32,7 +32,7 @@ public class EventExtractorService {
         runEventExtractors();
     }
 
-    public List<Future<String>> runEventExtractors() {
+    private List<Future<String>> runEventExtractors() {
         try {
             List<Future<String>> futures = executor.invokeAll(eventExtractors);
             return futures;
@@ -55,6 +55,11 @@ public class EventExtractorService {
             }
         }
         log.info("Created {} EventExtractors", eventExtractors);
+    }
+
+    public List<Event> extractEvents() {
+        runEventExtractors();
+        return repo.getEvents();
     }
 
     /**

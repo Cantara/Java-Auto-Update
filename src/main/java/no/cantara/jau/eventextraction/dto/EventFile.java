@@ -6,14 +6,18 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class EventFile {
-    private final Map<String, EventTag> tagNameToTagMapping;
+    private final Map<String, EventTag> tags;
 
     public EventFile() {
-        this.tagNameToTagMapping = new HashMap<>();
+        this.tags = new HashMap<>();
+    }
+
+    public Map<String, EventTag> getTags() {
+        return tags;
     }
 
     public EventTag getEventTag(String tagName) {
-        return tagNameToTagMapping.get(tagName);
+        return tags.get(tagName);
     }
 
     public void addEvents(List<Event> events) {
@@ -25,8 +29,8 @@ public class EventFile {
         eventsGroupedByTagName.keySet().stream()
                 .forEach(tag -> {
                     List<Event> eventsToAdd = eventsGroupedByTagName.get(tag);
-                    tagNameToTagMapping.putIfAbsent(tag, new EventTag());
-                    tagNameToTagMapping.get(tag).addEvents(eventsToAdd);
+                    tags.putIfAbsent(tag, new EventTag());
+                    tags.get(tag).addEvents(eventsToAdd);
                 });
     }
 }

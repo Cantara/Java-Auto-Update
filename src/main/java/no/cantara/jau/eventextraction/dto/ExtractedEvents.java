@@ -12,6 +12,10 @@ public class ExtractedEvents {
         eventGroups = new HashMap<>();
     }
 
+    public Map<String, EventGroup> getEventGroups() {
+        return eventGroups;
+    }
+
     public void addEvents(List<Event> eventsToAdd) {
         Map<String, List<Event>> eventsGroupedByGroup = eventsToAdd.stream()
                 .collect(Collectors.groupingBy(

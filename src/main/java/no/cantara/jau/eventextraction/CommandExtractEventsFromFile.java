@@ -29,8 +29,8 @@ public class CommandExtractEventsFromFile extends HystrixCommand<Integer> {
     private static final Logger log = LoggerFactory.getLogger(CommandExtractEventsFromFile.class);
     private static final String GROUP_KEY = "EXTRACT_EVENTS";
     private static final int COMMAND_TIMEOUT = 10000;
-    private static final String ERROR_MESSAGE = "ERROR";
-    private static final String EXCEPTION_MESSAGE = "Exception";
+    private static final String ERROR_REGEXP = "\\bERROR\\b";
+    private static final String EXCEPTION_REGEXP = ".+Exception[^\\n]+";
     private final EventRepo repo;
     private int lastLineRead;
     private final String filePath;
@@ -59,24 +59,29 @@ public class CommandExtractEventsFromFile extends HystrixCommand<Integer> {
                         lastLineRead = line.getNumber();
                         for (EventExtractionTag tag : extractionTags) {
                             line.setGroupName(groupName);
-                            String logLine = line.getLine();
-                            Matcher matcher = Pattern.compile(tag.regex)
-                                    .matcher(logLine);
                             line.setFileName(filePath);
-                            boolean isMatch = matcher.find();
+                            String logLine = line.getLine();
+                            boolean isMatch = matchAgainstRegex(tag.regex, logLine);
                             if (isMatch) {
                                 line.setTag(tag.tagName);
                                 return true;
                             }
-
-                            else if (logLine.contains(ERROR_MESSAGE)) {
-                                line.setTag(ERROR_MESSAGE);
+                            else if (logLine.contains("ERROR")) {
+                                line.setTag("Error");
                                 return true;
                             }
-                            else if (logLine.contains(EXCEPTION_MESSAGE)) {
-                                line.setTag(EXCEPTION_MESSAGE);
+                            else if (logLine.contains("Exception")) {
+                                line.setTag("Exception");
                                 return true;
                             }
+//                            else if (matchAgainstRegex(ERROR_REGEXP, logLine)) {
+//                                line.setTag(ERROR_REGEXP);
+//                                return true;
+//                            }
+//                            else if (matchAgainstRegex(EXCEPTION_REGEXP, logLine)) {
+//                                line.setTag(EXCEPTION_REGEXP);
+//                                return true;
+//                            }
                         }
                         return false;
                     })
@@ -89,6 +94,12 @@ public class CommandExtractEventsFromFile extends HystrixCommand<Integer> {
 
         repo.addEvents(events);
         return lastLineRead;
+    }
+
+    public boolean matchAgainstRegex(String regex, String logLine) {
+        Matcher matcher = Pattern.compile(regex)
+                .matcher(logLine);
+        return matcher.find();
     }
 
     public static Stream<Event> lines(Path p) throws IOException {

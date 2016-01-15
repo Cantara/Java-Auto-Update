@@ -6,14 +6,18 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class EventGroup {
-    private final Map<String, EventFile> fileNameToFileMapping;
+    private final Map<String, EventFile> files;
 
     public EventGroup() {
-        this.fileNameToFileMapping = new HashMap<>();
+        this.files = new HashMap<>();
+    }
+
+    public Map<String, EventFile> getFiles() {
+        return files;
     }
 
     public EventFile getEventFile(String fileName) {
-        return fileNameToFileMapping.get(fileName);
+        return files.get(fileName);
     }
 
     public void addEvents(List<Event> events) {
@@ -25,8 +29,8 @@ public class EventGroup {
         eventGroupsGroupedByFileName.keySet().stream()
                 .forEach(fileName -> {
                     List<Event> eventFilesToAdd = eventGroupsGroupedByFileName.get(fileName);
-                    fileNameToFileMapping.putIfAbsent(fileName, new EventFile());
-                    EventFile eventFile = fileNameToFileMapping.get(fileName);
+                    files.putIfAbsent(fileName, new EventFile());
+                    EventFile eventFile = files.get(fileName);
                     eventFile.addEvents(eventFilesToAdd);
                 });
 
