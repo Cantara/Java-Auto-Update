@@ -59,6 +59,7 @@ public class CheckForUpdateHelper {
                 newClientConfig = jau.registerClient();
             } catch (NoContentException e) {
                 log.debug("No updated config.");
+                extractorService.clearRepo();
                 return;
             } catch (BadRequestException e) {
                 log.error("Got BadRequestException: ", e);

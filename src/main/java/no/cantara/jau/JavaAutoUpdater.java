@@ -131,6 +131,7 @@ public class JavaAutoUpdater {
         ServiceConfig serviceConfig = clientConfig.serviceConfig;
         DownloadUtil.downloadAllFiles(serviceConfig.getDownloadItems(), workingDirectory);
         ConfigurationStoreUtil.toFiles(serviceConfig.getConfigurationStores(), workingDirectory);
+        extractorService.updateConfigs(serviceConfig.getEventExtractionConfigs());
     }
 
     private void initializeProcessHolder(Properties initialApplicationState) {

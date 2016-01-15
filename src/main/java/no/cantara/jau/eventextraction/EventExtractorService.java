@@ -14,8 +14,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-import static java.util.stream.Collectors.groupingBy;
-
 public class EventExtractorService {
     private static final Logger log = LoggerFactory.getLogger(EventExtractorService.class);
     private final EventRepo repo;
@@ -29,7 +27,6 @@ public class EventExtractorService {
 
     public void updateConfigs(List<EventExtractionConfig> configs) {
         createEventExtractors(configs);
-        runEventExtractors();
     }
 
     private List<Future<String>> runEventExtractors() {
@@ -43,6 +40,7 @@ public class EventExtractorService {
     }
 
     private void createEventExtractors(List<EventExtractionConfig> configs) {
+        log.info(configs.toString());
         eventExtractors = new ArrayList<>();
         for (EventExtractionConfig config : configs) {
             Map<String, List<EventExtractionTag>> tagsByFile = EventExtractionUtil
@@ -51,15 +49,20 @@ public class EventExtractorService {
             for (String filePath : tagsByFile.keySet()) {
                 List<EventExtractionTag> eventExtractionTags = tagsByFile.get(filePath);
                 EventExtractor extractor = new EventExtractor(repo, eventExtractionTags,
-                        filePath, "jau");
+                        filePath, config.groupName);
                 eventExtractors.add(extractor);
             }
         }
-        log.info("Created {} EventExtractors", eventExtractors);
+        log.debug("Created {} EventExtractors", eventExtractors.size());
     }
 
     public List<Event> extractEvents() {
+        log.debug("Extracting events.");
         runEventExtractors();
         return repo.getEvents();
+    }
+
+    public void clearRepo() {
+        repo.clearEvents();
     }
 }
