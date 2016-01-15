@@ -57,13 +57,13 @@ public class EventExtractorTest {
     }
 
     @Test
-    public void shouldExtractEventsBasedOnTags() throws JsonProcessingException {
+    public void shouldExtractEventsBasedOnTags() throws Exception {
         EventRepo repo = new EventRepo();
         List<EventExtractionTag> tags = new ArrayList<>();
         tags.add(new EventExtractionTag("this-is-an-mdc-tag", "\\bthis-is-an-mdc-tag\\b", LOG_FILE_PATH));
         EventExtractor extractor = new EventExtractor(repo, tags, LOG_FILE_PATH, "jau");
 
-        extractor.run();
+        extractor.call();
 
         List<Event> eventsExtracted = repo.getEvents();
 
@@ -71,18 +71,18 @@ public class EventExtractorTest {
     }
 
     @Test
-    public void shouldNotExtractEventsWhenFileIsUnmodified() throws InterruptedException, JsonProcessingException {
+    public void shouldNotExtractEventsWhenFileIsUnmodified() throws Exception {
         EventRepo repo = new EventRepo();
         List<EventExtractionTag> tags = new ArrayList<>();
         tags.add(new EventExtractionTag("this-is-an-mdc-tag", "\\bthis-is-an-mdc-tag\\b", LOG_FILE_PATH));
         EventExtractor extractor = new EventExtractor(repo, tags, LOG_FILE_PATH, "jau");
 
-        extractor.run();
+        extractor.call();
 
         List<Event> eventsExtracted = repo.getEvents();
         Assert.assertEquals(eventsExtracted.size(), 3);
 
-        extractor.run();
+        extractor.call();
 
         eventsExtracted = repo.getEvents();
         Assert.assertEquals(eventsExtracted.size(), 3);

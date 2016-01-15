@@ -107,13 +107,13 @@ public class CommandExtractEventsFromFile extends HystrixCommand<Integer> {
         return false;
     }
 
-    public boolean matchAgainstRegex(String regex, String logLine) {
+    private boolean matchAgainstRegex(String regex, String logLine) {
         Matcher matcher = Pattern.compile(regex)
                 .matcher(logLine);
         return matcher.find();
     }
 
-    public static Stream<Event> lines(Path p) throws IOException {
+    private static Stream<Event> lines(Path p) throws IOException {
         BufferedReader bufferedReader = Files.newBufferedReader(p);
         Spliterator<Event> spliterator = new Spliterators.AbstractSpliterator<Event>(
                 Long.MAX_VALUE, Spliterator.ORDERED|Spliterator.NONNULL) {
