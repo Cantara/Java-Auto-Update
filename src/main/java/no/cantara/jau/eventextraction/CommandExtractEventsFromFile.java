@@ -84,7 +84,7 @@ public class CommandExtractEventsFromFile extends HystrixCommand<Integer> {
         } catch (IOException e) {
             log.error("Error in reading managed service's log file.", e);
         }
-        log.trace("Line {} was the last line read", lastLineRead);
+        log.trace("Line {} was the last line read from file={}", lastLineRead, filePath);
         log.trace("Matching lines: {} {}", events.size(), events);
 
         repo.addEvents(events);

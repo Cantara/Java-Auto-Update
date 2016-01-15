@@ -33,7 +33,7 @@ public class EventExtractorServiceTest {
     }
 
     @Test
-    public void shouldReadTagsFromFiles() throws InterruptedException {
+    public void shouldExtractEventsFromFiles() throws InterruptedException {
         EventRepo repo = new EventRepo();
         EventExtractorService service = new EventExtractorService(repo);
         EventExtractionConfig config = new EventExtractionConfig("jau");
@@ -46,8 +46,6 @@ public class EventExtractorServiceTest {
         service.updateConfigs(configs);
 
         service.runEventExtractors();
-
-        Thread.sleep(500);
 
         List<Event> events = repo.getEvents();
         Assert.assertNotEquals(events.size(), 0);
@@ -62,4 +60,24 @@ public class EventExtractorServiceTest {
 
         Assert.assertEquals(tag.getEvents().size(), manuallyCollected.size());
     }
+
+    @Test
+    public void shouldExtractEventsFromMultipleLargeFiles() {
+        EventRepo repo = new EventRepo();
+        EventExtractorService service = new EventExtractorService(repo);
+        EventExtractionConfig config = new EventExtractionConfig("jau");
+        config.addEventExtractionTag(new EventExtractionTag("This a is a tag", "\\b200\\b",
+                "external_testdata/pharmacyagent-2016-01-07.logg"));
+        config.addEventExtractionTag(new EventExtractionTag("MDC tag test", "\\bmdc-tag-test\\b",
+                "external_testdata/pharmacyagent-2016-01-07.logg"));
+        List<EventExtractionConfig> configs = new ArrayList<>();
+        configs.add(config);
+        service.updateConfigs(configs);
+
+        service.runEventExtractors();
+
+        List<Event> events = repo.getEvents();
+        Assert.assertNotEquals(events.size(), 0);
+    }
+
 }
