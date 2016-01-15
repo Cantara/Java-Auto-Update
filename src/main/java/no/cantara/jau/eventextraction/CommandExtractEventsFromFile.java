@@ -60,29 +60,7 @@ public class CommandExtractEventsFromFile extends HystrixCommand<Integer> {
                     .filter(line -> {
                         lastLineRead = line.getNumber();
                         for (EventExtractionTag tag : extractionTags) {
-                            line.setGroupName(groupName);
-                            line.setFileName(filePath);
-                            String logLine = line.getLine();
-
-                            if (isException) {
-                                if (logLine.startsWith("\tat")) {
-                                    line.setTag("Exception");
-                                    return true;
-                                }
-                                isException = false;
-                            }
-                            boolean isMatch = matchAgainstRegex(tag.regex, logLine);
-                            if (isMatch) {
-                                line.setTag(tag.tagName);
-                                return true;
-                            }
-                            else if (logLine.contains(ERROR_WORD)) {
-                                line.setTag(ERROR_WORD);
-                                return true;
-                            }
-                            else if (logLine.contains(EXCEPTION_WORD)) {
-                                line.setTag(EXCEPTION_WORD);
-                                isException = true;
+                            if (extractLine(line, tag)) {
                                 return true;
                             }
                         }
@@ -97,6 +75,35 @@ public class CommandExtractEventsFromFile extends HystrixCommand<Integer> {
 
         repo.addEvents(events);
         return lastLineRead;
+    }
+
+    private boolean extractLine(Event line, EventExtractionTag tag) {
+        line.setGroupName(groupName);
+        line.setFileName(filePath);
+        String logLine = line.getLine();
+
+        if (isException) {
+            if (logLine.startsWith("\tat")) {
+                line.setTag("Exception");
+                return true;
+            }
+            isException = false;
+        }
+        boolean isMatch = matchAgainstRegex(tag.regex, logLine);
+        if (isMatch) {
+            line.setTag(tag.tagName);
+            return true;
+        }
+        else if (logLine.contains(ERROR_WORD)) {
+            line.setTag(ERROR_WORD);
+            return true;
+        }
+        else if (logLine.contains(EXCEPTION_WORD)) {
+            line.setTag(EXCEPTION_WORD);
+            isException = true;
+            return true;
+        }
+        return false;
     }
 
     public boolean matchAgainstRegex(String regex, String logLine) {
