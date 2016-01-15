@@ -29,13 +29,12 @@ public class CommandExtractEventsFromFile extends HystrixCommand<Integer> {
     private static final Logger log = LoggerFactory.getLogger(CommandExtractEventsFromFile.class);
     private static final String GROUP_KEY = "EXTRACT_EVENTS";
     private static final int COMMAND_TIMEOUT = 10000;
-    private static final String ERROR_REGEXP = "\\bERROR\\b";
-    private static final String EXCEPTION_REGEXP = ".+Exception[^\\n]+";
     private final EventRepo repo;
     private int lastLineRead;
     private final String filePath;
     private final String groupName;
     private final List<EventExtractionTag> extractionTags;
+    private boolean isException;
 
     protected CommandExtractEventsFromFile(EventRepo repo, int lastLineRead, String filePath,
                                            String groupName, List<EventExtractionTag> extractionTags) {
@@ -53,6 +52,7 @@ public class CommandExtractEventsFromFile extends HystrixCommand<Integer> {
     protected Integer run() throws Exception {
         log.trace("Start reading from line {}", lastLineRead);
         List<Event> events = new ArrayList<>();
+
         try(Stream<Event> lines = lines(Paths.get(filePath))) {
             events = lines.skip(lastLineRead)
                     .filter(line -> {
@@ -61,6 +61,14 @@ public class CommandExtractEventsFromFile extends HystrixCommand<Integer> {
                             line.setGroupName(groupName);
                             line.setFileName(filePath);
                             String logLine = line.getLine();
+
+                            if (isException) {
+                                if (logLine.startsWith("\tat")) {
+                                    line.setTag("Exception");
+                                    return true;
+                                }
+                                isException = false;
+                            }
                             boolean isMatch = matchAgainstRegex(tag.regex, logLine);
                             if (isMatch) {
                                 line.setTag(tag.tagName);
@@ -72,16 +80,9 @@ public class CommandExtractEventsFromFile extends HystrixCommand<Integer> {
                             }
                             else if (logLine.contains("Exception")) {
                                 line.setTag("Exception");
+                                isException = true;
                                 return true;
                             }
-//                            else if (matchAgainstRegex(ERROR_REGEXP, logLine)) {
-//                                line.setTag(ERROR_REGEXP);
-//                                return true;
-//                            }
-//                            else if (matchAgainstRegex(EXCEPTION_REGEXP, logLine)) {
-//                                line.setTag(EXCEPTION_REGEXP);
-//                                return true;
-//                            }
                         }
                         return false;
                     })
