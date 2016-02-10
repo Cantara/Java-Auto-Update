@@ -4,6 +4,7 @@ import com.netflix.hystrix.exception.HystrixRuntimeException;
 import no.cantara.jau.util.SleepUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.backoff.BackOff;
 import org.springframework.util.backoff.BackOffExecution;
 import org.springframework.util.backoff.ExponentialBackOff;
 
@@ -17,7 +18,7 @@ public class RegisterClientExceptionHandler {
 
     private static final Logger log = LoggerFactory.getLogger(RegisterClientHelper.class);
 
-    public static void handleRegisterClientException(HystrixRuntimeException e, ExponentialBackOff exponentialBackOff,
+    public static void handleRegisterClientException(HystrixRuntimeException e, BackOff exponentialBackOff,
                                                      BackOffExecution backOffExecution, String serviceConfigUrl) {
         Throwable cause = e.getCause();
         log.debug("Exception registering client, exception getMessage={}", e.getMessage());
@@ -32,7 +33,9 @@ public class RegisterClientExceptionHandler {
         } else if (cause instanceof BadRequestException) {
             log.error("400 Bad Request. Probably need to fix something on the client. Exiting after a" +
                     " wait, so as to not DDoS the server.");
-            SleepUtil.sleepWithLogging(exponentialBackOff.getMaxInterval() * 2);
+
+            // TODO  Do a sensible BackOff implementation class comparissmnet before this!!!  
+            SleepUtil.sleepWithLogging(((ExponentialBackOff)exponentialBackOff).getMaxInterval() * 2);
             System.exit(1);
         } else if (cause instanceof TimeoutException) {
             log.debug("CommandRegisterClient timed out.");
