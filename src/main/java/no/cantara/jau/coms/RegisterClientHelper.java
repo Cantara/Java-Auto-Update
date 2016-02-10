@@ -3,6 +3,7 @@ package no.cantara.jau.coms;
 import com.netflix.hystrix.exception.HystrixRuntimeException;
 import no.cantara.jau.serviceconfig.client.ConfigServiceClient;
 import no.cantara.jau.serviceconfig.dto.ClientConfig;
+import org.springframework.util.backoff.BackOff;
 import org.springframework.util.backoff.BackOffExecution;
 import org.springframework.util.backoff.ExponentialBackOff;
 
@@ -19,7 +20,7 @@ public class RegisterClientHelper {
     }
 
     public ClientConfig registerClient() {
-        ExponentialBackOff exponentialBackOff = new ExponentialBackOff();
+        BackOff exponentialBackOff = new ExponentialBackOff();
         BackOffExecution backOffExecution = exponentialBackOff.start();
 
         while (true) {

@@ -69,7 +69,7 @@
         <dependency>
             <groupId>no.cantara.jau</groupId>
             <artifactId>configservice-sdk</artifactId>
-            <version>0.7-SNAPSHOT</version>
+            <version>0.9</version>
         </dependency>
 
         <dependency>
