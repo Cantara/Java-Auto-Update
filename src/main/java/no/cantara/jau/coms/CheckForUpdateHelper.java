@@ -85,9 +85,6 @@ public class CheckForUpdateHelper {
                 processHolder.setClientId(newClientConfig.clientId);
                 processHolder.setLastChangedTimestamp(newClientConfig.serviceConfig.getLastChanged());
 
-                Properties environment = PropertiesHelper.getPropertiesFromConfigFile(PropertiesHelper.APPLICATION_ENV_FILENAME);
-                processHolder.setEnvironment(PropertiesHelper.propertiesAsMap(environment));
-
                 configServiceClient.saveApplicationState(newClientConfig);
             } catch (Exception e) {
                 log.warn("Error thrown from scheduled lambda.", e);

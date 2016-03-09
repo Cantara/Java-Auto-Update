@@ -12,7 +12,6 @@ import no.cantara.jau.serviceconfig.dto.ServiceConfig;
 import no.cantara.jau.util.PropertiesHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.slf4j.MDC;
 
 import java.util.Properties;
 import java.util.concurrent.Executors;
@@ -138,9 +137,12 @@ public class JavaAutoUpdater {
         String initialClientId = PropertiesHelper.getStringProperty(initialApplicationState, ConfigServiceClient.CLIENT_ID, null);
         String initialLastChanged = PropertiesHelper.getStringProperty(initialApplicationState, ConfigServiceClient.LAST_CHANGED, null);
         String initialCommand = PropertiesHelper.getStringProperty(initialApplicationState, ConfigServiceClient.COMMAND, null);
+        Properties environment = PropertiesHelper.getPropertiesFromConfigFile(PropertiesHelper.APPLICATION_ENV_FILENAME);
+
         processHolder.setCommand(initialCommand.split("\\s+"));
         processHolder.setClientId(initialClientId);
         processHolder.setLastChangedTimestamp(initialLastChanged);
+        processHolder.setEnvironment(PropertiesHelper.propertiesAsMap(environment));
     }
 
 }
