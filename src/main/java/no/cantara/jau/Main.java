@@ -22,13 +22,13 @@ public class Main {
     private static final Logger log = LoggerFactory.getLogger(Main.class);
 
     public static void main(String[] args) {
-        ProxyFixer.fixProxy(PropertiesHelper.getPropertiesFromConfigFile(PropertiesHelper.CONFIG_FILENAME));
+        ProxyFixer.fixProxy(PropertiesHelper.getPropertiesFromConfigFile(PropertiesHelper.JAU_CONFIG_FILENAME));
 
         String serviceConfigUrl = PropertiesHelper.getServiceConfigUrl();
 
         if (serviceConfigUrl == null) {
             log.error("Application cannot start! {} not set in {}.",
-                    PropertiesHelper.CONFIG_SERVICE_URL_KEY, PropertiesHelper.CONFIG_FILENAME);
+                    PropertiesHelper.CONFIG_SERVICE_URL_KEY, PropertiesHelper.JAU_CONFIG_FILENAME);
             System.exit(1);
         }
 

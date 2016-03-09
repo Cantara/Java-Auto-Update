@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Map;
 
 /**
  * Wrapper of process and related data,
@@ -15,6 +16,7 @@ public class ApplicationProcess {
     private static final Logger log = LoggerFactory.getLogger(ApplicationProcess.class);
     private File workingDirectory;
     private String[] command;
+    private Map<String, String> environment;
     private Process runningProcess;
 
     private String clientId;
@@ -31,6 +33,10 @@ public class ApplicationProcess {
 
     public void startProcess() {
         ProcessBuilder pb = new ProcessBuilder(command).inheritIO().directory(workingDirectory);
+        if (environment != null) {
+            pb.environment().putAll(environment);
+        }
+
         try {
             runningProcess = pb.start();
             Thread.sleep(1000); // Gives the process time to fail
@@ -66,6 +72,9 @@ public class ApplicationProcess {
     }
     public void setCommand(String[] command) {
         this.command = command;
+    }
+    public void setEnvironment(Map<String, String> environment) {
+        this.environment = environment;
     }
     public void setClientId(String clientId) {
         this.clientId = clientId;
