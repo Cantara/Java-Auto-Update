@@ -1,8 +1,8 @@
 package no.cantara.jau.coms;
 
 import com.netflix.hystrix.exception.HystrixRuntimeException;
-import no.cantara.jau.serviceconfig.client.ConfigServiceClient;
-import no.cantara.jau.serviceconfig.dto.ClientRegistrationRequest;
+import no.cantara.cs.client.ConfigServiceClient;
+import no.cantara.cs.dto.ClientRegistrationRequest;
 import org.testng.annotations.Test;
 
 import javax.ws.rs.BadRequestException;
@@ -12,8 +12,6 @@ import javax.ws.rs.core.NoContentException;
 import java.io.IOException;
 
 import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyMap;
-import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.testng.Assert.assertTrue;
@@ -31,7 +29,7 @@ public class CommandRegisterClientTest {
         when(configServiceClient.registerClient(any(ClientRegistrationRequest.class))).thenThrow(NotFoundException.class);
 
         try {
-            new CommandRegisterClient("", configServiceClient, "").execute();
+            new CommandRegisterClient("", configServiceClient, "", "").execute();
             fail("Should've gotten an exception");
         } catch (HystrixRuntimeException e) {
             Throwable cause = e.getCause();
@@ -48,7 +46,7 @@ public class CommandRegisterClientTest {
         when(configServiceClient.registerClient(any(ClientRegistrationRequest.class))).thenThrow(InternalServerErrorException.class);
 
         try {
-            new CommandRegisterClient("", configServiceClient, "").execute();
+            new CommandRegisterClient("", configServiceClient, "", "").execute();
             fail("Should've gotten an exception");
         } catch (HystrixRuntimeException e) {
             Throwable cause = e.getCause();
@@ -65,7 +63,7 @@ public class CommandRegisterClientTest {
         when(configServiceClient.registerClient(any(ClientRegistrationRequest.class))).thenThrow(BadRequestException.class);
 
         try {
-            new CommandRegisterClient("", configServiceClient, "").execute();
+            new CommandRegisterClient("", configServiceClient, "", "").execute();
             fail("Should've gotten an exception");
         } catch (HystrixRuntimeException e) {
             Throwable cause = e.getCause();
@@ -82,7 +80,7 @@ public class CommandRegisterClientTest {
         when(configServiceClient.registerClient(any(ClientRegistrationRequest.class))).thenThrow(NoContentException.class);
 
         try {
-            new CommandRegisterClient("", configServiceClient, "").execute();
+            new CommandRegisterClient("", configServiceClient, "", "").execute();
             fail("Should've gotten an exception");
         } catch (HystrixRuntimeException e) {
             Throwable cause = e.getCause();
@@ -100,7 +98,7 @@ public class CommandRegisterClientTest {
         when(configServiceClient.registerClient(any(ClientRegistrationRequest.class))).thenThrow(IllegalStateException.class);
 
         try {
-            new CommandRegisterClient("", configServiceClient, "").execute();
+            new CommandRegisterClient("", configServiceClient, "", "").execute();
             fail("Should've gotten an exception");
         } catch (HystrixRuntimeException e) {
             Throwable cause = e.getCause();

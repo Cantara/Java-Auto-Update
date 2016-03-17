@@ -1,5 +1,6 @@
 package no.cantara.jau.util;
 
+import no.cantara.cs.client.ConfigServiceProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,6 +20,7 @@ public class PropertiesHelper {
     public static final String VERSION_FILENAME = "version.properties";
 
     private static final String CLIENT_NAME_PROPERTY_KEY = "clientName";
+    private static final String CLIENT_ID_PROPERTY_KEY = "configservice.clientid";
     private static final String ARTIFACT_ID = "configservice.artifactid";
     private static final String CONFIG_SERVICE_USERNAME_KEY = "configservice.username";
     private static final String CONFIG_SERVICE_PASSWORD_KEY = "configservice.password";
@@ -60,6 +62,10 @@ public class PropertiesHelper {
         return map;
     }
 
+    public static String getClientId() {
+        return getStringProperty(getPropertiesFromConfigFile(JAU_CONFIG_FILENAME), CLIENT_ID_PROPERTY_KEY, null);
+    }
+
     public static String getClientName() {
         return getStringProperty(getPropertiesFromConfigFile(JAU_CONFIG_FILENAME), CLIENT_NAME_PROPERTY_KEY, CLIENT_NAME_PROPERTY_DEFAULT_VALUE);
     }
@@ -68,7 +74,7 @@ public class PropertiesHelper {
         return getStringProperty(getPropertiesFromConfigFile(JAU_CONFIG_FILENAME), ARTIFACT_ID, null);
     }
 
-    public static String getServiceConfigUrl() {
+    public static String getConfigServiceUrl() {
         return getStringProperty(getPropertiesFromConfigFile(JAU_CONFIG_FILENAME), CONFIG_SERVICE_URL_KEY, null);
     }
 

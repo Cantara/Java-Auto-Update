@@ -1,12 +1,12 @@
 package no.cantara.jau;
 
+import no.cantara.cs.client.ConfigServiceClient;
 import no.cantara.jau.coms.RegisterClientHelper;
 import no.cantara.jau.duplicatehandler.DuplicateProcessHandler;
 import no.cantara.jau.duplicatehandler.LastRunningProcessFileUtil;
 import no.cantara.jau.duplicatehandler.ProcessExecutorFetcher;
 import no.cantara.jau.eventextraction.EventExtractorService;
 import no.cantara.jau.eventextraction.EventRepo;
-import no.cantara.jau.serviceconfig.client.ConfigServiceClient;
 import no.cantara.jau.util.PropertiesHelper;
 import no.cantara.jau.util.ProxyFixer;
 import org.slf4j.Logger;
@@ -24,9 +24,9 @@ public class Main {
     public static void main(String[] args) {
         ProxyFixer.fixProxy(PropertiesHelper.getPropertiesFromConfigFile(PropertiesHelper.JAU_CONFIG_FILENAME));
 
-        String serviceConfigUrl = PropertiesHelper.getServiceConfigUrl();
+        String configServiceUrl = PropertiesHelper.getConfigServiceUrl();
 
-        if (serviceConfigUrl == null) {
+        if (configServiceUrl == null) {
             log.error("Application cannot start! {} not set in {}.",
                     PropertiesHelper.CONFIG_SERVICE_URL_KEY, PropertiesHelper.JAU_CONFIG_FILENAME);
             System.exit(1);
@@ -38,12 +38,13 @@ public class Main {
         String username = PropertiesHelper.getUsername();
         String password = PropertiesHelper.getPassword();
         String artifactId = PropertiesHelper.getArtifactId();
+        String clientId = PropertiesHelper.getClientId();
 
         int updateInterval = PropertiesHelper.getUpdateInterval();
         int isRunningInterval = PropertiesHelper.getIsRunningInterval();
 
-        ConfigServiceClient configServiceClient = new ConfigServiceClient(serviceConfigUrl, username, password);
-        RegisterClientHelper registerClientHelper = new RegisterClientHelper(configServiceClient, artifactId, clientName);
+        ConfigServiceClient configServiceClient = new ConfigServiceClient(configServiceUrl, username, password);
+        RegisterClientHelper registerClientHelper = new RegisterClientHelper(configServiceClient, artifactId, clientName, clientId);
 
         ProcessExecutorFetcher processExecutorFetcher = new ProcessExecutorFetcher();
         LastRunningProcessFileUtil fileUtil = new LastRunningProcessFileUtil(

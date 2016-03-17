@@ -1,10 +1,10 @@
 package no.cantara.jau;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import no.cantara.cs.client.ConfigurationStoreUtil;
+import no.cantara.cs.client.DownloadUtil;
+import no.cantara.cs.dto.ApplicationConfig;
 import no.cantara.jau.duplicatehandler.DuplicateProcessHandler;
-import no.cantara.jau.serviceconfig.client.ConfigurationStoreUtil;
-import no.cantara.jau.serviceconfig.client.DownloadUtil;
-import no.cantara.jau.serviceconfig.dto.ServiceConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.annotations.AfterClass;
@@ -61,7 +61,7 @@ public class JAUProcessTest {
         String jsonResponse = new Scanner( new File("config1.serviceconfig") ).useDelimiter("\\A").next();
 
         // let us type a configuration the quick way..
-        ServiceConfig serviceConfig = mapper.readValue(jsonResponse, ServiceConfig.class);
+        ApplicationConfig config = mapper.readValue(jsonResponse, ApplicationConfig.class);
 
         // Process stuff
         DuplicateProcessHandler duplicateProcessHandler = mock(DuplicateProcessHandler.class);
@@ -71,11 +71,11 @@ public class JAUProcessTest {
 
 
         // Download stuff
-        DownloadUtil.downloadAllFiles(serviceConfig.getDownloadItems(), workingDirectory);
-        ConfigurationStoreUtil.toFiles(serviceConfig.getConfigurationStores(), workingDirectory);
+        DownloadUtil.downloadAllFiles(config.getDownloadItems(), workingDirectory);
+        ConfigurationStoreUtil.toFiles(config.getConfigurationStores(), workingDirectory);
 
         // Lets try to start
-        String initialCommand = serviceConfig.getStartServiceScript();
+        String initialCommand = config.getStartServiceScript();
         int updateInterval=100;
 
         System.out.println("Initial command: "+initialCommand);

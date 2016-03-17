@@ -19,17 +19,17 @@ public class RegisterClientExceptionHandler {
     private static final Logger log = LoggerFactory.getLogger(RegisterClientHelper.class);
 
     public static void handleRegisterClientException(HystrixRuntimeException e, BackOff exponentialBackOff,
-                                                     BackOffExecution backOffExecution, String serviceConfigUrl) {
+                                                     BackOffExecution backOffExecution, String configServiceUrl) {
         Throwable cause = e.getCause();
         log.debug("Exception registering client, exception getMessage={}", e.getMessage());
         log.debug("Exception registering client, cause getMessage={}", cause.getMessage());
 
         if (cause instanceof ConnectException) {
-            log.debug("Connection refused to ConfigService url={}", serviceConfigUrl);
+            log.debug("Connection refused to ConfigService url={}", configServiceUrl);
         } else if (cause instanceof InternalServerErrorException) {
-            log.debug("Internal server error in ConfigService url={}", serviceConfigUrl);
+            log.debug("Internal server error in ConfigService url={}", configServiceUrl);
         } else if(cause instanceof NotFoundException) {
-            log.debug("404 not found to ConfigService url={}", serviceConfigUrl);
+            log.debug("404 not found to ConfigService url={}", configServiceUrl);
         } else if (cause instanceof BadRequestException) {
             log.error("400 Bad Request. Probably need to fix something on the client. Exiting after a" +
                     " wait, so as to not DDoS the server.");

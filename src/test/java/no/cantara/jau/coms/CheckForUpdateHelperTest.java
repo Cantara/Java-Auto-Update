@@ -1,19 +1,17 @@
 package no.cantara.jau.coms;
 
+import no.cantara.cs.client.ConfigServiceClient;
+import no.cantara.cs.dto.CheckForUpdateRequest;
 import no.cantara.jau.ApplicationProcess;
 import no.cantara.jau.JavaAutoUpdater;
 import no.cantara.jau.eventextraction.EventExtractorService;
-import no.cantara.jau.serviceconfig.client.ConfigServiceClient;
-import no.cantara.jau.serviceconfig.dto.CheckForUpdateRequest;
 import org.testng.annotations.Test;
 
 import javax.ws.rs.InternalServerErrorException;
-import javax.ws.rs.core.NoContentException;
 import java.io.IOException;
 import java.util.Properties;
 import java.util.concurrent.ScheduledFuture;
 
-import static org.mockito.Matchers.anyMap;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.*;
 
@@ -46,7 +44,7 @@ public class CheckForUpdateHelperTest {
     public void testNotChanged() throws IOException {
         ConfigServiceClient configServiceClient = mock(ConfigServiceClient.class);
         when(configServiceClient.getApplicationState()).thenReturn(new Properties());
-        when(configServiceClient.checkForUpdate(anyString(), any(CheckForUpdateRequest.class))).thenThrow(NoContentException.class);
+        when(configServiceClient.checkForUpdate(anyString(), any(CheckForUpdateRequest.class))).thenReturn(null);
 
         ApplicationProcess processHolder = mock(ApplicationProcess.class);
         ScheduledFuture processMonitorHandle = mock(ScheduledFuture.class);

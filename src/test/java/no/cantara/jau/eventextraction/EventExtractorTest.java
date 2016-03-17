@@ -1,7 +1,7 @@
 package no.cantara.jau.eventextraction;
 
-import no.cantara.jau.serviceconfig.dto.event.Event;
-import no.cantara.jau.serviceconfig.dto.event.EventExtractionTag;
+import no.cantara.cs.dto.event.Event;
+import no.cantara.cs.dto.event.EventExtractionTag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.Assert;

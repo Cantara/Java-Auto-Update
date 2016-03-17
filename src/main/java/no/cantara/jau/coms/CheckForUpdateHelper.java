@@ -1,14 +1,14 @@
 package no.cantara.jau.coms;
 
+import no.cantara.cs.client.ConfigServiceClient;
+import no.cantara.cs.client.EventExtractionUtil;
+import no.cantara.cs.dto.CheckForUpdateRequest;
+import no.cantara.cs.dto.ClientConfig;
+import no.cantara.cs.dto.event.Event;
+import no.cantara.cs.dto.event.ExtractedEventsStore;
 import no.cantara.jau.ApplicationProcess;
 import no.cantara.jau.JavaAutoUpdater;
 import no.cantara.jau.eventextraction.EventExtractorService;
-import no.cantara.jau.serviceconfig.client.ConfigServiceClient;
-import no.cantara.jau.serviceconfig.client.EventExtractionUtil;
-import no.cantara.jau.serviceconfig.dto.CheckForUpdateRequest;
-import no.cantara.jau.serviceconfig.dto.ClientConfig;
-import no.cantara.jau.serviceconfig.dto.event.Event;
-import no.cantara.jau.serviceconfig.dto.event.ExtractedEventsStore;
 import no.cantara.jau.util.ClientEnvironmentUtil;
 import no.cantara.jau.util.PropertiesHelper;
 import org.slf4j.Logger;
@@ -58,8 +58,7 @@ public class CheckForUpdateHelper {
                 configServiceClient.cleanApplicationState();
                 newClientConfig = jau.registerClient();
             } catch (NoContentException e) {
-                log.debug("No updated config.");
-                extractorService.clearRepo();
+                log.error("Got NoContentException: ", e);
                 return;
             } catch (BadRequestException e) {
                 log.error("Got BadRequestException: ", e);
@@ -72,6 +71,12 @@ public class CheckForUpdateHelper {
                 return;
             }
 
+            if (newClientConfig == null) {
+                log.debug("No updated config.");
+                extractorService.clearRepo();
+                return;
+            }
+
             // ExecutorService swallows any exceptions silently, so need to handle them explicitly.
             // See http://www.nurkiewicz.com/2014/11/executorservice-10-tips-and-tricks.html (point 6.).
             try {
@@ -80,10 +85,10 @@ public class CheckForUpdateHelper {
 
                 jau.storeClientFiles(newClientConfig);
 
-                String[] command = newClientConfig.serviceConfig.getStartServiceScript().split("\\s+");
+                String[] command = newClientConfig.config.getStartServiceScript().split("\\s+");
                 processHolder.setCommand(command);
                 processHolder.setClientId(newClientConfig.clientId);
-                processHolder.setLastChangedTimestamp(newClientConfig.serviceConfig.getLastChanged());
+                processHolder.setLastChangedTimestamp(newClientConfig.config.getLastChanged());
 
                 configServiceClient.saveApplicationState(newClientConfig);
             } catch (Exception e) {

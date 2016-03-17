@@ -1,14 +1,14 @@
 package no.cantara.jau;
 
+import no.cantara.cs.client.ConfigServiceClient;
+import no.cantara.cs.client.ConfigurationStoreUtil;
+import no.cantara.cs.client.DownloadUtil;
+import no.cantara.cs.dto.ApplicationConfig;
+import no.cantara.cs.dto.ClientConfig;
 import no.cantara.jau.coms.CheckForUpdateHelper;
 import no.cantara.jau.coms.RegisterClientHelper;
 import no.cantara.jau.duplicatehandler.DuplicateProcessHandler;
 import no.cantara.jau.eventextraction.EventExtractorService;
-import no.cantara.jau.serviceconfig.client.ConfigServiceClient;
-import no.cantara.jau.serviceconfig.client.ConfigurationStoreUtil;
-import no.cantara.jau.serviceconfig.client.DownloadUtil;
-import no.cantara.jau.serviceconfig.dto.ClientConfig;
-import no.cantara.jau.serviceconfig.dto.ServiceConfig;
 import no.cantara.jau.util.PropertiesHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -127,10 +127,10 @@ public class JavaAutoUpdater {
 
     public void storeClientFiles(ClientConfig clientConfig) {
         String workingDirectory = processHolder.getWorkingDirectory().getAbsolutePath();
-        ServiceConfig serviceConfig = clientConfig.serviceConfig;
-        DownloadUtil.downloadAllFiles(serviceConfig.getDownloadItems(), workingDirectory);
-        ConfigurationStoreUtil.toFiles(serviceConfig.getConfigurationStores(), workingDirectory);
-        extractorService.updateConfigs(serviceConfig.getEventExtractionConfigs());
+        ApplicationConfig config = clientConfig.config;
+        DownloadUtil.downloadAllFiles(config.getDownloadItems(), workingDirectory);
+        ConfigurationStoreUtil.toFiles(config.getConfigurationStores(), workingDirectory);
+        extractorService.updateConfigs(config.getEventExtractionConfigs());
     }
 
     private void initializeProcessHolder(Properties initialApplicationState) {

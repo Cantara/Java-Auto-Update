@@ -2,8 +2,8 @@ package no.cantara.jau.eventextraction;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import no.cantara.jau.serviceconfig.client.EventExtractionUtil;
-import no.cantara.jau.serviceconfig.dto.event.*;
+import no.cantara.cs.client.EventExtractionUtil;
+import no.cantara.cs.dto.event.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.Assert;
