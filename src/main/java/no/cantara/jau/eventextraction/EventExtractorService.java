@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
@@ -17,7 +18,7 @@ import java.util.concurrent.Future;
 public class EventExtractorService {
     private static final Logger log = LoggerFactory.getLogger(EventExtractorService.class);
     private final EventRepo repo;
-    private List<EventExtractor> eventExtractors;
+    private List<EventExtractor> eventExtractors = Collections.emptyList();
     private final ExecutorService executor;
 
     public EventExtractorService(EventRepo repo) {

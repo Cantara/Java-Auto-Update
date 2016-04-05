@@ -66,7 +66,7 @@ public class CheckForUpdateHelper {
             } catch (InternalServerErrorException e) {
                 log.warn("Got InternalServerErrorException: ", e);
                 return;
-            } catch (IOException e) {
+            } catch (Exception e) {
                 log.error("checkForUpdate failed, do nothing. Retrying in {} seconds.", interval, e);
                 return;
             }
