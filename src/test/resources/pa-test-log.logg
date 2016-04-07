@@ -9,46 +9,11 @@
 10:22:48.478 [main] TRACE n.n.p.a.dao.DummyAvbConfigDao - Generating dummy config
 10:22:48.522 [main] TRACE n.n.pharmacy.config.ApplicationMode - isDemoMode: true
 10:22:48.544 [main] TRACE n.n.pharmacy.config.ApplicationMode - isDemoMode: true
-10:22:49.667 [main] DEBUG n.n.p.s.StockLevelSNSPublisher - In StockLevelSNSPublisher. useProxy=false , proxyHost=10.246.5.10 , proxyport=8080
-10:22:49.727 [main] DEBUG n.n.p.s.StockLevelSNSPublisher - AmazonSNSClient initiated. destinationName=nmd_aro_devtest_stocklevel1, region=us-east-1, useProxy=false, proxyHost=10.246.5.10, proxyPort=8080
-10:22:49.788 [main] DEBUG no.nmd.pharmacy.Main - Resolved properties:
-  demo.mode=true
-  stocklevel.aws.region=us-east-1
-  jdbc.password=avb1234
-  stocklevel.aws.accessKey=AKIAJ6U27ZHESHVLVQ2Q
-  jdbc.url=jdbc:postgresql://localhost:5432/avb
-  jdbc.urlWithoutDomain=jdbc:jtds:sqlserver://localhost:1433/fpro;useNTLMv2=true;domain={WIN_DOMAIN_NAME}
-  avbconfigchange.aws.region=us-east-1
-  avbconfigchange.aws.secretKey=YCSrT3kyYWVV0CnztVSnjYvuAkMbyYgdHVZogr3Z
-  jdbc.username=avb
-  jms.rest.port=80
-  jms.rest.queue.grossistmelding=avb.grossistmelding
-  aws.accessKey=AKIAJ6U27ZHESHVLVQ2Q
-  http.useProxy=false
-  avbconfigchange.aws.accessKey=AKIAJ6U27ZHESHVLVQ2Q
-  jms.rest.host=192.168.99.100
-  avbconfigchange.polling.interval.seconds=300
-  jdbc.driverClassName=net.sourceforge.jtds.jdbc.Driver
-  http.proxyPort=8080
-  aws.secretKey=YCSrT3kyYWVV0CnztVSnjYvuAkMbyYgdHVZogr3Z
-  https.proxyPort=8080
-  stocklevel.polling.interval.seconds=10
-  avbconfig.polling.interval.seconds=20
-  demo.pharmacyid=1245
-  avbconfigchange.aws.agent_in_prefix=pharmacyagent_devtest_aro_
-  jms.rest.password=cantaraOgOslo2021BlirKnall
-  https.proxyHost=10.246.5.10
-  http.proxyHost=10.246.5.10
-  jms.rest.username=admin
-  stocklevel.aws.destination.name=nmd_aro_devtest_stocklevel1
-  stocklevel.aws.secretKey=YCSrT3kyYWVV0CnztVSnjYvuAkMbyYgdHVZogr3Z
 10:22:49.788 [main] DEBUG no.nmd.pharmacy.Main - running pharmacyIdService.getPharmacyId()
 10:22:49.788 [main] TRACE n.n.pharmacy.config.ApplicationMode - isDemoMode: true
 10:22:49.788 [main] INFO  n.n.p.config.PharmacyIdService - Demo mode active using pharmacyId=1245
 10:22:49.788 [main] DEBUG no.nmd.pharmacy.Main - pharmacyId=1245
-10:22:51.239 [main] DEBUG n.n.p.s.StockLevelSNSPublisher - Topic created with topicArn=arn:aws:sns:us-east-1:923402097046:nmd_aro_devtest_stocklevel1, responseMetadata={AWS_REQUEST_ID=a0edf958-a026-58c9-888b-b655d68ddac2}
 10:22:51.241 [pool-3-thread-1] TRACE n.n.pharmacy.config.ApplicationMode - isDemoMode: true
-10:22:51.241 [main] INFO  n.n.p.stocklevel.StockLevelService - StockLevelService started. Polling FarmaPro database every 10 seconds. Publish to arn:aws:sns:us-east-1:923402097046:nmd_aro_devtest_stocklevel1
 10:22:51.244 [pool-1-thread-1] INFO  n.n.p.a.p.AvbConfigPublishService - Fetching AvbConfig/GrossistMelding from database and publish. pharmacyId=1245
 10:22:51.244 [main] INFO  n.n.p.a.p.AvbConfigPublishService - AvbConfigPublishService started. Polling FarmaPro database every 20 seconds. Publish to host=192.168.99.100, queueName=avb.grossistmelding.
 10:22:51.250 [pool-2-thread-1] INFO  n.n.p.avbconfig.update.SqsPoller - SqsPoller started. Polling SQS every with exponential backoff.
