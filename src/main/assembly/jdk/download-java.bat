@@ -1,80 +1,89 @@
 @ECHO OFF
  
-:: Switch comments on next two lines when using proxy
-::SET "USE_HTTP_PROXY=192.168.0.1:8080"
-SET "USE_HTTP_PROXY="
+::
+:: Default properties. To override these, you can edit download-java-overrides.bat
+::
 
+:: Download URL for the "normal" 64-bit JDK
+SET DOWNLOAD_URL="http://cdn.azul.com/zulu/bin/zulu8.13.0.5-jdk8.0.72-win_x64.zip"
+
+:: Download URL for the 32-bit JDK that will be downloaded on Windows 2003 servers
+SET DOWNLOAD_URL_32_BIT=
+
+:: Root directory in the downloaded zip file.  Only relevant for the 64-bit JDK.
+SET ZIP_ROOT_DIR="zulu8.13.0.5-jdk8.0.72-win_x64"
+
+:: Name of the temporary zip file.
+SET ZIP_FILE="java.zip"
+
+:: Set this if using an http proxy. Specified as "host:port".
+SET HTTP_PROXY=
+
+:: Username and password for HTTP authentication. Only relevant for the 32-bit JDK.
+SET HTTP_USER=
+SET HTTP_PASSWORD=
+
+
+CALL download-java-overrides.bat
+
+:: Windows Server 2003 needs 32-bit Java
 ver | findstr /i "5\.2\." > nul
 IF %ERRORLEVEL% == 0 (
-    GOTO ver_2003
+    GOTO use32bit
 ) ELSE (
-    GOTO :normal
+    GOTO normal
 )
  
- 
-:ver_2003
-echo Downloading Java for Windows Server 2003, using an older Java-version.
-set DOWNLOAD_URL="http://mvnrepo.cantara.no/service/local/artifact/maven/redirect?r=nmdreleases&g=net.java.jdk8&a=jre&v=LATEST&p=zip"
-set TmpDir=.
-set ZipFile=jre.zip
-set BaseDir=.
- 
-IF defined USE_HTTP_PROXY (
-    wget.exe --user=altran --password=l1nkSys -e use_proxy=yes -e http_proxy=%USE_HTTP_PROXY% -P "%TmpDir%" -O %ZipFile% --content-disposition %DOWNLOAD_URL%
+
+
+:use32bit
+echo Downloading Java from %DOWNLOAD_URL_32_BIT%
+
+IF defined HTTP_PROXY (
+    wget.exe --user=%HTTP_USER% --password=%HTTP_PASSWORD% -e use_proxy=yes -e http_proxy=%HTTP_PROXY% -O %ZIP_FILE% --content-disposition %DOWNLOAD_URL_32_BIT%
 ) ELSE (
-    wget.exe --user=altran --password=l1nkSys -e use_proxy=no -e -P "%TmpDir%" -O %ZipFile% --content-disposition %DOWNLOAD_URL%
+    wget.exe --user=%HTTP_USER% --password=%HTTP_PASSWORD% -O %ZIP_FILE% --content-disposition %DOWNLOAD_URL_32_BIT%
+)
+
+echo Unzipping %ZIP_FILE%
+unzip -q -o %ZIP_FILE% -d java
+if exist java\jre1.8.0_40 (
+    echo Copying java files to java\bin
+    move java\jre1.8.0_40\*.* java\
+    move java\jre1.8.0_40\bin java\bin
+    move java\jre1.8.0_40\lib java\lib
+    xcopy /E /O /Y java\bin\client\* java\bin\server\
 )
  
-unzip -q -o %TmpDir%\%ZipFile% -d %BaseDir%\java
-if exist %BaseDir%\java\jre1.8.0_40 (
-    echo "Copy java files %BaseDir%\java\bin"
-    move %BaseDir%\java\jre1.8.0_40\*.* %BaseDir%\java\
-    move %BaseDir%\java\jre1.8.0_40\bin %BaseDir%\java\bin
-    move %BaseDir%\java\jre1.8.0_40\lib %BaseDir%\java\lib
-    xcopy /E /O /Y %BaseDir%\java\bin\client\* %BaseDir%\java\bin\server\
-)
- 
-:: Copy windows login dll
-if exist %BaseDir%\java\bin (
-    echo "Copy windows login dll %BaseDir%\java\bin"
-    copy %BaseDir%\ntlmauth.dll %BaseDir%\java\bin
-)
- 
-if exist %ZipFile% (
-    del %ZipFile%
-)
-GOTO exit
+GOTO finish
  
  
  
 :normal
-echo Downloading Java normally.
-set ZipFile=jdk.zip
-set BaseDir=.
- 
-IF defined USE_HTTP_PROXY (
-    wget.exe -e use_proxy=yes -e http_proxy=%USE_HTTP_PROXY% -P . -O %ZipFile% --referer=http://www.azulsystems.com/products/zulu/downloads http://cdn.azulsystems.com/zulu/2015-04-8.7-bin/zulu1.8.0_45-8.7.0.5-win64.zip
+echo Downloading Java from %DOWNLOAD_URL%
+
+IF defined HTTP_PROXY (
+    wget.exe -e use_proxy=yes -e http_proxy=%HTTP_PROXY% -O %ZIP_FILE% %DOWNLOAD_URL%
 ) ELSE (
-    wget.exe -P . -O %ZipFile% --referer=http://www.azulsystems.com/products/zulu/downloads http://cdn.azulsystems.com/zulu/2015-04-8.7-bin/zulu1.8.0_45-8.7.0.5-win64.zip
+    wget.exe -O %ZIP_FILE% %DOWNLOAD_URL%
 )
  
-unzip.exe -q -o %ZipFile%
-move zulu1.8.0_45-8.7.0.5-win64 java
+echo Unzipping %ZIP_FILE%
+unzip.exe -q -o %ZIP_FILE%
+move %ZIP_ROOT_DIR% java
+
+GOTO finish
  
-:: Copy windows login dll
-if exist %BaseDir%\java\bin (
-    echo "Copy windows login dll %BaseDir%\java\bin"
-    copy %BaseDir%\ntlmauth.dll %BaseDir%\java\bin
+ 
+ 
+:finish
+
+:: Copy windows ntlmauth dll
+if exist java\bin (
+    echo Copying ntlmauth.dll to java\bin
+    copy ntlmauth.dll java\bin
 )
- 
-if exist %ZipFile% (
-    del %ZipFile%
+
+if exist %ZIP_FILE% (
+    del %ZIP_FILE%
 )
- 
-echo "zulu1.8.0_45-8.7.0.5-win64 JDK downloaded to java folder"
-GOTO exit
- 
- 
- 
-:exit
- 
