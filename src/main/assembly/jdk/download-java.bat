@@ -24,7 +24,7 @@ SET HTTP_USER=
 SET HTTP_PASSWORD=
 
 
-CALL download-java-overrides.bat
+CALL config_override\download-java-overrides.bat
 
 :: Windows Server 2003 needs 32-bit Java
 ver | findstr /i "5\.2\." > nul
