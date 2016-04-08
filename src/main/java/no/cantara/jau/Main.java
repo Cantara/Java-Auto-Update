@@ -33,12 +33,12 @@ public class Main {
         }
 
         String clientName = PropertiesHelper.getClientName();
-        log.debug("Resolved clientName={}", clientName);
-
         String username = PropertiesHelper.getUsername();
         String password = PropertiesHelper.getPassword();
         String artifactId = PropertiesHelper.getArtifactId();
         String clientId = PropertiesHelper.getClientId();
+
+        log.debug("Resolved clientId={}", clientId);
 
         int updateInterval = PropertiesHelper.getUpdateInterval();
         int isRunningInterval = PropertiesHelper.getIsRunningInterval();
