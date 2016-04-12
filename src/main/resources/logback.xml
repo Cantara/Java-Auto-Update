@@ -26,6 +26,7 @@
 
 
     <logger name="no.cantara.jau" level="TRACE" />
+    <logger name="no.cantara.cs" level="DEBUG" />
 
     <root level="INFO">
         <appender-ref ref="STDOUT" />

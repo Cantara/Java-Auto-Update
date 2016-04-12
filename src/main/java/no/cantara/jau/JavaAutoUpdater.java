@@ -64,6 +64,7 @@ public class JavaAutoUpdater {
 
         Properties initialApplicationState = configServiceClient.getApplicationState();
         initializeProcessHolder(initialApplicationState);
+        extractorService.updateConfigs(configServiceClient.getEventExtractionConfigs());
 
         // checkForUpdate and start process
         while (true) {

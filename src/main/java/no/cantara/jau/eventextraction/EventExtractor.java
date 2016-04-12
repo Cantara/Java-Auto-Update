@@ -18,6 +18,7 @@ public class EventExtractor implements Callable<String> {
     private final String groupName;
     private int lastLineRead;
     private long lastModified;
+    private long lastFileSize;
 
     public EventExtractor(EventRepo eventRepo, List<EventExtractionTag> extractionTags,
                           String managedProcessLogFilePath, String groupName) {
@@ -28,6 +29,7 @@ public class EventExtractor implements Callable<String> {
         managedProcessLogFile = new File(managedProcessLogFilePath);
         lastModified = 0;
         lastLineRead = 0;
+        lastFileSize = 0;
     }
 
     private void checkForEvents() {
@@ -43,13 +45,19 @@ public class EventExtractor implements Callable<String> {
 
     private boolean fileHasBeenModified() {
         if (managedProcessLogFile.lastModified() > lastModified) {
-            log.trace("File={} is modified since last extraction. Extracting...",
-                    managedProcessLogFilePath);
+            log.trace("{} is modified since last extraction. Extracting...", managedProcessLogFilePath);
             lastModified = managedProcessLogFile.lastModified();
+
+            // If file has shrunk (due to rolling log files), start reading from the first line.
+            if (managedProcessLogFile.length() < lastFileSize) {
+                log.info("{} has shrunk since last extraction. Starting from first line.", managedProcessLogFilePath);
+                lastFileSize = managedProcessLogFile.length();
+                lastLineRead = 0;
+            }
+
             return true;
         }
-        log.trace("File={} has not been modified since last extraction. Will not extract",
-                    managedProcessLogFilePath);
+        log.trace("{} has not been modified since last extraction. Will not extract.", managedProcessLogFilePath);
         return false;
     }
 
