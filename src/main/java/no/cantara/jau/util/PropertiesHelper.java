@@ -1,13 +1,17 @@
 package no.cantara.jau.util;
 
-import no.cantara.cs.client.ConfigServiceProperties;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Properties;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class PropertiesHelper {
 
@@ -40,6 +44,28 @@ public class PropertiesHelper {
         return properties;
     }
 
+    public static Properties loadProperties(File file) {
+        Properties properties = new Properties();
+        if (file.exists()) {
+            try (InputStream input = new FileInputStream(file)) {
+                properties.load(input);
+            } catch (Exception e) {
+                log.warn("Failed to load properties from {}", file, e);
+            }
+        }
+        return properties;
+    }
+
+    public static boolean saveProperties(Properties properties, File file) {
+        try (OutputStream output = new FileOutputStream(file)) {
+            properties.store(output, null);
+            return true;
+        } catch (Exception e) {
+            log.warn("Failed to save properties to {}", file, e);
+            return false;
+        }
+    }
+
     public static String getStringProperty(final Properties properties, String propertyKey, String defaultValue) {
         String property = properties.getProperty(propertyKey, defaultValue);
         if (property == null) {
@@ -54,6 +80,18 @@ public class PropertiesHelper {
             return defaultValue;
         }
         return Integer.valueOf(property);
+    }
+
+    public static Long getLongProperty(final Properties properties, String propertyKey, Long defaultValue) {
+        String property = getStringProperty(properties, propertyKey, null);
+        if (property == null) {
+            return defaultValue;
+        }
+        return Long.valueOf(property);
+    }
+
+    public static void setLongProperty(Properties properties, String propertyKey, long value) {
+        properties.setProperty(propertyKey, String.valueOf(value));
     }
 
     public static Map<String, String> propertiesAsMap(Properties properties) {

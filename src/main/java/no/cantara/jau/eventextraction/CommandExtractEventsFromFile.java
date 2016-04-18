@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-public class CommandExtractEventsFromFile extends HystrixCommand<Integer> {
+public class CommandExtractEventsFromFile extends HystrixCommand<Long> {
     private static final Logger log = LoggerFactory.getLogger(CommandExtractEventsFromFile.class);
     private static final String GROUP_KEY = "EXTRACT_EVENTS";
     private static final int COMMAND_TIMEOUT = 10000;
@@ -33,13 +33,13 @@ public class CommandExtractEventsFromFile extends HystrixCommand<Integer> {
     public static final String EXCEPTION_WORD = "Exception";
     public static final String STACK_TRACE_PREFIX = "\tat";
     private final EventRepo repo;
-    private int lastLineRead;
+    private long lastLineRead;
     private final String filePath;
     private final String groupName;
     private final List<EventExtractionTag> extractionTags;
     private boolean isException;
 
-    protected CommandExtractEventsFromFile(EventRepo repo, int lastLineRead, String filePath,
+    protected CommandExtractEventsFromFile(EventRepo repo, long lastLineRead, String filePath,
                                            String groupName, List<EventExtractionTag> extractionTags) {
         super(Setter.withGroupKey(HystrixCommandGroupKey.Factory.asKey(GROUP_KEY))
                 .andCommandPropertiesDefaults(HystrixCommandProperties.Setter()
@@ -52,7 +52,7 @@ public class CommandExtractEventsFromFile extends HystrixCommand<Integer> {
     }
 
     @Override
-    protected Integer run() throws Exception {
+    protected Long run() throws Exception {
         log.trace("Start reading from line {}", lastLineRead);
         List<Event> events = new ArrayList<>();
 

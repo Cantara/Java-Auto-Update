@@ -115,7 +115,7 @@ public class JavaAutoUpdater {
 
     private ScheduledFuture<?> startUpdaterThread(long interval) {
         log.debug("Starting update scheduler with an update interval of {} seconds.", interval);
-        return scheduler.scheduleAtFixedRate(
+        return scheduler.scheduleWithFixedDelay(
                 CheckForUpdateHelper.getCheckForUpdateRunnable(interval, configServiceClient, processHolder,
                         processMonitorHandle, extractorService, this),
                 1, interval, SECONDS
