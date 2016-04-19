@@ -10,6 +10,7 @@ import no.cantara.jau.coms.RegisterClientHelper;
 import no.cantara.jau.duplicatehandler.DuplicateProcessHandler;
 import no.cantara.jau.eventextraction.EventExtractorService;
 import no.cantara.jau.util.PropertiesHelper;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,15 +44,29 @@ public class JavaAutoUpdater {
         this.processHolder = applicationProcess;
         this.duplicateProcessHandler = duplicateProcessHandler;
         this.extractorService = extractorService;
+
+        addShutdownHook();
+    }
+
+    /**
+     * Registers a shutdown hook that attempts to stop the application process when JAU is stopped.
+     */
+    private void addShutdownHook() {
+        Runtime.getRuntime().addShutdownHook(new Thread() {
+            @Override
+            public void run() {
+                processHolder.stopProcess();
+            }
+        });
     }
 
     /**
      * registerClient
      * checkForUpdate
      * if changed
-     *   Download
-     *   Stop existing service if running
-     *   Start new service
+     * Download
+     * Stop existing service if running
+     * Start new service
      */
     public void start(int updateInterval, int isRunningInterval) {
         // registerClient or fetch applicationState from file
@@ -79,9 +94,8 @@ public class JavaAutoUpdater {
 
                 if (!successKillingProcess) {
                     log.error("Problem killing running process! A new managed process will not be started. " +
-                            "Retrying in {} seconds", sleepTime / 1000);
-                }
-                else {
+                              "Retrying in {} seconds", sleepTime / 1000);
+                } else {
                     processMonitorHandle = startProcessMonitorThread(isRunningInterval);
                 }
             }
@@ -104,22 +118,22 @@ public class JavaAutoUpdater {
                     // Restart, whatever the reason the process is not running.
                     if (!processHolder.processIsRunning()) {
                         log.debug("Process is not running - restarting... clientId={}, lastChanged={}, command={}",
-                                processHolder.getClientId(), processHolder.getLastChangedTimestamp(), processHolder.getCommand());
+                                  processHolder.getClientId(), processHolder.getLastChangedTimestamp(), processHolder.getCommand());
 
                         processHolder.startProcess();
                     }
                 },
                 1, interval, SECONDS
-        );
+                                            );
     }
 
     private ScheduledFuture<?> startUpdaterThread(long interval) {
         log.debug("Starting update scheduler with an update interval of {} seconds.", interval);
         return scheduler.scheduleWithFixedDelay(
                 CheckForUpdateHelper.getCheckForUpdateRunnable(interval, configServiceClient, processHolder,
-                        processMonitorHandle, extractorService, this),
+                                                               processMonitorHandle, extractorService, this),
                 1, interval, SECONDS
-        );
+                                               );
     }
 
     public ClientConfig registerClient() {
