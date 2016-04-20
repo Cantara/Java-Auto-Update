@@ -52,12 +52,15 @@ public class JavaAutoUpdater {
      * Registers a shutdown hook that attempts to stop the application process when JAU is stopped.
      */
     private void addShutdownHook() {
-        Runtime.getRuntime().addShutdownHook(new Thread() {
-            @Override
-            public void run() {
-                processHolder.stopProcess();
-            }
-        });
+        if (PropertiesHelper.stopApplicationOnShutdown()) {
+            Runtime.getRuntime().addShutdownHook(new Thread() {
+                @Override
+                public void run() {
+                    processHolder.stopProcess();
+                }
+            });
+            log.info("Registered shutdown hook for stopping application.");
+        }
     }
 
     /**

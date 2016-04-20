@@ -31,8 +31,11 @@ public class PropertiesHelper {
     private static final String VERSION_PROPERTY_KEY = "jau.version";
     private static final String IS_RUNNING_INTERVAL_KEY = "isrunninginterval";
     private static final String UPDATE_INTERVAL_KEY = "updateinterval";
+    private static final String STOP_APPLICATION_ON_SHUTDOWN_KEY = "stopApplicationOnShutdown";
+
     private static final int DEFAULT_UPDATE_INTERVAL = 60; // seconds
     private static final int DEFAULT_IS_RUNNING_INTERVAL = 40; // seconds
+    private static final boolean DEFAULT_STOP_APPLICATION_ON_SHUTDOWN = false;
 
     public static Properties getPropertiesFromConfigFile(String filename) {
         Properties properties = new Properties();
@@ -94,6 +97,14 @@ public class PropertiesHelper {
         properties.setProperty(propertyKey, String.valueOf(value));
     }
 
+    public static Boolean getBooleanProperty(final Properties properties, String propertyKey, Boolean defaultValue) {
+        String property = getStringProperty(properties, propertyKey, null);
+        if (property == null) {
+            return defaultValue;
+        }
+        return Boolean.valueOf(property);
+    }
+
     public static Map<String, String> propertiesAsMap(Properties properties) {
         Map<String, String> map = new LinkedHashMap<>();
         properties.forEach((key, value) -> map.put(String.valueOf(key), String.valueOf(value)));
@@ -134,5 +145,9 @@ public class PropertiesHelper {
 
     public static String getVersion() {
         return getStringProperty(getPropertiesFromConfigFile(VERSION_FILENAME), VERSION_PROPERTY_KEY, null);
+    }
+
+    public static boolean stopApplicationOnShutdown() {
+        return getBooleanProperty(getPropertiesFromConfigFile(JAU_CONFIG_FILENAME), STOP_APPLICATION_ON_SHUTDOWN_KEY, DEFAULT_STOP_APPLICATION_ON_SHUTDOWN);
     }
 }
