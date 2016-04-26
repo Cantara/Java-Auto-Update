@@ -1,6 +1,5 @@
 package no.cantara.jau.util;
 
-import no.cantara.jau.ApplicationProcess;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,7 +38,10 @@ public class ClientEnvironmentUtil {
             log.warn("getNetworkInterfaces failed. Networkinterface addresses will not be availble.");
         }
 
-        clientEnv.putAll(System.getenv());
+        // We mask environment variables that are defined in appliction-env.properties, the assumption is that these are
+        // sensitive and we do want to send them as heartbeat data
+        Set<String> propertiesToMask = PropertiesHelper.getPropertiesFromConfigFile(PropertiesHelper.APPLICATION_ENV_FILENAME).stringPropertyNames();
+        clientEnv.putAll(maskApplicationEnvProperties(System.getenv(), propertiesToMask));
         String version = PropertiesHelper.getVersion();
         clientEnv.put("jau.version", version);
         clientEnv.put("applicationState", String.valueOf(applicationState));
@@ -50,5 +52,25 @@ public class ClientEnvironmentUtil {
 
     public static SortedMap<String, String> getClientEnvironment() {
         return getClientEnvironment(new Properties(), "information not available");
+    }
+
+    static Map<String, String> maskApplicationEnvProperties(Map<String, String> environmentVariables, Set<String> variablesToMask) {
+        HashMap<String, String> masked = new HashMap<>();
+        for (String variableKey : environmentVariables.keySet()) {
+            if (variablesToMask.contains(variableKey)) {
+                masked.put(variableKey, maskEnvironmentVariable(environmentVariables.get(variableKey)));
+            } else {
+                masked.put(variableKey, environmentVariables.get(variableKey));
+            }
+        }
+        return masked;
+    }
+
+    private static String maskEnvironmentVariable(String variableValue) {
+        if (variableValue == null || variableValue.length() < 5) {
+            // We assume short variable values are not sensitive
+            return variableValue;
+        }
+        return variableValue.substring(0, 2) + "..." + variableValue.substring(variableValue.length() - 2, variableValue.length());
     }
 }
