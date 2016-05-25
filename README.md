@@ -33,7 +33,7 @@ If JAU is running behind a proxy, use the following properties
 * "https.proxyPort"
 
 
-## Example application configuration JAU receives from ConfigServer
+## Example application configuration JAU receives from ConfigService
 
 ```
 {
