@@ -21,6 +21,20 @@ Tip! If it fails to start, check the wrapper.log.
 1. wget http://mvnrepo.cantara.no/content/repositories/snapshots/no/cantara/jau/java-auto-update/1.0-SNAPSHOT/java-auto-update-1.0-20150731.054516-1.jar
 2. java -DconfigServiceUrl=http://localhost:7000/jau/serviceconfig/query?clientid=clientid1 -jar java-auto-update-1.0-20150731.054516-1.jar
 
+
+## Configuration
+
+
+If JAU is running behind a proxy, use the following properties
+* "http.useProxy"
+* "http.proxyPort"
+* "http.proxyHost"
+* "https.proxyHost"
+* "https.proxyPort"
+
+
+
+
 ## Develop
 
 Java Auto-Update depends on ConfigService, so this must be available in your maven repositories.

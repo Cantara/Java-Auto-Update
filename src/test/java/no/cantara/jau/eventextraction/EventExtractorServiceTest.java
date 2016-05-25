@@ -1,25 +1,19 @@
 package no.cantara.jau.eventextraction;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import no.cantara.cs.client.EventExtractionUtil;
+import no.cantara.cs.dto.event.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.testng.Assert;
+import org.testng.annotations.Test;
+
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.testng.Assert;
-import org.testng.annotations.Test;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import no.cantara.cs.client.EventExtractionUtil;
-import no.cantara.cs.dto.event.Event;
-import no.cantara.cs.dto.event.EventExtractionConfig;
-import no.cantara.cs.dto.event.EventExtractionTag;
-import no.cantara.cs.dto.event.EventTag;
-import no.cantara.cs.dto.event.ExtractedEventsStore;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotEquals;
@@ -45,7 +39,7 @@ public class EventExtractorServiceTest {
         EventExtractorService service = new EventExtractorService(repo);
         EventExtractionConfig config = new EventExtractionConfig("jau");
         String filePath1 = getLogFile("jau-test-log.logg");
-        String filePath2 = getLogFile("pa-test-log.logg");
+        String filePath2 = getLogFile("ma-test-log.logg");
         config.addEventExtractionTag(new EventExtractionTag("This a is a tag", "\\btest\\b",
                                                             filePath1));
         config.addEventExtractionTag(new EventExtractionTag("MDC tag test", "\\bmdc-tag-test\\b",
@@ -75,7 +69,7 @@ public class EventExtractorServiceTest {
         EventRepo repo = new EventRepo();
         EventExtractorService service = new EventExtractorService(repo);
         EventExtractionConfig config = new EventExtractionConfig("jau");
-        String filePath1 = getLogFile("pharmacyagent-2016-01-07.logg");
+        String filePath1 = getLogFile("mymanagedapplication-2016-01-07.logg");
         String filePath2 = getLogFile("jau-2016-01-10.logg");
         config.addEventExtractionTag(new EventExtractionTag("This a is a tag", "\\b200\\b",
                                                             filePath1));
