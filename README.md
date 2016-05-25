@@ -35,7 +35,7 @@ If JAU is running behind a proxy, use the following properties
 
 ## Example application configuration JAU receives from ConfigServer
 
-'''
+```
 {
   "name": "hello-world_0.1-SNAPSHOT",
   "lastChanged": "2016-03-09T07:50:18.994Z",
@@ -78,7 +78,7 @@ If JAU is running behind a proxy, use the following properties
   ],
   "startServiceScript": "java -jar hello-world-0.1-SNAPSHOT.jar"
 }
-'''
+```
 
 ## Develop
 
