@@ -9,9 +9,25 @@
     <includeBaseDirectory>true</includeBaseDirectory>
 
     <fileSets>
+        <!-- jsw files, but exclude dependencies -->
         <fileSet>
             <directory>${project.build.directory}/jsw/${project.artifactId}</directory>
+            <includes>
+                <include>bin/*</include>
+                <include>etc/*</include>
+                <include>lib/wrapper.jar</include>
+                <include>lib/*.dll</include>
+            </includes>
             <outputDirectory/>
+        </fileSet>
+
+        <!-- single jar for jau, java-auto-update.jar -->
+        <fileSet>
+            <directory>${project.build.directory}</directory>
+            <includes>
+                <include>${project.build.finalName}.jar</include>
+            </includes>
+            <outputDirectory>lib</outputDirectory>
         </fileSet>
 
         <fileSet>
