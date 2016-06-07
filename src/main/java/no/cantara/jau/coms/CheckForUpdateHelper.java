@@ -52,17 +52,19 @@ public class CheckForUpdateHelper {
                 newClientConfig = configServiceClient.checkForUpdate(clientId, checkForUpdateRequest);
             } catch (HttpException e) {
                 if (e.getStatusCode() == HttpURLConnection.HTTP_PRECON_FAILED) {
-                    log.warn("Got PRECONDITION_FAILED, reregistering client. Response message: " + e.getMessage());
+                    log.warn("Got http {} Precondition failed, reregistering client. Response message: {}", e.getStatusCode(), e.getMessage());
                     configServiceClient.cleanApplicationState();
                     newClientConfig = jau.registerClient();
                 } else if (e.getStatusCode() == HttpURLConnection.HTTP_BAD_REQUEST) {
-                    log.error("Got BadRequestException: ", e);
+                    log.error("Got http {} Bad request: ", e.getStatusCode(), e);
+                    return;
                 } else if (e.getStatusCode() == HttpURLConnection.HTTP_INTERNAL_ERROR) {
-                    log.warn("Got InternalServerErrorException: ", e);
+                    log.warn("Got http {} Internal error: ", e.getStatusCode(), e);
+                    return;
                 } else {
-                    log.warn("checkForUpdate failed, do nothing. Retrying in {} seconds.", interval, e);
+                    log.warn("Got http {}. checkForUpdate failed, do nothing. Retrying in {} seconds.", e.getStatusCode(), interval, e);
+                    return;
                 }
-                return;
             } catch (Exception e) {
                 log.warn("checkForUpdate failed, do nothing. Retrying in {} seconds.", interval, e);
                 return;

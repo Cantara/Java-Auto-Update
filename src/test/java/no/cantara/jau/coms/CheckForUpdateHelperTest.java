@@ -2,7 +2,9 @@ package no.cantara.jau.coms;
 
 import no.cantara.cs.client.ConfigServiceClient;
 import no.cantara.cs.client.HttpException;
+import no.cantara.cs.dto.ApplicationConfig;
 import no.cantara.cs.dto.CheckForUpdateRequest;
+import no.cantara.cs.dto.ClientConfig;
 import no.cantara.jau.ApplicationProcess;
 import no.cantara.jau.JavaAutoUpdater;
 import no.cantara.jau.eventextraction.EventExtractorService;
@@ -30,6 +32,12 @@ public class CheckForUpdateHelperTest {
         ApplicationProcess processHolder = mock(ApplicationProcess.class);
         ScheduledFuture processMonitorHandle = mock(ScheduledFuture.class);
         JavaAutoUpdater jau = mock(JavaAutoUpdater.class);
+
+        ApplicationConfig newConfig = new ApplicationConfig("name");
+        newConfig.setStartServiceScript("start script");
+        ClientConfig newClientConfig = new ClientConfig("clientId", newConfig);
+        when(jau.registerClient()).thenReturn(newClientConfig);
+
         EventExtractorService extractorService = mock(EventExtractorService.class);
 
         Runnable checkForUpdateRunnable = CheckForUpdateHelper.getCheckForUpdateRunnable(1, configServiceClient,
@@ -39,6 +47,8 @@ public class CheckForUpdateHelperTest {
 
         verify(jau).registerClient();
         verify(configServiceClient).cleanApplicationState();
+        verify(jau).storeClientFiles(newClientConfig);
+        verify(configServiceClient).saveApplicationState(newClientConfig);
     }
 
     @Test
@@ -64,6 +74,42 @@ public class CheckForUpdateHelperTest {
         ConfigServiceClient configServiceClient = mock(ConfigServiceClient.class);
         when(configServiceClient.getApplicationState()).thenReturn(new Properties());
         when(configServiceClient.checkForUpdate(anyString(), any(CheckForUpdateRequest.class))).thenThrow(new HttpException(HttpURLConnection.HTTP_INTERNAL_ERROR, "internal error"));
+
+        ApplicationProcess processHolder = mock(ApplicationProcess.class);
+        ScheduledFuture processMonitorHandle = mock(ScheduledFuture.class);
+        JavaAutoUpdater jau = mock(JavaAutoUpdater.class);
+        EventExtractorService extractorService = mock(EventExtractorService.class);
+
+        Runnable checkForUpdateRunnable = CheckForUpdateHelper.getCheckForUpdateRunnable(1, configServiceClient,
+                processHolder, processMonitorHandle, extractorService, jau);
+        checkForUpdateRunnable.run();
+
+        verify(processHolder, never()).stopProcess();
+    }
+
+    @Test
+    public void testUnknownHttpError() throws IOException {
+        ConfigServiceClient configServiceClient = mock(ConfigServiceClient.class);
+        when(configServiceClient.getApplicationState()).thenReturn(new Properties());
+        when(configServiceClient.checkForUpdate(anyString(), any(CheckForUpdateRequest.class))).thenThrow(new HttpException(HttpURLConnection.HTTP_BAD_GATEWAY, "bad gateway"));
+
+        ApplicationProcess processHolder = mock(ApplicationProcess.class);
+        ScheduledFuture processMonitorHandle = mock(ScheduledFuture.class);
+        JavaAutoUpdater jau = mock(JavaAutoUpdater.class);
+        EventExtractorService extractorService = mock(EventExtractorService.class);
+
+        Runnable checkForUpdateRunnable = CheckForUpdateHelper.getCheckForUpdateRunnable(1, configServiceClient,
+                processHolder, processMonitorHandle, extractorService, jau);
+        checkForUpdateRunnable.run();
+
+        verify(processHolder, never()).stopProcess();
+    }
+
+    @Test
+    public void testIOConnection() throws IOException {
+        ConfigServiceClient configServiceClient = mock(ConfigServiceClient.class);
+        when(configServiceClient.getApplicationState()).thenReturn(new Properties());
+        when(configServiceClient.checkForUpdate(anyString(), any(CheckForUpdateRequest.class))).thenThrow(new IOException());
 
         ApplicationProcess processHolder = mock(ApplicationProcess.class);
         ScheduledFuture processMonitorHandle = mock(ScheduledFuture.class);
