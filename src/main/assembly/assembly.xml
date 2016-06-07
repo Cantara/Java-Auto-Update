@@ -44,6 +44,7 @@
             <directory>src/main/assembly</directory>
             <includes>
                 <include>install.bat</include>
+                <include>uninstall.bat</include>
             </includes>
             <outputDirectory/>
         </fileSet>
