@@ -158,6 +158,7 @@
                     <generateRepository>false</generateRepository>
                     <useWildcardClassPath>true</useWildcardClassPath>
                     <includeConfigurationDirectoryInClasspath>false</includeConfigurationDirectoryInClasspath>
+                    <environmentSetupFileName>environment-setup</environmentSetupFileName>
                     <target>${project.build.directory}</target>
                     <daemons>
                         <daemon>

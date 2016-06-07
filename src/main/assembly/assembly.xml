@@ -48,5 +48,13 @@
             </includes>
             <outputDirectory/>
         </fileSet>
+
+        <fileSet>
+            <directory>src/main/assembly</directory>
+            <includes>
+                <include>environment-setup.bat</include>
+            </includes>
+            <outputDirectory>bin</outputDirectory>
+        </fileSet>
     </fileSets>
 </assembly>
