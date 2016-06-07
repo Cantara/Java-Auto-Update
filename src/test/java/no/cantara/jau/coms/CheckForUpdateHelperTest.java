@@ -1,14 +1,15 @@
 package no.cantara.jau.coms;
 
 import no.cantara.cs.client.ConfigServiceClient;
+import no.cantara.cs.client.HttpException;
 import no.cantara.cs.dto.CheckForUpdateRequest;
 import no.cantara.jau.ApplicationProcess;
 import no.cantara.jau.JavaAutoUpdater;
 import no.cantara.jau.eventextraction.EventExtractorService;
 import org.testng.annotations.Test;
 
-import javax.ws.rs.InternalServerErrorException;
 import java.io.IOException;
+import java.net.HttpURLConnection;
 import java.util.Properties;
 import java.util.concurrent.ScheduledFuture;
 
@@ -24,7 +25,7 @@ public class CheckForUpdateHelperTest {
     public void testPreconditionFailed() throws IOException {
         ConfigServiceClient configServiceClient = mock(ConfigServiceClient.class);
         when(configServiceClient.getApplicationState()).thenReturn(new Properties());
-        when(configServiceClient.checkForUpdate(anyString(), any(CheckForUpdateRequest.class))).thenThrow(IllegalStateException.class);
+        when(configServiceClient.checkForUpdate(anyString(), any(CheckForUpdateRequest.class))).thenThrow(new HttpException(HttpURLConnection.HTTP_PRECON_FAILED, "precondition failed"));
 
         ApplicationProcess processHolder = mock(ApplicationProcess.class);
         ScheduledFuture processMonitorHandle = mock(ScheduledFuture.class);
@@ -62,7 +63,7 @@ public class CheckForUpdateHelperTest {
     public void testServerProblems() throws IOException {
         ConfigServiceClient configServiceClient = mock(ConfigServiceClient.class);
         when(configServiceClient.getApplicationState()).thenReturn(new Properties());
-        when(configServiceClient.checkForUpdate(anyString(), any(CheckForUpdateRequest.class))).thenThrow(InternalServerErrorException.class);
+        when(configServiceClient.checkForUpdate(anyString(), any(CheckForUpdateRequest.class))).thenThrow(new HttpException(HttpURLConnection.HTTP_INTERNAL_ERROR, "internal error"));
 
         ApplicationProcess processHolder = mock(ApplicationProcess.class);
         ScheduledFuture processMonitorHandle = mock(ScheduledFuture.class);

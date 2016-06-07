@@ -2,6 +2,7 @@ package no.cantara.jau.coms;
 
 import no.cantara.cs.client.ConfigServiceClient;
 import no.cantara.cs.client.EventExtractionUtil;
+import no.cantara.cs.client.HttpException;
 import no.cantara.cs.dto.CheckForUpdateRequest;
 import no.cantara.cs.dto.ClientConfig;
 import no.cantara.cs.dto.event.Event;
@@ -14,10 +15,7 @@ import no.cantara.jau.util.PropertiesHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.ws.rs.BadRequestException;
-import javax.ws.rs.InternalServerErrorException;
-import javax.ws.rs.core.NoContentException;
-import java.io.IOException;
+import java.net.HttpURLConnection;
 import java.util.List;
 import java.util.Properties;
 import java.util.SortedMap;
@@ -52,19 +50,18 @@ public class CheckForUpdateHelper {
                 CheckForUpdateRequest checkForUpdateRequest = new CheckForUpdateRequest(lastChanged, clientEnvironment,
                         PropertiesHelper.getClientName(), eventsStore);
                 newClientConfig = configServiceClient.checkForUpdate(clientId, checkForUpdateRequest);
-            } catch (IllegalStateException e) {
-                log.debug("Illegal state - reregister client");
-                log.warn(e.getMessage());
-                configServiceClient.cleanApplicationState();
-                newClientConfig = jau.registerClient();
-            } catch (NoContentException e) {
-                log.error("Got NoContentException: ", e);
-                return;
-            } catch (BadRequestException e) {
-                log.error("Got BadRequestException: ", e);
-                return;
-            } catch (InternalServerErrorException e) {
-                log.warn("Got InternalServerErrorException: ", e);
+            } catch (HttpException e) {
+                if (e.getStatusCode() == HttpURLConnection.HTTP_PRECON_FAILED) {
+                    log.warn("Got PRECONDITION_FAILED, reregistering client. Response message: " + e.getMessage());
+                    configServiceClient.cleanApplicationState();
+                    newClientConfig = jau.registerClient();
+                } else if (e.getStatusCode() == HttpURLConnection.HTTP_BAD_REQUEST) {
+                    log.error("Got BadRequestException: ", e);
+                } else if (e.getStatusCode() == HttpURLConnection.HTTP_INTERNAL_ERROR) {
+                    log.warn("Got InternalServerErrorException: ", e);
+                } else {
+                    log.warn("checkForUpdate failed, do nothing. Retrying in {} seconds.", interval, e);
+                }
                 return;
             } catch (Exception e) {
                 log.warn("checkForUpdate failed, do nothing. Retrying in {} seconds.", interval, e);
