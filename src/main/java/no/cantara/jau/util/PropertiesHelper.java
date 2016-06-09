@@ -28,6 +28,7 @@ public class PropertiesHelper {
     private static final String ARTIFACT_ID = "configservice.artifactid";
     private static final String CONFIG_SERVICE_USERNAME_KEY = "configservice.username";
     private static final String CONFIG_SERVICE_PASSWORD_KEY = "configservice.password";
+    private static final String START_PATTERN_PROPERTY_KEY = "startPattern";
     private static final String VERSION_PROPERTY_KEY = "jau.version";
     private static final String IS_RUNNING_INTERVAL_KEY = "isrunninginterval";
     private static final String UPDATE_INTERVAL_KEY = "updateinterval";
@@ -145,6 +146,10 @@ public class PropertiesHelper {
 
     public static String getVersion() {
         return getStringProperty(getPropertiesFromConfigFile(VERSION_FILENAME), VERSION_PROPERTY_KEY, null);
+    }
+
+    public static String getStartPattern() {
+        return getStringProperty(getPropertiesFromConfigFile(JAU_CONFIG_FILENAME), START_PATTERN_PROPERTY_KEY, null);
     }
 
     public static boolean stopApplicationOnShutdown() {

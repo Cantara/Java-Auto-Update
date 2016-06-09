@@ -36,7 +36,7 @@ public class EventExtractorServiceTest {
     @Test
     public void shouldExtractEventsFromFiles() throws Exception {
         EventRepo repo = new EventRepo();
-        EventExtractorService service = new EventExtractorService(repo);
+        EventExtractorService service = new EventExtractorService(repo, null);
         EventExtractionConfig config = new EventExtractionConfig("jau");
         String filePath1 = getLogFile("jau-test-log.logg");
         String filePath2 = getLogFile("ma-test-log.logg");
@@ -67,7 +67,7 @@ public class EventExtractorServiceTest {
     @Test
     public void shouldExtractEventsFromMultipleLargeFiles() throws Exception {
         EventRepo repo = new EventRepo();
-        EventExtractorService service = new EventExtractorService(repo);
+        EventExtractorService service = new EventExtractorService(repo, null);
         EventExtractionConfig config = new EventExtractionConfig("jau");
         String filePath1 = getLogFile("mymanagedapplication-2016-01-07.logg");
         String filePath2 = getLogFile("jau-2016-01-10.logg");

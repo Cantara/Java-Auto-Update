@@ -18,11 +18,13 @@ import java.util.concurrent.Future;
 public class EventExtractorService {
     private static final Logger log = LoggerFactory.getLogger(EventExtractorService.class);
     private final EventRepo repo;
+    private final String startPattern;
     private List<EventExtractor> eventExtractors = Collections.emptyList();
     private final ExecutorService executor;
 
-    public EventExtractorService(EventRepo repo) {
+    public EventExtractorService(EventRepo repo, String startPattern) {
         this.repo = repo;
+        this.startPattern = startPattern;
         this.executor = Executors.newCachedThreadPool();
     }
 
@@ -32,8 +34,7 @@ public class EventExtractorService {
 
     private List<Future<String>> runEventExtractors() {
         try {
-            List<Future<String>> futures = executor.invokeAll(eventExtractors);
-            return futures;
+            return executor.invokeAll(eventExtractors);
         } catch (InterruptedException e) {
             log.error("Execution of EventExtractor was interrupted!", e);
         }
@@ -49,8 +50,7 @@ public class EventExtractorService {
 
             for (String filePath : tagsByFile.keySet()) {
                 List<EventExtractionTag> eventExtractionTags = tagsByFile.get(filePath);
-                EventExtractor extractor = new EventExtractor(repo, eventExtractionTags,
-                        filePath, config.groupName);
+                EventExtractor extractor = new EventExtractor(repo, eventExtractionTags, filePath, config.groupName, startPattern);
                 eventExtractors.add(extractor);
             }
         }

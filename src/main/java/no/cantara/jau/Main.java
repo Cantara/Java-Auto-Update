@@ -37,6 +37,7 @@ public class Main {
         String password = PropertiesHelper.getPassword();
         String artifactId = PropertiesHelper.getArtifactId();
         String clientId = PropertiesHelper.getClientId();
+        String startPattern = PropertiesHelper.getStartPattern();
 
         log.debug("Resolved clientId={}", clientId);
 
@@ -55,7 +56,7 @@ public class Main {
         ApplicationProcess processHolder = new ApplicationProcess(duplicateProcessHandler);
         processHolder.setWorkingDirectory(new File(workingDirectory));
 
-        EventExtractorService extractorService = new EventExtractorService(new EventRepo());
+        EventExtractorService extractorService = new EventExtractorService(new EventRepo(), startPattern);
 
         new JavaAutoUpdater(configServiceClient, registerClientHelper, processHolder, duplicateProcessHandler,
                 extractorService)
