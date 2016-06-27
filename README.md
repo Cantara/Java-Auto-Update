@@ -32,6 +32,28 @@ If JAU is running behind a proxy, use the following properties
 * "https.proxyHost"
 * "https.proxyPort"
 
+jau.properties
+```
+configservice.url=http://localhost:8086/jau/client
+configservice.username=read
+configservice.password=baretillesing
+configservice.artifactid=cantara-demo
+
+updateinterval=60
+isrunninginterval=40
+
+clientName=local-jau
+
+monitor.events=testkey
+
+# "startPattern" is a regex defining the start of a log entry. Setting this property causes multi-line
+# log entries to be collated before being sent to ConfigService.
+# For example, if your log entries starts with a UTC timestamp (e.g., 2016-06-09T14:01:05.348) you can
+# use the following regex:
+
+# startPattern=\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}
+```
+
 
 ## Example application configuration JAU receives from ConfigService
 
