@@ -286,6 +286,7 @@
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                                     <manifestEntries>
                                         <Main-Class>no.cantara.jau.Main</Main-Class>
+                                        <Class-Path>. ./config_override</Class-Path>
                                     </manifestEntries>
                                 </transformer>
                             </transformers>
