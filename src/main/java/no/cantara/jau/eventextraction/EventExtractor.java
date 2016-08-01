@@ -84,8 +84,8 @@ public class EventExtractor implements Callable<String> {
             lastFileSize = managedProcessLogFile.length();
             return true;
         }
-        LOG.trace("Last modified when last extracted is {}. Last modified attribute from file now is {}", new Date(lastModified), new Date(managedProcessLogFile.lastModified()));
-        LOG.trace("{} has NOT been modified since last extraction. Will not extract.", managedProcessLogFilePath);
+        LOG.trace("{} has NOT been modified since last extraction. Will not extract. Last modified when last extracted was {}. Last modified now is {}",
+                managedProcessLogFilePath, new Date(lastModified), new Date(managedProcessLogFile.lastModified()));
         return false;
     }
 

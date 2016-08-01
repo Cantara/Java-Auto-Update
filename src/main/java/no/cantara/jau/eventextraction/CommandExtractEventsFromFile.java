@@ -51,7 +51,7 @@ public class CommandExtractEventsFromFile extends HystrixCommand<Long> {
 
     @Override
     protected Long run() throws Exception {
-        log.trace("Start reading from line {}", lastLineRead);
+        log.trace("Start reading from line {} from file {}", lastLineRead, filePath);
 
         List<Event> events = new ArrayList<>();
         int lineNumber = -1;
