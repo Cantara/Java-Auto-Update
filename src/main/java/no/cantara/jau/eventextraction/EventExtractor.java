@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.Callable;
@@ -83,7 +84,8 @@ public class EventExtractor implements Callable<String> {
             lastFileSize = managedProcessLogFile.length();
             return true;
         }
-        LOG.trace("{} has not been modified since last extraction. Will not extract.", managedProcessLogFilePath);
+        LOG.trace("Last modified when last extracted is {}. Last modified attribute from file now is {}", new Date(lastModified), new Date(managedProcessLogFile.lastModified()));
+        LOG.trace("{} has NOT been modified since last extraction. Will not extract.", managedProcessLogFilePath);
         return false;
     }
 
