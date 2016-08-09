@@ -65,20 +65,21 @@ public class CheckForUpdateHelper {
                     log.warn("Got http {}. checkForUpdate failed, do nothing. Retrying in {} seconds.", e.getStatusCode(), interval, e);
                     return;
                 }
-            } catch (Exception e) {
+            } catch (Throwable e) {
                 log.warn("checkForUpdate failed, do nothing. Retrying in {} seconds.", interval, e);
-                return;
-            }
-
-            if (newClientConfig == null) {
-                log.debug("No updated config.");
-                extractorService.clearRepo();
                 return;
             }
 
             // ExecutorService swallows any exceptions silently, so need to handle them explicitly.
             // See http://www.nurkiewicz.com/2014/11/executorservice-10-tips-and-tricks.html (point 6.).
             try {
+
+                if (newClientConfig == null) {
+                    log.debug("No updated config.");
+                    extractorService.clearRepo();
+                    return;
+                }
+
                 log.debug("We got changes - stopping process and downloading new files.");
                 processHolder.stopProcess();
 
@@ -90,7 +91,7 @@ public class CheckForUpdateHelper {
                 processHolder.setLastChangedTimestamp(newClientConfig.config.getLastChanged());
 
                 configServiceClient.saveApplicationState(newClientConfig);
-            } catch (Exception e) {
+            } catch (Throwable e) {
                 log.warn("Error thrown from scheduled lambda.", e);
             }
         };
