@@ -84,7 +84,7 @@ public class CommandExtractEventsFromFile extends HystrixCommand<Long> {
         lastLineRead = lineNumber;
         repo.addEvents(events);
 
-        log.trace("Line {} was the last line read from file {}", lastLineRead, filePath);
+        log.trace("Line {} was the last line read from file {}. Number of events in repo {}", lastLineRead, filePath, events.size());
         return lastLineRead;
     }
 

@@ -72,7 +72,7 @@ public class EventExtractor implements Callable<String> {
     }
 
     private boolean fileHasBeenModified() {
-        if (managedProcessLogFile.lastModified() > lastModified) {
+        if (managedProcessLogFile.lastModified() > lastModified || managedProcessLogFile.length() != lastFileSize) {
             LOG.trace("{} is modified since last extraction. Extracting...", managedProcessLogFilePath);
             lastModified = managedProcessLogFile.lastModified();
 
