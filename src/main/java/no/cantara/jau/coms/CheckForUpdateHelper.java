@@ -16,6 +16,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.net.HttpURLConnection;
+import java.net.SocketTimeoutException;
+import java.net.UnknownHostException;
 import java.util.List;
 import java.util.Properties;
 import java.util.SortedMap;
@@ -33,7 +35,7 @@ public class CheckForUpdateHelper {
                                                      ScheduledFuture<?> processMonitorHandle,
                                                      EventExtractorService extractorService,
                                                      JavaAutoUpdater jau
-                                                     ) {
+    ) {
         return () -> {
             ClientConfig newClientConfig = null;
             try {
@@ -50,6 +52,9 @@ public class CheckForUpdateHelper {
                 CheckForUpdateRequest checkForUpdateRequest = new CheckForUpdateRequest(lastChanged, clientEnvironment,
                         PropertiesHelper.getClientName(), eventsStore);
                 newClientConfig = configServiceClient.checkForUpdate(clientId, checkForUpdateRequest);
+            } catch (SocketTimeoutException | UnknownHostException e) {
+                log.warn("checkForUpdate failed, do nothing. Fail reason {}. Retrying in {} seconds.", e.getMessage(), interval);
+                return;
             } catch (HttpException e) {
                 if (e.getStatusCode() == HttpURLConnection.HTTP_PRECON_FAILED) {
                     log.warn("Got http {} Precondition failed, reregistering client. Response message: {}", e.getStatusCode(), e.getMessage());
@@ -96,5 +101,4 @@ public class CheckForUpdateHelper {
             }
         };
     }
-
 }
