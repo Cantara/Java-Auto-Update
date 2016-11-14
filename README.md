@@ -7,7 +7,7 @@ Java Auto-Update - wrapper to automatically upgrade a Java application.
 1. Download zip file from http://mvnrepo.cantara.no/content/repositories/snapshots/no/cantara/jau/java-auto-update/1.0-SNAPSHOT/java-auto-update-1.0-20150731.054516-1.zip 
 2. unzip 
 3. Update configServiceUrl in config_override/jau.properties
-4. Execute download-java.bat
+4. Execute download-java.bat. Use the parameter extraSecurity if you want to add the optional cryptography extension kit
 5. Open command prompt with 'Run as Administrator'
 6. cd java-auto-update-1.0-SNAPSHOT\bin
 7. java-auto-update remove & java-auto-update install

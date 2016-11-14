@@ -5,17 +5,19 @@
 ::
 
 :: Download URL for the "normal" 64-bit JDK
-SET DOWNLOAD_URL="http://cdn.azul.com/zulu/bin/zulu8.13.0.5-jdk8.0.72-win_x64.zip"
-
+SET DOWNLOAD_URL="http://cdn.azul.com/zulu/bin/zulu8.19.0.1-jdk8.0.112-win_x64.zip"
 :: Download URL for the 32-bit JDK that will be downloaded on Windows 2003 servers
 SET DOWNLOAD_URL_32_BIT=
 
 :: Download URL for the optional cryptography extension kit, e.g.,
-:: http://www.azulsystems.com/sites/default/files/images/ZuluJCEPolicies.zip
+:: use parameter extraSecurity to install the optional cryptography extension kit
 SET DOWNLOAD_URL_CRYPTO=
+IF "%1"=="extraSecurity" (
+	SET DOWNLOAD_URL_CRYPTO="http://www.azulsystems.com/sites/default/files/images/ZuluJCEPolicies.zip"
+)
 
 :: Root directory in the downloaded zip file.  Only relevant for the 64-bit JDK.
-SET ZIP_ROOT_DIR="zulu8.13.0.5-jdk8.0.72-win_x64"
+SET ZIP_ROOT_DIR="zulu8.19.0.1-jdk8.0.112-win_x64"
 
 :: Set this if using an http proxy. Specified as "host:port".
 SET HTTP_PROXY=
