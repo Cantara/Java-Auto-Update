@@ -1,6 +1,7 @@
 package no.cantara.jau;
 
 import no.cantara.cs.client.ConfigServiceClient;
+import no.cantara.jau.util.AppConfig;
 import no.cantara.jau.coms.RegisterClientHelper;
 import no.cantara.jau.duplicatehandler.DuplicateProcessHandler;
 import no.cantara.jau.duplicatehandler.LastRunningProcessFileUtil;
@@ -22,6 +23,7 @@ public class Main {
     private static final Logger log = LoggerFactory.getLogger(Main.class);
 
     public static void main(String[] args) {
+        AppConfig.init("jau");
         ProxyFixer.fixProxy(PropertiesHelper.getPropertiesFromConfigFile(PropertiesHelper.JAU_CONFIG_FILENAME));
 
         String configServiceUrl = PropertiesHelper.getConfigServiceUrl();

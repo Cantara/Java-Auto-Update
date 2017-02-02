@@ -140,6 +140,16 @@
             <version>1.10.19</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.constretto</groupId>
+            <artifactId>constretto-core</artifactId>
+            <version>2.2.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.constretto</groupId>
+            <artifactId>constretto-spring</artifactId>
+            <version>2.2.2</version>
+        </dependency>
     </dependencies>
 
     <build>

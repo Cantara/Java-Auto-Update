@@ -17,3 +17,6 @@ test-output/
 /.project
 /.classpath
 *.logg.properties
+
+# Unit Test Files #
+*overrides.properties
