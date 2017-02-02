@@ -58,7 +58,7 @@ public class PropertiesHelperTest {
                 ex.printStackTrace();
             }
         }
-        String filename2 = "unit-test_overrides.properties";
+        String filename2 = "config_override/unit-test_overrides.properties";
         BufferedWriter bw2 = null;
         FileWriter fw2 = null;
         try {

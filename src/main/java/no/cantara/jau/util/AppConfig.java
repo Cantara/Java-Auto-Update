@@ -26,7 +26,7 @@ public class AppConfig {
         configuration = new ConstrettoBuilder()
                 .createPropertiesStore()
                 .addResource(Resource.create("classpath:" + appname + ".properties"))
-                .addResource(Resource.create("file:./" + appname + "_overrides.properties"))
+                .addResource(Resource.create("file:config_override/" + appname + "_overrides.properties"))
                 .done()
                 .getConfiguration();
         printConfiguration(configuration);
