@@ -1,5 +1,6 @@
 package no.cantara.jau.util;
 
+import java.io.File;
 import java.util.Map;
 import java.util.Properties;
 import java.io.BufferedWriter;
@@ -38,11 +39,11 @@ public class PropertiesHelperTest {
     }
     @Test
     public void testPropertiesPrecedence(){
-        String filename = "target/classes/unit-test.properties";
+        String filename = "target" + File.separator + "classes" + File.separator + " unit-test.properties";
         BufferedWriter bw = null;
         FileWriter fw = null;
         try {
-            String content = "configservice.url=https://test.com\nconfigservice.username=ausername\n";
+            String content = "configservice.url=https://test.com"+System.getProperty("line.separator")+"configservice.username=ausername";
             fw = new FileWriter(filename);
             bw = new BufferedWriter(fw);
             bw.write(content);
@@ -58,11 +59,11 @@ public class PropertiesHelperTest {
                 ex.printStackTrace();
             }
         }
-        String filename2 = "config_override/unit-test_overrides.properties";
+        String filename2 = System.getProperty("user.dir")+ File.separator + "config_override" + File.separator + "unit-test_overrides.properties";
         BufferedWriter bw2 = null;
         FileWriter fw2 = null;
         try {
-            String content = "configservice.url=https://overridetest.com\n";
+            String content = "configservice.url=https://overridetest.com"+System.getProperty("line.separator");
             fw2 = new FileWriter(filename2);
             bw2 = new BufferedWriter(fw2);
             bw2.write(content);

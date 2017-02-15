@@ -5,6 +5,7 @@ import org.constretto.ConstrettoConfiguration;
 import org.constretto.model.Resource;
 import org.slf4j.Logger;
 
+import java.io.File;
 import java.util.Map;
 
 import static org.slf4j.LoggerFactory.getLogger;
@@ -23,10 +24,16 @@ public class AppConfig {
         if (appname == null) {
             throw new IllegalArgumentException("appname is null. Please run AppName.init(\"myawesomeapp\") before reading configuration");
         }
+        String appnameDotProperties = "classpath:" + appname + ".properties";
+        String appnameOverridesDotProperties = "file:" + System.getProperty("user.dir")+
+                File.separator + "config_override"+
+                File.separator + appname +
+                "_overrides.properties";
+        System.out.println("Properties Loaded from: Commandline - "+ appnameOverridesDotProperties+ " - "+appnameDotProperties );
         configuration = new ConstrettoBuilder()
                 .createPropertiesStore()
-                .addResource(Resource.create("classpath:" + appname + ".properties"))
-                .addResource(Resource.create("file:config_override/" + appname + "_overrides.properties"))
+                .addResource(Resource.create(appnameDotProperties))
+                .addResource(Resource.create(appnameOverridesDotProperties))
                 .done()
                 .getConfiguration();
         printConfiguration(configuration);
