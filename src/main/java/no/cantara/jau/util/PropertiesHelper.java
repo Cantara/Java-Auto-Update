@@ -71,9 +71,12 @@ public class PropertiesHelper {
     }
 
     public static String getStringProperty(final Properties properties, String propertyKey, String defaultValue) {
-        String property = properties.getProperty(propertyKey, defaultValue);
+        String property = System.getProperty(propertyKey);
         if (property == null) {
-            property = System.getProperty(propertyKey);
+            property = AppConfig.getString(propertyKey);
+        }
+        if (property == null) {
+            property = properties.getProperty(propertyKey, defaultValue);
         }
         return property;
     }
