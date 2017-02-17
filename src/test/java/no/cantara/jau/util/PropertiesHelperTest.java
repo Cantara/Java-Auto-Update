@@ -39,26 +39,6 @@ public class PropertiesHelperTest {
     }
     @Test
     public void testPropertiesPrecedence(){
-        String filename = "target" + File.separator + "classes" + File.separator + " unit-test.properties";
-        BufferedWriter bw = null;
-        FileWriter fw = null;
-        try {
-            String content = "configservice.url=https://test.com"+System.getProperty("line.separator")+"configservice.username=ausername";
-            fw = new FileWriter(filename);
-            bw = new BufferedWriter(fw);
-            bw.write(content);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (bw != null)
-                    bw.close();
-                if (fw != null)
-                    fw.close();
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
-        }
         String filename2 = System.getProperty("user.dir")+ File.separator + "config_override" + File.separator + "unit-test_overrides.properties";
         BufferedWriter bw2 = null;
         FileWriter fw2 = null;
