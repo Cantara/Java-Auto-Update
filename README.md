@@ -2,6 +2,10 @@
 Java Auto-Update - wrapper to automatically upgrade a Java application. 
 
 
+![Build Status](https://jenkins.capraconsulting.no/buildStatus/icon?job=Cantara-Java-Auto-Update) - [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active) 
+
+[![Known Vulnerabilities](https://snyk.io/test/github/Cantara/Java-Auto-Update/badge.svg)](https://snyk.io/test/github/Cantara/Java-Auto-Update)
+
 ## Install on Windows 
 
 1. Download zip file from http://mvnrepo.cantara.no/content/repositories/snapshots/no/cantara/jau/java-auto-update/1.0-SNAPSHOT/java-auto-update-1.0-20150731.054516-1.zip 
