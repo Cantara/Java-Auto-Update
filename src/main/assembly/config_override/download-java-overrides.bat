@@ -11,7 +11,7 @@
 :: SET DOWNLOAD_URL_32_BIT=
 
 :: Download URL for the optional cryptography extension kit, e.g.,
-:: http://www.azulsystems.com/sites/default/files/images/ZuluJCEPolicies.zip
+:: http://cdn.azul.com/zcek/bin/ZuluJCEPolicies.zip
 :: SET DOWNLOAD_URL_CRYPTO=
 
 :: Root directory in the downloaded zip file.  Only relevant for the 64-bit JDK.

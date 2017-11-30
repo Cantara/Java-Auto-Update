@@ -13,7 +13,7 @@ SET DOWNLOAD_URL_32_BIT=
 :: use parameter extraSecurity to install the optional cryptography extension kit
 SET DOWNLOAD_URL_CRYPTO=
 IF "%1"=="extraSecurity" (
-	SET DOWNLOAD_URL_CRYPTO="http://www.azulsystems.com/sites/default/files/images/ZuluJCEPolicies.zip"
+	SET DOWNLOAD_URL_CRYPTO="http://cdn.azul.com/zcek/bin/ZuluJCEPolicies.zip"
 )
 
 :: Root directory in the downloaded zip file.  Only relevant for the 64-bit JDK.
