@@ -40,7 +40,6 @@
         <developerConnection>scm:git:ssh://git@github.com/cantara/Java-Auto-Update.git</developerConnection>
         <connection>scm:git:https://github.com/cantara/Java-Auto-Update.git</connection>
         <url>https://github.com/Cantara/Java-Auto-Update</url>
-    <tag>java-auto-update-0.9.1</tag>
   </scm>
 
     <properties>
@@ -69,7 +68,7 @@
         <dependency>
             <groupId>no.cantara.jau</groupId>
             <artifactId>configservice-sdk</artifactId>
-            <version>0.15</version>
+            <version>0.16.1</version>
         </dependency>
 
         <dependency>
