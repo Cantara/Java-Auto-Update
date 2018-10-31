@@ -96,8 +96,15 @@ public class JavaAutoUpdater {
                 boolean successKillingProcess = duplicateProcessHandler.killExistingProcessIfRunning(processCommand);
 
                 if (!successKillingProcess) {
-                    log.error("Problem killing running process! A new managed process will not be started. " +
-                              "Retrying in {} seconds", sleepTime / 1000);
+                    boolean forceStartSubProcess = PropertiesHelper.forceStartSubProcess();
+                    if (forceStartSubProcess) {
+                        log.warn("Problem killing running process. Will start a new managed process as the" +
+                                "flag 'forceStartSubProcess' is set to true. This may lead to duplicate " +
+                                "subprocesses.");
+                    } else {
+                        log.error("Problem killing running process! A new managed process will not be started. " +
+                                "Retrying in {} seconds", sleepTime / 1000);
+                    }
                 } else {
                     processMonitorHandle = startProcessMonitorThread(isRunningInterval);
                 }

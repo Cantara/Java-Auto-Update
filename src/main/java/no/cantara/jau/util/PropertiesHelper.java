@@ -33,10 +33,12 @@ public class PropertiesHelper {
     private static final String IS_RUNNING_INTERVAL_KEY = "isrunninginterval";
     private static final String UPDATE_INTERVAL_KEY = "updateinterval";
     private static final String STOP_APPLICATION_ON_SHUTDOWN_KEY = "stopApplicationOnShutdown";
+    private static final String FORCE_START_SUB_PROCESS = "forceStartSubProcess";
 
     private static final int DEFAULT_UPDATE_INTERVAL = 60; // seconds
     private static final int DEFAULT_IS_RUNNING_INTERVAL = 40; // seconds
     private static final boolean DEFAULT_STOP_APPLICATION_ON_SHUTDOWN = false;
+    private static final boolean DEFAULT_FORCE_START_SUB_PROCESS = false;
 
     public static Properties getPropertiesFromConfigFile(String filename) {
         Properties properties = new Properties();
@@ -157,5 +159,9 @@ public class PropertiesHelper {
 
     public static boolean stopApplicationOnShutdown() {
         return getBooleanProperty(getPropertiesFromConfigFile(JAU_CONFIG_FILENAME), STOP_APPLICATION_ON_SHUTDOWN_KEY, DEFAULT_STOP_APPLICATION_ON_SHUTDOWN);
+    }
+
+    public static boolean forceStartSubProcess() {
+        return getBooleanProperty(getPropertiesFromConfigFile(JAU_CONFIG_FILENAME), FORCE_START_SUB_PROCESS, DEFAULT_FORCE_START_SUB_PROCESS);
     }
 }
