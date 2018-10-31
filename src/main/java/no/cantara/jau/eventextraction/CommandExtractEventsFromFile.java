@@ -1,7 +1,14 @@
 package no.cantara.jau.eventextraction;
 
-import java.io.BufferedReader;
-import java.io.IOException;
+import com.netflix.hystrix.HystrixCommand;
+import com.netflix.hystrix.HystrixCommandGroupKey;
+import com.netflix.hystrix.HystrixCommandProperties;
+import no.cantara.cs.dto.event.Event;
+import no.cantara.cs.dto.event.EventExtractionTag;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -10,21 +17,12 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.netflix.hystrix.HystrixCommand;
-import com.netflix.hystrix.HystrixCommandGroupKey;
-import com.netflix.hystrix.HystrixCommandProperties;
-
-import no.cantara.cs.dto.event.Event;
-import no.cantara.cs.dto.event.EventExtractionTag;
-
 public class CommandExtractEventsFromFile extends HystrixCommand<Long> {
     private static final Logger log = LoggerFactory.getLogger(CommandExtractEventsFromFile.class);
     private static final String GROUP_KEY = "EXTRACT_EVENTS";
     private static final int COMMAND_TIMEOUT = 10_000;
     private static final int MAX_LINE_LENGTH = 1_000_000;
+    private static final int MAX_LOG_LINES = 100;
     private static final String ERROR_WORD = "ERROR";
     private static final String EXCEPTION_WORD = "Exception";
     private static final String STACK_TRACE_PREFIX = "\tat";
@@ -56,6 +54,12 @@ public class CommandExtractEventsFromFile extends HystrixCommand<Long> {
         List<Event> events = new ArrayList<>();
         int lineNumber = -1;
 
+        // Limit to only process last 100 lines
+        int linesInFile = countLinesInFile(filePath);
+        if (linesInFile - lastLineRead > MAX_LOG_LINES) {
+            lastLineRead = linesInFile - MAX_LOG_LINES;
+        }
+
         try (BufferedReader reader = Files.newBufferedReader(Paths.get(filePath), StandardCharsets.UTF_8)) {
 
             String line = reader.readLine();
@@ -86,6 +90,45 @@ public class CommandExtractEventsFromFile extends HystrixCommand<Long> {
 
         log.trace("Line {} was the last line read from file {}. Number of events in repo {}", lastLineRead, filePath, events.size());
         return lastLineRead;
+    }
+
+    public static int countLinesInFile(String filename) throws IOException {
+        InputStream is = new BufferedInputStream(new FileInputStream(filename));
+        try {
+            byte[] c = new byte[1024];
+
+            int readChars = is.read(c);
+            if (readChars == -1) {
+                // bail out if nothing to read
+                return 0;
+            }
+
+            // make it easy for the optimizer to tune this loop
+            int count = 0;
+            while (readChars == 1024) {
+                for (int i = 0; i < 1024; ) {
+                    if (c[i++] == '\n') {
+                        ++count;
+                    }
+                }
+                readChars = is.read(c);
+            }
+
+            // count remaining characters
+            while (readChars != -1) {
+                System.out.println(readChars);
+                for (int i = 0; i < readChars; ++i) {
+                    if (c[i] == '\n') {
+                        ++count;
+                    }
+                }
+                readChars = is.read(c);
+            }
+
+            return count == 0 ? 1 : count;
+        } finally {
+            is.close();
+        }
     }
 
     private boolean hasStartPattern(String line) {
