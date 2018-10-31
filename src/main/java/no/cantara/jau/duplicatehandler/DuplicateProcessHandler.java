@@ -30,7 +30,8 @@ public class DuplicateProcessHandler {
         try {
             pid = fileUtil.getRunningProcessPidFromFile();
         } catch (IOException e) {
-            log.warn("Could not read file={}.", fileUtil.getFileName());
+            log.warn("Could not read file={}. Attempting to kill process by searching for processes with " +
+                            "processCommand={}", fileUtil.getFileName(), processCommand);
             return findRunningProcessByProcessNameAndKill(processCommand);
         }
         if (pid != null) {
@@ -84,9 +85,7 @@ public class DuplicateProcessHandler {
     private boolean killRunningProcessByProcessName(String processName) {
         try {
             return processExecutor.killProcessByProcessName(processName);
-        } catch (IOException e) {
-            log.error("Could not kill process by process name", e);
-        } catch (InterruptedException e) {
+        } catch (IOException | InterruptedException e) {
             log.error("Could not kill process by process name", e);
         }
         return false;
@@ -110,8 +109,7 @@ public class DuplicateProcessHandler {
     }
 
     private boolean processIsRunning(String pid) throws IOException, InterruptedException {
-        boolean processRuns = processExecutor.isProcessRunning(pid);
-        return processRuns;
+        return processExecutor.isProcessRunning(pid);
     }
 
     private boolean killRunningProcessByPID(String pid) {
