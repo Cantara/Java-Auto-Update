@@ -1,17 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <configuration scan="true" scanPeriod="60 seconds">
     <property name="LOG_DIR" value="logs/"/>
     <property name="env" value="prod"/>
     <property name="appName" value="jau"/>
 
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-        <layout class="ch.qos.logback.classic.PatternLayout">
-            <Pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</Pattern>
-        </layout>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd'T'HH:mm:ss.SSSZ} [%thread] %-5level %logger{35} - %msg%n</pattern>
+        </encoder>
     </appender>
 
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <File>${LOG_DIR}${appName}.log</File>
-        <!--Each file should be at most 50MB, keep 5 days worth of history, but at most 3GB -->
+        <file>${LOG_DIR}${appName}.log</file>
+        <!--Each file should be at most 50MB, keep 5 days worth of history, but at most 1GB -->
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
             <fileNamePattern>${LOG_DIR}${appName}-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
             <maxHistory>5</maxHistory>
@@ -19,15 +20,16 @@
             <maxFileSize>50MB</maxFileSize>
         </rollingPolicy>
         <encoder>
-            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{35} - %msg%n</pattern>
+            <pattern>%d{yyyy-MM-dd'T'HH:mm:ss.SSSZ} [%thread] %-5level %logger{35} - %msg%n</pattern>
+            <charset>UTF-8</charset>
         </encoder>
     </appender>
 
-    <logger name="no.cantara.jau" level="DEBUG" />
-    <logger name="no.cantara.cs" level="DEBUG" />
+    <logger name="no.cantara.jau" level="DEBUG"/>
+    <logger name="no.cantara.cs" level="DEBUG"/>
 
     <root level="INFO">
-<!--        <appender-ref ref="STDOUT" /> -->
-        <appender-ref ref="FILE" />
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="FILE"/>
     </root>
 </configuration>
