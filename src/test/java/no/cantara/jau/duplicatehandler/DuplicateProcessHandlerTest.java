@@ -20,7 +20,7 @@ public class DuplicateProcessHandlerTest {
         when(processExecutorFetcher.getProcessExecutorBasedOnOs()).thenReturn(processExecutorMock);
         LastRunningProcessFileUtil lastRunningProcessFileUtilMock = mock(LastRunningProcessFileUtil.class);
 
-        stub(processExecutorMock.findProcessId(any())).toReturn("12345");
+        when(processExecutorMock.findProcessId(any())).thenReturn("12345");
 
         DuplicateProcessHandler duplicateProcessHandler = new DuplicateProcessHandler(processExecutorFetcher,
                 lastRunningProcessFileUtilMock);

@@ -15,7 +15,6 @@ import java.net.HttpURLConnection;
 import java.util.Properties;
 import java.util.concurrent.ScheduledFuture;
 
-import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.*;
 
 /**
@@ -27,7 +26,7 @@ public class CheckForUpdateHelperTest {
     public void testPreconditionFailed() throws IOException {
         ConfigServiceClient configServiceClient = mock(ConfigServiceClient.class);
         when(configServiceClient.getApplicationState()).thenReturn(new Properties());
-        when(configServiceClient.checkForUpdate(anyString(), any(CheckForUpdateRequest.class))).thenThrow(new HttpException(HttpURLConnection.HTTP_PRECON_FAILED, "precondition failed"));
+        when(configServiceClient.checkForUpdate(any(), any())).thenThrow(new HttpException(HttpURLConnection.HTTP_PRECON_FAILED, "precondition failed"));
 
         ApplicationProcess processHolder = mock(ApplicationProcess.class);
         ScheduledFuture processMonitorHandle = mock(ScheduledFuture.class);
@@ -42,7 +41,7 @@ public class CheckForUpdateHelperTest {
 
         Runnable checkForUpdateRunnable = CheckForUpdateHelper.getCheckForUpdateRunnable(1, configServiceClient,
                 processHolder, processMonitorHandle, extractorService, jau
-                );
+        );
         checkForUpdateRunnable.run();
 
         verify(jau).registerClient();
