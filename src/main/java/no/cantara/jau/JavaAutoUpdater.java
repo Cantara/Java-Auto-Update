@@ -98,7 +98,7 @@ public class JavaAutoUpdater {
                 if (!successKillingProcess) {
                     boolean forceStartSubProcess = PropertiesHelper.forceStartSubProcess();
                     if (forceStartSubProcess) {
-                        log.warn("Problem killing running process. Will start a new managed process as the" +
+                        log.warn("Problem killing running process. Will start a new managed process as the " +
                                 "flag 'forceStartSubProcess' is set to true. This may lead to duplicate " +
                                 "subprocesses.");
                     } else {
