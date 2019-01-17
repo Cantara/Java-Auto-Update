@@ -8,6 +8,7 @@ import java.net.InterfaceAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.util.*;
+import java.util.Map.Entry;
 
 /**
  * @author <a href="mailto:erik-dev@fjas.no">Erik Drolshammer</a> 2015-09-20.
@@ -42,6 +43,12 @@ public class ClientEnvironmentUtil {
         // sensitive and we do want to send them as heartbeat data
         Set<String> propertiesToMask = PropertiesHelper.getPropertiesFromConfigFile(PropertiesHelper.APPLICATION_ENV_FILENAME).stringPropertyNames();
         clientEnv.putAll(maskApplicationEnvProperties(System.getenv(), propertiesToMask));
+        Map<String, String> mapProperties = new HashMap<String, String>();
+        Properties systemProperties = System.getProperties();
+        for(Entry<Object, Object> x : systemProperties.entrySet()) {
+            mapProperties.put((String)x.getKey(), (String)x.getValue());
+        }
+        clientEnv.putAll(maskApplicationEnvProperties(mapProperties, propertiesToMask));
         String version = PropertiesHelper.getVersion();
         clientEnv.put("jau.version", version);
         clientEnv.put("applicationState", String.valueOf(applicationState));
