@@ -1,19 +1,22 @@
 package no.cantara.jau;
 
 import no.cantara.cs.client.ConfigServiceClient;
-import no.cantara.jau.util.AppConfig;
 import no.cantara.jau.coms.RegisterClientHelper;
 import no.cantara.jau.duplicatehandler.DuplicateProcessHandler;
 import no.cantara.jau.duplicatehandler.LastRunningProcessFileUtil;
 import no.cantara.jau.duplicatehandler.ProcessExecutorFetcher;
 import no.cantara.jau.eventextraction.EventExtractorService;
 import no.cantara.jau.eventextraction.EventRepo;
+import no.cantara.jau.util.AppConfig;
+import no.cantara.jau.util.DisableSSLVerification;
 import no.cantara.jau.util.PropertiesHelper;
 import no.cantara.jau.util.ProxyFixer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author <a href="mailto:erik-dev@fjas.no">Erik Drolshammer</a> 2015-07-13.
@@ -45,6 +48,12 @@ public class Main {
 
         int updateInterval = PropertiesHelper.getUpdateInterval();
         int isRunningInterval = PropertiesHelper.getIsRunningInterval();
+
+        String domains = PropertiesHelper.getStringProperty(null, "disable.tlscheck.domains", "");
+        if (!"".equals(domains)) {
+            List<String> domainsToIgnoreTlsCheck = Arrays.asList(domains.split(","));
+            DisableSSLVerification.disableForDomains(domainsToIgnoreTlsCheck);
+        }
 
         ConfigServiceClient configServiceClient = new ConfigServiceClient(configServiceUrl, username, password);
         RegisterClientHelper registerClientHelper = new RegisterClientHelper(configServiceClient, artifactId, clientName, clientId);

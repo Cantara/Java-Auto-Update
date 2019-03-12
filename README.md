@@ -34,6 +34,14 @@ If JAU is running behind a proxy, use the following properties
 * "https.proxyHost"
 * "https.proxyPort"
 
+If JAU is running behind a proxy that performs SSL sniffing, you can use the
+following property to ignore certificate validation for given domains. Matches
+the Subject DN of the certificate, so if a wildcard certificate is used, specify
+like "*.example.com". Separate multiple domains using a comma.
+
+- `disable.tlscheck.domains`, e.g.
+  `disable.tlscheck.domains="*.example.com,subdomain.domain.com"`
+
 jau.properties
 ```
 configservice.url=http://localhost:8086/jau/client
