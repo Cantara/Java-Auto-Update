@@ -60,7 +60,8 @@ public class CommandExtractEventsFromFile extends HystrixCommand<Long> {
             lastLineRead = linesInFile - MAX_LOG_LINES;
         }
 
-        try (BufferedReader reader = Files.newBufferedReader(Paths.get(filePath), StandardCharsets.UTF_8)) {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(filePath),
+                StandardCharsets.UTF_8))) {
 
             String line = reader.readLine();
             Event event = null;
