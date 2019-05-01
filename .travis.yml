@@ -1,0 +1,44 @@
+dist: trusty
+language: java
+# We now cache the Maven dependencies directory for faster builds
+cache:
+  apt: true
+  directories:
+    - $HOME/.m2
+    - $HOME/.downloads
+sudo: true
+
+#notifications:
+#  slack: cantara:Mc0ZrDXc2tFgnWeDd5xwiTGn
+
+addons:
+  apt:
+    sources:
+      - sourceline: 'deb http://repos.azulsystems.com/ubuntu stable main'
+        key_url: 'http://repos.azulsystems.com/RPM-GPG-KEY-azulsystems'
+    packages:
+      - zulu-8
+
+
+before_install:
+  - echo 'MAVEN_OPTS="-Dorg.slf4j.simpleLogger.defaultLogLevel=warn"' >~/.mavenrc
+  - mkdir -p $HOME/.downloads
+  - wget -N -q -O $HOME/.downloads/ZuluJCEPolicies.zip 'https://cdn.azul.com/zcek/bin/ZuluJCEPolicies.zip'
+  #  # The SHA256 checksum for JCE for Azul will break if Azul updates their archive.
+  #  # If so, you will need to update the fingerprint below after verifying the
+  #  # authenticity of the archive.
+#  - echo "8021a28b8cac41b44f1421fd210a0a0822fcaf88d62d2e70a35b2ff628a8675a  $HOME/.downloads/ZuluJCEPolicies.zip" | sha256sum -c
+#  - sudo unzip -o -j $HOME/.downloads/ZuluJCEPolicies.zip ZuluJCEPolicies/local_policy.jar ZuluJCEPolicies/US_export_policy.jar -d /usr/lib/jvm/zulu-8-amd64/jre/lib/security
+#  - sudo unzip -o -j $HOME/.downloads/ZuluJCEPolicies.zip ZuluJCEPolicies/local_policy.jar ZuluJCEPolicies/US_export_policy.jar -d /usr/lib/jvm/zulu-9-amd64/lib/security
+
+matrix:
+  fast_finish: true
+  include:
+    #   unit test build  tests (zulu-8)
+    - env:
+        - JAVA_HOME=/usr/lib/jvm/zulu-8-amd64
+        - DESC="zulu-8 unit tests"
+        - CMD="mvn clean test -Dcheckstyle.skip=true"
+        - LANG=en_US.utf8
+
+script: echo ${CMD}; ${CMD}
