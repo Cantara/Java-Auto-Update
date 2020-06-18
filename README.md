@@ -20,7 +20,7 @@ Tip! If it fails to start, check the wrapper.log.
 
 ## Run on Linux 
 
-1. wget https://mvnrepo.cantara.no/content/repositories/releases/no/cantara/jau/java-auto-update/0.10.5/java-auto-update-0.10.5.jar
+1. wget https://mvnrepo.cantara.no/content/repositories/releases/no/cantara/jau/java-auto-update/0.11.1/java-auto-update-0.11.1.zip
 2. java -Dconfigservice.url=http://localhost:7000/jau/serviceconfig/query?clientid=clientid1 -jar java-auto-update-0.10.5.jar
 
 
