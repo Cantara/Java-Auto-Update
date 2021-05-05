@@ -2,33 +2,11 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>no.cantara.jau</groupId>
     <artifactId>java-auto-update</artifactId>
-    <version>0.17.24-SNAPSHOT</version>
+    <version>0.18.2-SNAPSHOT</version>
     <name>Java Auto-Update</name>
     <url>https://wiki.cantara.no/display/dev/Java+Auto-Update</url>
 
-    <developers>
-        <developer>
-            <name>Erik Drolshammer</name>
-            <email>erik-dev@fjas.no</email>
-            <roles>
-                <role>Developer</role>
-            </roles>
-        </developer>
-        <developer>
-            <name>Jørund B. Fagerjord</name>
-            <email>j.b.fagerjord@gmail.com</email>
-            <roles>
-                <role>Developer</role>
-            </roles>
-        </developer>
-        <developer>
-            <name>Anders Emil Rønning</name>
-            <email>anders.roenning@gmail.com</email>
-            <roles>
-                <role>Developer</role>
-            </roles>
-        </developer>
-    </developers>
+    
 
     <parent>
         <groupId>no.cantara.emi</groupId>
@@ -48,28 +26,13 @@
         <slf4j.version>1.7.30</slf4j.version>
     </properties>
 
-    <repositories>
-        <!-- Needed for parent  -->
-        <repository>
-            <id>cantara-releases</id>
-            <name>Cantara Release Repository</name>
-            <url>http://mvnrepo.cantara.no/content/repositories/releases/</url>
-        </repository>
-        <!-- Needed for SDK snapshots  -->
-        <repository>
-            <id>cantara-snapshots</id>
-            <name>Cantara Snapshot Repository</name>
-            <url>http://mvnrepo.cantara.no/content/repositories/snapshots/</url>
-        </repository>
-    </repositories>
-
 
     <!-- mvn org.codehaus.mojo:versions-maven-plugin:2.2:display-dependency-updates -->
     <dependencies>
         <dependency>
             <groupId>no.cantara.jau</groupId>
             <artifactId>configservice-sdk</artifactId>
-            <version>0.17.22</version>
+            <version>0.18.2</version>
         </dependency>
 
         <dependency>
@@ -320,4 +283,45 @@
             </plugin>
         </plugins>
     </build>
+    
+    <developers>
+        <developer>
+            <name>Erik Drolshammer</name>
+            <email>erik-dev@fjas.no</email>
+            <roles>
+                <role>Developer</role>
+            </roles>
+        </developer>
+        <developer>
+            <name>Jørund B. Fagerjord</name>
+            <email>j.b.fagerjord@gmail.com</email>
+            <roles>
+                <role>Developer</role>
+            </roles>
+        </developer>
+        <developer>
+            <name>Anders Emil Rønning</name>
+            <email>anders.roenning@gmail.com</email>
+            <roles>
+                <role>Developer</role>
+            </roles>
+        </developer>
+    </developers>
+    
+    <repositories>
+        <!-- Needed for parent  -->
+        <repository>
+            <id>cantara-releases</id>
+            <name>Cantara Release Repository</name>
+            <url>http://mvnrepo.cantara.no/content/repositories/releases/</url>
+        </repository>
+        <!-- Needed for SDK snapshots  -->
+        <repository>
+            <id>cantara-snapshots</id>
+            <name>Cantara Snapshot Repository</name>
+            <url>http://mvnrepo.cantara.no/content/repositories/snapshots/</url>
+        </repository>
+    </repositories>
+
+
 </project>
