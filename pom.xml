@@ -123,7 +123,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>appassembler-maven-plugin</artifactId>
-                <version>1.10</version>
+                <version>2.1.0</version>
                 <configuration>
                     <repositoryLayout>flat</repositoryLayout>
                     <generateRepository>false</generateRepository>
