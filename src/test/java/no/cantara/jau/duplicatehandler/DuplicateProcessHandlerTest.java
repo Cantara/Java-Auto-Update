@@ -7,7 +7,6 @@ import org.testng.annotations.Test;
 
 import java.io.IOException;
 
-import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
 public class DuplicateProcessHandlerTest {

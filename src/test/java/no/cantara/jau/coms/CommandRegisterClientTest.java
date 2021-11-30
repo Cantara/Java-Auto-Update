@@ -11,7 +11,7 @@ import javax.ws.rs.NotFoundException;
 import javax.ws.rs.core.NoContentException;
 import java.io.IOException;
 
-import static org.mockito.Matchers.any;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.testng.Assert.assertTrue;
