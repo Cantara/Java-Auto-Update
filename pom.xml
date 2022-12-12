@@ -80,7 +80,7 @@
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-            <version>1.4.5</version>
+            <version>1.2.11</version>
             <scope>runtime</scope>
         </dependency>
         <!-- Needed for logback filter -->
@@ -94,7 +94,7 @@
         <dependency>
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
-            <version>7.6.0</version>
+            <version>7.7.0</version>
             <scope>test</scope>
         </dependency>
         <dependency>
