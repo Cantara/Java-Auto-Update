@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>no.cantara.jau</groupId>
     <artifactId>java-auto-update</artifactId>
-    <version>0.18.17</version>
+    <version>0.18.18-SNAPSHOT</version>
     <name>Java Auto-Update</name>
     <url>https://wiki.cantara.no/display/dev/Java+Auto-Update</url>
 
@@ -18,7 +18,7 @@
         <developerConnection>scm:git:ssh://git@github.com/cantara/Java-Auto-Update.git</developerConnection>
         <connection>scm:git:https://github.com/cantara/Java-Auto-Update.git</connection>
         <url>https://github.com/Cantara/Java-Auto-Update</url>
-        <tag>java-auto-update-0.18.17</tag>
+        <tag>java-auto-update-0.18.3</tag>
     </scm>
 
     <properties>
