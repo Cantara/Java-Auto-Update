@@ -14,7 +14,7 @@ public class WindowsProcessExecutor extends ProcessExecutor {
 
     @Override
     public boolean killProcessByPID(String pid) throws IOException, InterruptedException {
-        ProcessBuilder processBuilder = new ProcessBuilder("taskkill", "/pid", pid, "/f");
+        ProcessBuilder processBuilder = new ProcessBuilder("C:\\Windows\\System32\\taskkill.exe", "/pid", pid, "/f");
         return executeProcess(processBuilder);
     }
 
@@ -27,8 +27,8 @@ public class WindowsProcessExecutor extends ProcessExecutor {
     @Override
     public boolean isProcessRunning(String pid) throws IOException, InterruptedException {
         ProcessBuilder processBuilder;
-        processBuilder = new ProcessBuilder("C:\\Windows\\System32\\cmd.exe", "/c", "tasklist",
-                "/FI", "\"PID eq " + pid + "\" | findstr " + pid + "\"");
+        processBuilder = new ProcessBuilder("C:\\Windows\\System32\\cmd.exe", "/c", "C:\\Windows\\System32\\tasklist.exe",
+                "/FI", "\"PID eq " + pid + "\" | C:\\Windows\\System32\\findstr.exe " + pid + "\"");
         return executeProcess(processBuilder);
     }
 
