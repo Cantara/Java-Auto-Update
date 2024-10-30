@@ -32,7 +32,7 @@
         <dependency>
             <groupId>no.cantara.jau</groupId>
             <artifactId>configservice-sdk</artifactId>
-            <version>0.20.8</version>
+            <version>0.20.9</version>
         </dependency>
 
         <dependency>
