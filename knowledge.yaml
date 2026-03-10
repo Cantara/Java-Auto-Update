@@ -1,0 +1,25 @@
+id: java-auto-update
+name: Java Auto Update
+version: 0.18.12-SNAPSHOT
+description: |
+  Auto-update library and agent for long-running Java services. Polls a Maven
+  repository or download URL for new versions and performs rolling updates
+  without downtime, integrated with the Cantara Config Service.
+units:
+  - id: update-agent
+    name: Update Agent
+    type: component
+    description: Version polling and update lifecycle — detects new versions and coordinates replacement.
+    path: src/main/java/no/cantara/jau
+  - id: downloader
+    name: Downloader
+    type: component
+    description: Artifact download and checksum verification before applying an update.
+  - id: process-manager
+    name: Process Manager
+    type: component
+    description: Service restart orchestration — graceful shutdown and re-launch of the updated JAR.
+  - id: config-client
+    name: Config Client
+    type: component
+    description: Config Service integration for retrieving update configuration and target versions.
