@@ -1,0 +1,137 @@
+name: cantara-infrastructure
+description: Cantara infrastructure tooling — ConfigService-Dashboard, SourceCodePortal, Client-Observer-Filter, Java-Auto-Update, Whydah-HelidonProvider
+version: "1.0.0"
+content: |
+  # Cantara Infrastructure Tooling
+
+  Five supporting infrastructure repos — monitoring UIs, deployment automation,
+  observability helpers, and Helidon integration.
+
+  ---
+
+  ## ConfigService-Dashboard (v0.18)
+
+  **Package:** `no.cantara.cs.dashboard`
+  **Purpose:** Web UI for managing ConfigService applications and their configurations.
+
+  ### What it does
+  - CRUD for CS applications and their config entries (key/value pairs)
+  - Audit view: shows config change history
+  - All CS operations are wrapped in Command objects (one class per CS REST call)
+  - Stack: Jetty + Jersey, no separate frontend framework — server-rendered
+
+  ### Usage
+  Deployed alongside ConfigService. Provides a human-friendly alternative to calling
+  CS REST endpoints directly. Not required for production — CS API is the authority.
+
+  ---
+
+  ## SourceCodePortal (v0.10)
+
+  **Package:** `no.cantara.docsite`
+  **Purpose:** GitHub multi-organisation repository aggregator with build status badges.
+
+  ### What it does
+  - Fetches repo metadata from multiple GitHub orgs (Cantara, eXOReaction, etc.)
+  - Displays repos with README previews, build status badges (Jenkins/GitHub Actions)
+  - In-memory cache to stay within GitHub API rate limits
+  - Useful for getting an organisation-wide view of repo health
+
+  ### Usage
+  Read-only dashboard — no write operations to GitHub. Configure with GitHub tokens
+  and org names. Cache TTL controls API request frequency.
+
+  ---
+
+  ## Client-Observer-Filter (v0.2)
+
+  **Package:** `no.cantara.clientobserver`
+  **Purpose:** Servlet filter that captures per-user HTTP request events and ships them to Valuereporter.
+
+  ### What it does
+  - `ClientObserverFilter implements javax.servlet.Filter` — wraps incoming requests
+  - Captures: user identity (from token), endpoint, response code, latency
+  - Forwards events asynchronously to Valuereporter REST API
+  - Only 3 classes total — deliberately thin
+
+  ### Usage
+  Add to web.xml or programmatic servlet registration. Configure Valuereporter endpoint URL.
+  Zero business logic — pure observation forwarding. Works alongside any Whydah-authenticated service.
+
+  ### Cross-reference
+  - cantara-valuereporter — receives and stores the events this filter emits
+
+  ---
+
+  ## Java-Auto-Update (JAU) (v0.18)
+
+  **Package:** `no.cantara.jau`
+  **Purpose:** Deployment automation agent — polls ConfigService for new artifact versions,
+  downloads, checksums, and restarts managed JARs automatically.
+
+  ### What it does
+  - Registers the managed application with ConfigService on startup
+  - Polls CS periodically for updated artifact version (Maven coordinates)
+  - Downloads new JAR, verifies checksum, performs graceful stop + restart
+  - Duplicate process handler: detects and kills stale instances before starting new one
+  - Event extractor: reads application log files and ships events to ConfigService
+
+  ### Config
+  ```properties
+  jau.cs.url=http://configservice:8080
+  jau.application.artifact.id=my-app
+  jau.application.group.id=no.myorg
+  jau.application.version=LATEST
+  jau.poll.interval=30
+  ```
+
+  ### Usage pattern
+  JAU runs as a wrapper process — it starts the managed JAR as a subprocess and monitors it.
+  Used by Whydah services (UIB, UAS, STS) for zero-downtime rolling updates.
+
+  ### Cross-reference
+  - cantara-configservice — JAU registers with CS and polls it for updates
+  - whydah-core-backend — UIB/UAS use JAU for deployment
+
+  ---
+
+  ## Whydah-HelidonProvider (v0.4)
+
+  **Package:** `no.cantara.whydah.helidon`
+  **Purpose:** Helidon SE `AuthenticationProvider` SPI integration — plugs Whydah SSO into Helidon microservices.
+
+  ### What it does
+  - `WhydahProvider extends SynchronousProvider` — implements Helidon's security SPI
+  - Reads Whydah config from Helidon's config system (application.yaml or environment)
+  - Validates incoming `usertoken` headers against Whydah STS
+  - Injects user identity and roles into Helidon security context
+  - Includes MicroProfile Metrics integration (request counts, latency)
+  - `TestStubs` for unit testing without a live Whydah instance
+
+  ### Config (application.yaml)
+  ```yaml
+  security:
+    providers:
+      - whydah:
+          whydah_enabled: true
+          whydah_uri: http://whydah-sso:9990/sso
+          whydah_application_id: myapp123
+          whydah_application_name: MyApp
+          whydah_application_secret: mysecret
+  ```
+
+  ### Usage
+  Add `whydah-helidon-provider` dependency. Helidon auto-discovers the provider via
+  ServiceLoader. Annotate JAX-RS resources with `@Authenticated` as usual.
+
+  ### Cross-reference
+  - cantara-visuale — also uses Helidon SE (Helidon 3.x), the only other Helidon service in Cantara
+  - whydah-sdk-development — Whydah-Java-SDK for non-Helidon Whydah integration
+
+  ---
+
+  ## Cross-references
+  - cantara-valuereporter — Client-Observer-Filter ships events here
+  - cantara-configservice — Java-Auto-Update polls here for updates
+  - whydah-core-backend — UIB + UAS deployed/monitored via JAU
+  - cantara-visuale — Helidon SE sibling service
