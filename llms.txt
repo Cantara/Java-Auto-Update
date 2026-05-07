@@ -1,0 +1,19 @@
+# Java-Auto-Update
+
+> Java Auto-Update - wrapper to automaticall upgrade a Java application.
+
+Part of the [Cantara](https://wiki.cantara.no) open source ecosystem.
+Apache-2.0. Java.
+
+## Structured Navigation (for AI agents)
+
+KCP v0.14 manifest for this repository (wiki-hosted):
+https://wiki.cantara.no/knowledge/repos/Java-Auto-Update.yaml
+
+Signing key (delegated to Cantara org): https://wiki.cantara.no/.well-known/kcp-signing-key.pub
+
+## Related
+
+- [Cantara wiki](https://wiki.cantara.no) — Full project documentation
+- [knowledge-context-protocol](https://github.com/Cantara/knowledge-context-protocol) — KCP spec
+- [kcp-commands](https://github.com/Cantara/kcp-commands) — Claude Code hook
