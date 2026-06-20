@@ -1,3 +1,17 @@
+kcp_version: "0.21"
+updated: "2026-06-20"
+language: en
+license: "Apache-2.0"
+indexing: private
+temporal:
+  valid_from: "2026-03-14"
+signing:
+  scheme: ed25519
+  scope: this-manifest
+  public_key: "MCowBQYDK2VwAyEAuipgusnqU9vjf3p2yPVLD/DmERT6tBbLOqEETdxAhMU="
+  signature: "https://raw.githubusercontent.com/Cantara/Java-Auto-Update/master/knowledge.yaml.sig"
+not_for: []
+
 id: java-auto-update
 name: Java Auto Update
 version: 0.18.12-SNAPSHOT
@@ -11,15 +25,27 @@ units:
     type: component
     description: Version polling and update lifecycle — detects new versions and coordinates replacement.
     path: src/main/java/no/cantara/jau
+      content_hash:
+        algorithm: sha256
+        value: ""
   - id: downloader
     name: Downloader
     type: component
     description: Artifact download and checksum verification before applying an update.
+      content_hash:
+        algorithm: sha256
+        value: ""
   - id: process-manager
     name: Process Manager
     type: component
     description: Service restart orchestration — graceful shutdown and re-launch of the updated JAR.
+      content_hash:
+        algorithm: sha256
+        value: ""
   - id: config-client
     name: Config Client
     type: component
     description: Config Service integration for retrieving update configuration and target versions.
+      content_hash:
+        algorithm: sha256
+        value: ""
