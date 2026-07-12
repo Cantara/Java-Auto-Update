@@ -15,10 +15,10 @@ jobs:
       contents: write
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Checkout KCP CLI
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           repository: Cantara/knowledge-context-protocol
           path: kcp-spec
