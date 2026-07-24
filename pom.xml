@@ -55,7 +55,11 @@
         <dependency>
             <groupId>org.glassfish.jersey.core</groupId>
             <artifactId>jersey-common</artifactId>
-            <version>4.0.2</version>
+            <!-- Stay on the 2.x line: Jersey 3.x+ is jakarta.ws.rs (this code uses
+                 javax.ws.rs) and Jersey 4.x is compiled for JDK 17+, while this
+                 module builds on JDK 11 - a 4.x jar throws UnsupportedClassVersionError
+                 at test runtime. Do not bump the major without the jakarta + JDK move. -->
+            <version>2.48</version>
         </dependency>
 
         <!-- Needed for native access for killing duplicate processes and getting process id -->
