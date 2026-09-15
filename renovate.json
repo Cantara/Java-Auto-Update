@@ -5,10 +5,21 @@
   ],
   "packageRules": [
     {
-      "description": "Stay on Jersey 2.x: 3.x+ switched to jakarta.ws.rs (this code uses javax.ws.rs) and 4.x is compiled for JDK 17+, while this module builds on JDK 8/11 — a major bump is a jakarta+JDK migration, not an auto-bump, and throws UnsupportedClassVersionError at test runtime. Minor/patch within 2.x still flow. Remove only together with that migration.",
-      "matchPackagePatterns": ["^org\\.glassfish\\.jersey"],
-      "matchUpdateTypes": ["major"],
+      "description": "Stay on Jersey 2.x: 3.x+ switched to jakarta.ws.rs (this code uses javax.ws.rs) and 4.x is compiled for JDK 17+, while this module builds on JDK 8/11 \u2014 a major bump is a jakarta+JDK migration, not an auto-bump, and throws UnsupportedClassVersionError at test runtime. Minor/patch within 2.x still flow. Remove only together with that migration.",
+      "matchPackagePatterns": [
+        "^org\\.glassfish\\.jersey"
+      ],
+      "matchUpdateTypes": [
+        "major"
+      ],
       "enabled": false
+    },
+    {
+      "description": "Stay below configservice-sdk 0.21.0: 0.21.0 moved its admin client to jakarta.ws.rs and no longer brings javax.ws.rs-api, which RegisterClientExceptionHandler imports (it arrived only through the SDK). Taking 0.21.0 broke master on 2026-09-15 (Jenkins #2906). Remove only together with moving that handler off javax JAX-RS.",
+      "matchPackageNames": [
+        "no.cantara.jau:configservice-sdk"
+      ],
+      "allowedVersions": "<0.21.0"
     }
   ]
 }
