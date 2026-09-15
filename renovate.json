@@ -5,7 +5,7 @@
   ],
   "packageRules": [
     {
-      "description": "Stay on Jersey 2.x: 3.x+ switched to jakarta.ws.rs (this code uses javax.ws.rs) and 4.x is compiled for JDK 17+, while this module builds on JDK 8/11 \u2014 a major bump is a jakarta+JDK migration, not an auto-bump, and throws UnsupportedClassVersionError at test runtime. Minor/patch within 2.x still flow. Remove only together with that migration.",
+      "description": "Stay on Jersey 2.x: 3.x+ switched to jakarta.ws.rs (this code uses javax.ws.rs) and 4.x is compiled for JDK 17+, while this module builds on JDK 8/11 — a major bump is a jakarta+JDK migration, not an auto-bump, and throws UnsupportedClassVersionError at test runtime. Minor/patch within 2.x still flow. Remove only together with that migration.",
       "matchPackagePatterns": [
         "^org\\.glassfish\\.jersey"
       ],
@@ -13,13 +13,6 @@
         "major"
       ],
       "enabled": false
-    },
-    {
-      "description": "janitor-hold: configservice-sdk 0.21.0 no longer ships javax.ws.rs. Janitor holds this repo back, so no update automerges until the hold is released.",
-      "matchPackagePatterns": [
-        ".*"
-      ],
-      "automerge": false
     }
   ]
 }
