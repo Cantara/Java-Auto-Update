@@ -34,7 +34,7 @@
         <dependency>
             <groupId>no.cantara.jau</groupId>
             <artifactId>configservice-sdk</artifactId>
-            <version>0.21.0</version>
+            <version>0.21.1</version>
         </dependency>
         <!-- javax.ws.rs exceptions are thrown and caught by this code (coms/*); declared explicitly
              because they used to arrive only through configservice-sdk, which moved to jakarta in 0.21.0 -->
